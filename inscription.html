@@ -3,96 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Match - Inscription</title>
+    <title>Inscription - Student Match</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #F5F5F5;
-            color: #333;
-        }
-        header {
-            background-color: #800020;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        .nav {
-            margin: 10px;
-        }
-        .nav a {
-            margin: 0 15px;
-            color: white;
-            text-decoration: none;
-        }
-        main {
-            max-width: 600px;
-            margin: 40px auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        input[type="text"], input[type="number"], input[type="email"], select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .passions {
-            margin: 15px 0;
-        }
-        .passions label {
-            display: inline-block;
-            margin-right: 10px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #800020;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #800020;
-            color: white;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Pour les icônes -->
 </head>
 <body>
     <header>
         <div class="nav">
-            <a href="profil.html" class="profile-button">Profil</a>
-            <a href="index.html" class="home-button">Accueil</a>
+            <a href="#" class="profile-button">Profil</a>
+            <a href="#" class="home-button">Accueil</a>
         </div>
-        <h1>Inscription</h1>
     </header>
 
     <main>
+        <h1>Inscription</h1>
         <form id="registration-form">
             <input type="text" placeholder="Nom" required>
             <input type="text" placeholder="Prénom" required>
             <input type="number" placeholder="Âge" required>
             <input type="email" placeholder="Adresse email" required>
             <input type="text" placeholder="Orientation sexuelle (facultatif)">
-
             <div class="passions">
                 <h2>Passions</h2>
-                <label><input type="checkbox" value="Cinéma"> Cinéma</label>
-                <label><input type="checkbox" value="Sport"> Sport</label>
-                <label><input type="checkbox" value="Musique"> Musique</label>
-                <label><input type="checkbox" value="Voyages"> Voyages</label>
-                <!-- Ajoute d'autres passions ici -->
+                <div class="passion-checkbox">
+                    <input type="checkbox" id="cinema" value="Cinéma">
+                    <label for="cinema">Cinéma</label>
+                </div>
+                <div class="passion-checkbox">
+                    <input type="checkbox" id="sport" value="Sport">
+                    <label for="sport">Sport</label>
+                </div>
+                <div class="passion-checkbox">
+                    <input type="checkbox" id="musique" value="Musique">
+                    <label for="musique">Musique</label>
+                </div>
+                <div class="passion-checkbox">
+                    <input type="checkbox" id="voyages" value="Voyages">
+                    <label for="voyages">Voyages</label>
+                </div>
             </div>
-
             <div>
                 <h2>Que recherchez-vous ?</h2>
                 <select required>
