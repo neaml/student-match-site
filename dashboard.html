@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tableau de Bord - Student Match</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5F5F5;
+            color: #333;
+        }
+        header {
+            background-color: #800020;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        section {
+            text-align: center;
+            margin: 20px;
+        }
+        .profile-card {
+            background-color: white;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 300px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            padding: 10px;
+            margin: 10px;
+            background-color: #800020;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tableau de Bord</h1>
+        <p>Explorez les profils et créez des activités ou des groupes de travail</p>
+    </header>
+
+    <section>
+        <h2>Explorer des Profils</h2>
+        <div class="profile-card" id="profile1">
+            <p><strong>Nom :</strong> Marie Dupont</p>
+            <p><strong>Âge :</strong> 22 ans</p>
+            <button onclick="swipeYes()">Aimer</button>
+            <button onclick="swipeNo()">Ignorer</button>
+        </div>
+
+        <div class="profile-card" id="profile2">
+            <p><strong>Nom :</strong> Jean Martin</p>
+            <p><strong>Âge :</strong> 24 ans</p>
+            <button onclick="swipeYes()">Aimer</button>
+            <button onclick="swipeNo()">Ignorer</button>
+        </div>
+    </section>
+
+    <section>
+        <h2>Créer une activité ou un groupe</h2>
+        <form>
+            <label for="activityName">Nom de l'activité :</label>
+            <input type="text" id="activityName" required><br>
+
+            <label for="description">Description :</label><br>
+            <textarea id="description" rows="4" cols="50" required></textarea><br>
+
+            <button type="submit">Créer</button>
+        </form>
+    </section>
+
+    <script>
+        function swipeYes() {
+            alert('Profil ajouté à vos matchs!');
+        }
+
+        function swipeNo() {
+            alert('Profil ignoré.');
+        }
+    </script>
+</body>
+</html>
