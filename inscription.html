@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Inscription / Connexion - Student Match</title>
+    <title>Student Match - Inscription</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,24 +17,35 @@
             padding: 20px;
             text-align: center;
         }
-        section {
+        .nav {
+            margin: 10px;
+        }
+        .nav a {
+            margin: 0 15px;
+            color: white;
+            text-decoration: none;
+        }
+        main {
             max-width: 600px;
             margin: 40px auto;
-            padding: 20px;
             background-color: white;
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
-        label {
-            display: block;
-            margin: 15px 0 5px;
-        }
-        input[type="text"], input[type="password"], input[type="email"] {
+        input[type="text"], input[type="number"], input[type="email"], select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 4px;
+        }
+        .passions {
+            margin: 15px 0;
+        }
+        .passions label {
+            display: inline-block;
+            margin-right: 10px;
         }
         button {
             width: 100%;
@@ -45,38 +56,61 @@
             border-radius: 4px;
             cursor: pointer;
         }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #800020;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Inscription / Connexion</h1>
+        <div class="nav">
+            <a href="profil.html" class="profile-button">Profil</a>
+            <a href="index.html" class="home-button">Accueil</a>
+        </div>
+        <h1>Inscription</h1>
     </header>
 
-    <section>
-        <h2>Inscrivez-vous</h2>
-        <form id="signupForm">
-            <label for="email">Email :</label>
-            <input type="email" id="email" required>
+    <main>
+        <form id="registration-form">
+            <input type="text" placeholder="Nom" required>
+            <input type="text" placeholder="Prénom" required>
+            <input type="number" placeholder="Âge" required>
+            <input type="email" placeholder="Adresse email" required>
+            <input type="text" placeholder="Orientation sexuelle (facultatif)">
 
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" required>
+            <div class="passions">
+                <h2>Passions</h2>
+                <label><input type="checkbox" value="Cinéma"> Cinéma</label>
+                <label><input type="checkbox" value="Sport"> Sport</label>
+                <label><input type="checkbox" value="Musique"> Musique</label>
+                <label><input type="checkbox" value="Voyages"> Voyages</label>
+                <!-- Ajoute d'autres passions ici -->
+            </div>
 
-            <label for="confirmPassword">Confirmer mot de passe :</label>
-            <input type="password" id="confirmPassword" required>
-
+            <div>
+                <h2>Que recherchez-vous ?</h2>
+                <select required>
+                    <option value="">Sélectionnez...</option>
+                    <option value="relation_sérieuse">Relation sérieuse</option>
+                    <option value="amis">Amitié</option>
+                    <option value="relation_long_terme">Relation long terme</option>
+                    <option value="indécis">Indécis</option>
+                </select>
+            </div>
             <button type="submit">S'inscrire</button>
         </form>
+    </main>
 
-        <h2>Déjà inscrit ? Connectez-vous :</h2>
-        <form id="loginForm">
-            <label for="emailLogin">Email :</label>
-            <input type="email" id="emailLogin" required>
+    <footer>
+        <p>&copy; 2024 Student Match</p>
+    </footer>
 
-            <label for="passwordLogin">Mot de passe :</label>
-            <input type="password" id="passwordLogin" required>
-
-            <button type="submit">Se connecter</button>
-        </form>
-    </section>
+    <script src="script.js"></script>
 </body>
 </html>
