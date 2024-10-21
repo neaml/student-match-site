@@ -12,7 +12,6 @@ header {
     background-color: #FF5864; /* Couleur inspirée de Tinder */
     color: white;
     padding: 20px;
-    text-align: center;
 }
 
 .nav {
@@ -66,20 +65,24 @@ button:hover {
     margin: 10px 0;
 }
 
-.passions label {
+.passion-checkbox {
+    display: inline-block;
+    margin: 5px;
+}
+
+.passion-checkbox input[type="checkbox"] {
+    display: none; /* Cache la case à cocher */
+}
+
+.passion-checkbox label {
     background-color: #FF5864; /* Couleur des bulles */
     color: white;
     border-radius: 20px;
     padding: 10px 15px;
-    margin: 5px;
     cursor: pointer;
 }
 
-.passions input[type="checkbox"] {
-    display: none; /* Cache la case à cocher */
-}
-
-.passions input[type="checkbox"]:checked + label {
+.passion-checkbox input[type="checkbox"]:checked + label {
     background-color: #FF6F82; /* Couleur lorsque la bulle est sélectionnée */
 }
 
@@ -88,7 +91,4 @@ footer {
     padding: 10px;
     background-color: #FF5864; /* Couleur inspirée de Tinder */
     color: white;
-    position: relative;
-    bottom: 0;
-    width: 100%;
 }
