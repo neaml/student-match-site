@@ -1,94 +1,134 @@
-/* styles.css */
+/* Styles pour Student Match inspiré de Tinder */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #F5F5F5;
+    background-color: #f3f3f3;
     color: #333;
-    margin: 0;
-    padding: 0;
 }
 
 header {
-    background-color: #FF5864; /* Couleur inspirée de Tinder */
-    color: white;
-    padding: 20px;
+    background-color: #FF5864;
+    padding: 15px;
 }
 
-.nav {
+.top-nav {
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
+    align-items: center;
 }
 
-main {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
+.top-nav a {
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
+    margin: 0 20px;
+}
+
+.top-nav a i {
+    margin-right: 8px;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-card {
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-h1, h2 {
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    width: 400px;
     text-align: center;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="number"],
-select {
+h1 {
+    font-size: 24px;
+    color: #FF5864;
+    margin-bottom: 20px;
+}
+
+input[type="text"], input[type="email"], input[type="number"], select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }
 
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #FF5864; /* Couleur inspirée de Tinder */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.input-group {
+    display: flex;
+    justify-content: space-between;
 }
 
-button:hover {
-    background-color: #FF6F82; /* Couleur légèrement plus claire pour l'effet hover */
+.input-group input {
+    width: 48%;
 }
 
-.passions {
+.passions h2, .select-group h2 {
+    font-size: 18px;
+    color: #333;
+    margin: 15px 0;
+}
+
+.bubble-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 10px 0;
 }
 
-.passion-checkbox {
-    display: inline-block;
+.bubble {
     margin: 5px;
+    position: relative;
 }
 
-.passion-checkbox input[type="checkbox"] {
-    display: none; /* Cache la case à cocher */
+.bubble input[type="checkbox"] {
+    display: none;
 }
 
-.passion-checkbox label {
-    background-color: #FF5864; /* Couleur des bulles */
+.bubble label {
+    background-color: #FF5864;
     color: white;
+    padding: 10px 20px;
     border-radius: 20px;
-    padding: 10px 15px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.passion-checkbox input[type="checkbox"]:checked + label {
-    background-color: #FF6F82; /* Couleur lorsque la bulle est sélectionnée */
+.bubble input[type="checkbox"]:checked + label {
+    background-color: #FF6F82;
+}
+
+.submit-btn {
+    background-color: #FF5864;
+    color: white;
+    padding: 15px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #FF6F82;
 }
 
 footer {
     text-align: center;
+    background-color: #FF5864;
     padding: 10px;
-    background-color: #FF5864; /* Couleur inspirée de Tinder */
     color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
