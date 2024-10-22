@@ -1,88 +1,33 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Tableau de Bord - Student Match</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #F5F5F5;
-            color: #333;
-        }
-        header {
-            background-color: #800020;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        section {
-            text-align: center;
-            margin: 20px;
-        }
-        .profile-card {
-            background-color: white;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 300px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        button {
-            padding: 10px;
-            margin: 10px;
-            background-color: #800020;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Tableau de Bord</h1>
-        <p>Explorez les profils et créez des activités ou des groupes de travail</p>
-    </header>
+<main id="profileExplorePage" style="padding: 20px; font-family: Arial, sans-serif;">
+    <h2 style="color: #800000; text-align: center;">Explorez les Profils</h2>
 
-    <section>
-        <h2>Explorer des Profils</h2>
-        <div class="profile-card" id="profile1">
-            <p><strong>Nom :</strong> Marie Dupont</p>
-            <p><strong>Âge :</strong> 22 ans</p>
-            <button onclick="swipeYes()">Aimer</button>
-            <button onclick="swipeNo()">Ignorer</button>
+    <div id="profileCard" style="max-width: 350px; margin: auto; background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+        <img id="profileImage" src="https://via.placeholder.com/150" alt="Photo de profil" style="width: 100%; border-radius: 15px;" />
+        <h3 id="profileName" style="margin-top: 10px;">Prénom, Âge</h3>
+        <p id="profilePassions" style="margin: 10px 0;">Passions : Cinéma, Sport</p>
+        <div id="swipeActions" style="display: flex; justify-content: space-between;">
+            <button id="passButton" style="background-color: #f0f0f0; padding: 10px 20px; border-radius: 50%; border: none; cursor: pointer;">❌</button>
+            <button id="smashButton" style="background-color: #800000; color: white; padding: 10px 20px; border-radius: 50%; border: none; cursor: pointer;">❤️</button>
         </div>
+    </div>
+</main>
 
-        <div class="profile-card" id="profile2">
-            <p><strong>Nom :</strong> Jean Martin</p>
-            <p><strong>Âge :</strong> 24 ans</p>
-            <button onclick="swipeYes()">Aimer</button>
-            <button onclick="swipeNo()">Ignorer</button>
-        </div>
-    </section>
+<script>
+    document.getElementById('smashButton').addEventListener('click', () => {
+        // Logique pour passer au profil suivant avec animation
+        const profileCard = document.getElementById('profileCard');
+        profileCard.style.transform = 'translateX(1000px)';
+        setTimeout(() => {
+            // Charge un autre profil ici
+            profileCard.style.transform = 'translateX(0)';
+        }, 500);
+    });
 
-    <section>
-        <h2>Créer une activité ou un groupe</h2>
-        <form>
-            <label for="activityName">Nom de l'activité :</label>
-            <input type="text" id="activityName" required><br>
-
-            <label for="description">Description :</label><br>
-            <textarea id="description" rows="4" cols="50" required></textarea><br>
-
-            <button type="submit">Créer</button>
-        </form>
-    </section>
-
-    <script>
-        function swipeYes() {
-            alert('Profil ajouté à vos matchs!');
-        }
-
-        function swipeNo() {
-            alert('Profil ignoré.');
-        }
-    </script>
-</body>
-</html>
+    document.getElementById('passButton').addEventListener('click', () => {
+        const profileCard = document.getElementById('profileCard');
+        profileCard.style.transform = 'translateX(-1000px)';
+        setTimeout(() => {
+            profileCard.style.transform = 'translateX(0)';
+        }, 500);
+    });
+</script>
