@@ -3,44 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Match - Inscription/Connexion</title>
+  <title>Student Match - Connexion</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-
     body {
-      margin: 0;
       font-family: 'Poppins', sans-serif;
       background-color: #f0f0f0;
-      overflow: hidden;
-    }
-
-    /* Animation de fond en vague */
-    body:before {
-      content: "";
-      position: absolute;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(135deg, #800000, #b31e1e);
-      top: -50%;
-      left: -50%;
-      z-index: -1;
-      animation: wave 10s infinite linear;
-    }
-
-    @keyframes wave {
-      0% {
-        transform: translateX(0%);
-      }
-      100% {
-        transform: translateX(100%);
-      }
     }
 
     main {
       background-color: rgba(255, 255, 255, 0.95);
       border-radius: 15px;
       padding: 20px;
-      max-width: 600px;
+      max-width: 400px;
       margin: 100px auto;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
@@ -49,12 +23,6 @@
       color: #800000;
       text-align: center;
       font-weight: 600;
-    }
-
-    p {
-      text-align: center;
-      font-size: 1.1em;
-      color: #555;
     }
 
     form {
@@ -76,38 +44,6 @@
       font-size: 1em;
     }
 
-    .bubbleContainer {
-      display: flex;
-      flex-wrap: wrap;
-      margin: 10px 0;
-    }
-
-    .bubble {
-      background-color: #eee;
-      color: black;
-      border-radius: 20px;
-      padding: 8px 16px;
-      margin: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-    }
-
-    .bubble.selected {
-      background-color: #800000;
-      color: white;
-    }
-
-    .bubble:hover {
-      transform: scale(1.05);
-    }
-
-    .emoji {
-      font-size: 1.2em;
-      margin-right: 5px;
-    }
-
     button {
       background-color: #800000;
       color: white;
@@ -124,7 +60,6 @@
       background-color: #b31e1e;
     }
 
-    /* Lien pour ceux qui ont déjà un compte */
     .account-switch {
       text-align: center;
       margin-top: 15px;
@@ -142,33 +77,21 @@
 <body>
 
   <main>
-    <h1>Bienvenue sur Student Match</h1>
-    <p>Rejoignez la communauté ou connectez-vous à votre compte !</p>
-
-    <form id="signupForm">
-      <label for="firstName">Prénom:</label>
-      <input type="text" id="firstName" placeholder="Votre prénom" required>
-
-      <label for="lastName">Nom:</label>
-      <input type="text" id="lastName" placeholder="Votre nom" required>
-
-      <label for="age">Âge:</label>
-      <input type="number" id="age" placeholder="Votre âge" required>
-
+    <h1>Connexion</h1>
+    <form id="loginForm">
       <label for="email">Adresse e-mail:</label>
       <input type="email" id="email" placeholder="exemple@etudiant.fr" required>
 
-      <!-- Ajout des autres champs ici (orientation sexuelle, passions, etc.) -->
-      
-      <button type="submit">S'inscrire</button>
+      <label for="password">Mot de passe:</label>
+      <input type="password" id="password" placeholder="Votre mot de passe" required>
+
+      <button type="submit">Se connecter</button>
     </form>
 
     <div class="account-switch">
-      <p>Déjà un compte ? <a href="#">Connectez-vous</a></p>
+      <p>Pas encore de compte ? <a href="inscription.html">Inscrivez-vous</a></p>
     </div>
-
   </main>
 
 </body>
 </html>
-
