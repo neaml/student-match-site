@@ -3,51 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Match - Accueil</title>
+  <title>Student Match - Inscription</title>
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f0f0f0;
-    }
-
-    /* Barre de navigation */
-    .navbar {
-      background-color: #800000;
-      color: white;
-      padding: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .navbar h1 {
       margin: 0;
-      font-size: 1.5em;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #f3f4f6 25%, #e2e8f0 50%, #edf2f7 75%, #f7fafc);
+      animation: waveAnimation 10s ease-in-out infinite alternate;
+      color: #333;
     }
 
-    .navbar .menu {
-      display: flex;
+    @keyframes waveAnimation {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 0%; }
     }
 
-    .navbar .menu a {
-      color: white;
-      margin: 0 10px;
-      text-decoration: none;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 50px auto;
+    main {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
       padding: 20px;
+      max-width: 600px;
+      margin: 50px auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    h1 {
+      color: #800000;
       text-align: center;
     }
 
-    h2 {
-      color: #800000;
+    p {
+      text-align: center;
+      font-size: 1.1em;
+      color: #555;
     }
 
-    p {
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    input, select {
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 1em;
+    }
+
+    .bubbleContainer {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+
+    .bubble {
+      background-color: #eee;
+      color: black;
+      border-radius: 20px;
+      padding: 8px 16px;
+      margin: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .bubble.selected {
+      background-color: #800000;
+      color: white;
+    }
+
+    .bubble:hover {
+      transform: scale(1.05);
+    }
+
+    .emoji {
       font-size: 1.2em;
+      margin-right: 5px;
     }
 
     button {
@@ -66,29 +106,94 @@
       background-color: #b31e1e;
     }
 
+    .nav {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .nav a {
+      margin: 0 10px;
+      color: #800000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .loginLink {
+      text-align: center;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Barre de navigation -->
-  <div class="navbar">
-    <h1>Student Match</h1>
-    <div class="menu">
-      <a href="exploration.html">Explorer les Profils</a>
-      <a href="profil.html">Mon Profil</a>
-      <a href="groupes.html">Groupes</a>
-      <a href="evenements.html">Événements</a>
+  <main>
+    <h1>Bienvenue sur Student Match</h1>
+    <p>Rejoins une communauté d'étudiants et découvre des personnes qui partagent tes passions !</p>
+
+    <div class="nav">
+      <a href="#home">Accueil</a>
+      <a href="#profile">Profil</a>
+      <a href="#dashboard">Tableau de bord</a>
     </div>
-  </div>
 
-  <!-- Contenu principal -->
-  <div class="container">
-    <h2>Bienvenue sur Student Match</h2>
-    <p>Un réseau étudiant dynamique pour rencontrer, partager et organiser des événements.</p>
+    <form id="signupForm">
+      <label for="firstName">Prénom:</label>
+      <input type="text" id="firstName" placeholder="Ton prénom" required>
 
-    <button onclick="location.href='inscription.html'">S'inscrire</button>
-    <button onclick="location.href='connexion.html'">Se Connecter</button>
-  </div>
+      <label for="lastName">Nom:</label>
+      <input type="text" id="lastName" placeholder="Ton nom" required>
+
+      <label for="age">Âge:</label>
+      <input type="number" id="age" placeholder="Ton âge" required>
+
+      <label for="email">Adresse e-mail:</label>
+      <input type="email" id="email" placeholder="exemple@etudiant.fr" required>
+
+      <label for="orientation">Orientation sexuelle (optionnel):</label>
+      <div class="bubbleContainer">
+        <div class="bubble"><span class="emoji">👩‍❤️‍👨</span>Hétérosexuel</div>
+        <div class="bubble"><span class="emoji">🏳️‍🌈</span>Homosexuel</div>
+        <div class="bubble"><span class="emoji">🟣</span>Bisexuel</div>
+        <div class="bubble"><span class="emoji">🟡</span>Pansexuel</div>
+        <div class="bubble"><span class="emoji">⚫️</span>Asexuel</div>
+      </div>
+
+      <label for="passions">Passions :</label>
+      <div class="bubbleContainer">
+        <div class="bubble"><span class="emoji">🎬</span>Cinéma</div>
+        <div class="bubble"><span class="emoji">⚽</span>Sport</div>
+        <div class="bubble"><span class="emoji">📚</span>Lecture</div>
+        <div class="bubble"><span class="emoji">🎮</span>Jeux vidéo</div>
+        <div class="bubble"><span class="emoji">✈️</span>Voyages</div>
+        <div class="bubble"><span class="emoji">🎶</span>Musique</div>
+        <div class="bubble"><span class="emoji">🍳</span>Cuisine</div>
+        <div class="bubble"><span class="emoji">👗</span>Mode</div>
+      </div>
+
+      <label for="searchingFor">Tu recherches :</label>
+      <div class="bubbleContainer">
+        <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
+        <div class="bubble"><span class="emoji">👫</span>Des Amis</div>
+        <div class="bubble"><span class="emoji">💍</span>Une relation courte durée</div>
+        <div class="bubble"><span class="emoji">🤷‍♂️🤷‍♀️</span>J'ai pas encore décidé</div>
+      </div>
+
+      <button type="submit">S'inscrire</button>
+    </form>
+
+    <div class="loginLink">
+      <p>Déjà un compte ? <a href="#login">Se connecter</a></p>
+    </div>
+  </main>
+
+  <script>
+    const bubbles = document.querySelectorAll('.bubble');
+    bubbles.forEach(bubble => {
+      bubble.addEventListener('click', () => {
+        bubble.classList.toggle('selected');
+      });
+    });
+  </script>
 
 </body>
 </html>
