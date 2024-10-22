@@ -63,7 +63,7 @@
       flex: 1;
     }
 
-    h2 {
+    h2, h3 {
       color: #800000;
       margin-top: 0;
     }
@@ -152,16 +152,19 @@
     }
 
     /* Style pour la section des groupes et des événements */
-    .group-list, .event-list {
+    .group-list, .event-list, .match-list {
       margin-top: 20px;
     }
 
-    .group-item, .event-item {
+    .group-item, .event-item, .match-item {
       background-color: #f9f9f9;
       border: 1px solid #ddd;
       padding: 10px;
       border-radius: 5px;
       margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .no-items {
@@ -169,6 +172,21 @@
       font-style: italic;
       text-align: center;
       margin-top: 10px;
+    }
+
+    /* Style des boutons Rejoindre, Participer et Chat */
+    .join-button, .participate-button, .chat-button {
+      background-color: #800000;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .join-button:hover, .participate-button:hover, .chat-button:hover {
+      background-color: #b31e1e;
     }
 
   </style>
@@ -205,6 +223,12 @@
         </div>
       </div>
 
+      <!-- Section des matchs -->
+      <h3>Mes Matchs</h3>
+      <div class="match-list" id="matchList">
+        <p class="no-items" id="noMatches">Aucun match pour le moment.</p>
+      </div>
+
     </div>
 
     <!-- Section Groupes & Événements -->
@@ -229,7 +253,7 @@
     </div>
   </div>
 
-  <!-- Script pour gérer le swipe et les événements -->
+  <!-- Script pour gérer le swipe, les matchs, et les événements -->
   <script>
     const profileCard = document.getElementById('profileCard');
     const passButton = document.getElementById('passButton');
@@ -251,40 +275,66 @@
       }, 500);
     });
 
-    // Simuler l'ajout de groupes et d'événements (tu pourrais le faire dynamiquement avec une base de données)
+    // Simuler l'ajout de groupes et d'événements
     const groupList = document.getElementById('groupList');
     const eventList = document.getElementById('eventList');
+    const matchList = document.getElementById('matchList');
     const noGroupsMessage = document.getElementById('noGroups');
     const noEventsMessage = document.getElementById('noEvents');
+    const noMatchesMessage = document.getElementById('noMatches');
 
-    // Exemple de données (tu pourras remplacer ces données par des vraies)
-    const groups = []; // Mettre ici les groupes créés
-    const events = []; // Mettre ici les événements créés
+    const groups = [
+      { name: "Groupe Cinéma", description: "Discussions autour du cinéma." },
+      { name: "Groupe Cuisine", description: "Partage de recettes et astuces culinaires." }
+    ];
 
-    // Si des groupes existent, les afficher
+    const events = [
+      { name: "Soirée Jeux", description: "Amène tes jeux préférés !" },
+      { name: "Conférence sur l'IA", description: "Discussion autour des dernières innovations." }
+    ];
+
+    const matches = [
+      { name: "Julie Bernard", age: 22, passions: "Musique, Voyages", recherche: "Amitié" },
+      { name: "Luc Martin", age: 24, passions: "Sport, Technologie", recherche: "Relation sérieuse" }
+    ];
+
+    // Afficher les groupes
     if (groups.length > 0) {
       noGroupsMessage.style.display = 'none'; // Cacher le message "aucun groupe"
       groups.forEach(group => {
         const groupItem = document.createElement('div');
         groupItem.classList.add('group-item');
-        groupItem.innerHTML = `<strong>${group.name}</strong><br>${group.description}`;
+        groupItem.innerHTML = `<strong>${group.name}</strong><br>${group.description} <button class="join-button">Rejoindre</button>`;
         groupList.appendChild(groupItem);
       });
     } else {
       noGroupsMessage.style.display = 'block'; // Afficher le message "aucun groupe"
     }
 
-    // Si des événements existent, les afficher
+    // Afficher les événements
     if (events.length > 0) {
       noEventsMessage.style.display = 'none'; // Cacher le message "aucun événement"
       events.forEach(event => {
         const eventItem = document.createElement('div');
         eventItem.classList.add('event-item');
-        eventItem.innerHTML = `<strong>${event.name}</strong><br>${event.description}`;
+        eventItem.innerHTML = `<strong>${event.name}</strong><br>${event.description} <button class="participate-button">Participer</button>`;
         eventList.appendChild(eventItem);
       });
     } else {
       noEventsMessage.style.display = 'block'; // Afficher le message "aucun événement"
+    }
+
+    // Afficher les matchs
+    if (matches.length > 0) {
+      noMatchesMessage.style.display = 'none'; // Cacher le message "aucun match"
+      matches.forEach(match => {
+        const matchItem = document.createElement('div');
+        matchItem.classList.add('match-item');
+        matchItem.innerHTML = `<strong>${match.name}, ${match.age} ans</strong><br>Passions: ${match.passions}<br>Recherche: ${match.recherche} <button class="chat-button">Chat</button>`;
+        matchList.appendChild(matchItem);
+      });
+    } else {
+      noMatchesMessage.style.display = 'block'; // Afficher le message "aucun match"
     }
   </script>
 
