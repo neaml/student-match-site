@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créer un Groupe - Student Match</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+    }
+
+    main {
+      background-color: white;
+      padding: 20px;
+      max-width: 600px;
+      margin: 50px auto;
+      border-radius: 10px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #800000;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #333;
+    }
+
+    input, textarea {
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 1em;
+    }
+
+    button {
+      background-color: #800000;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #b31e1e;
+    }
+
+    .nav {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .nav a {
+      margin: 0 10px;
+      color: #800000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+    <h1>Créer un Nouveau Groupe</h1>
+
+    <form id="createGroupForm">
+      <label for="groupName">Nom du Groupe :</label>
+      <input type="text" id="groupName" placeholder="Nom du groupe" required>
+
+      <label for="groupDescription">Description du Groupe :</label>
+      <textarea id="groupDescription" rows="5" placeholder="Décrivez votre groupe ici" required></textarea>
+
+      <label for="groupCategory">Catégorie :</label>
+      <input type="text" id="groupCategory" placeholder="Exemple : Musique, Sport, Lecture" required>
+
+      <button type="submit">Créer le Groupe</button>
+    </form>
+  </main>
+
+</body>
+</html>
