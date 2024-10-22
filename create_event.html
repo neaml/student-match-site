@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créer un Événement - Student Match</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+    }
+
+    main {
+      background-color: white;
+      padding: 20px;
+      max-width: 600px;
+      margin: 50px auto;
+      border-radius: 10px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #800000;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #333;
+    }
+
+    input, textarea {
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 1em;
+    }
+
+    button {
+      background-color: #800000;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #b31e1e;
+    }
+
+    .nav {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .nav a {
+      margin: 0 10px;
+      color: #800000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+    <h1>Créer un Nouvel Événement</h1>
+
+    <form id="createEventForm">
+      <label for="eventName">Nom de l'Événement :</label>
+      <input type="text" id="eventName" placeholder="Nom de l'événement" required>
+
+      <label for="eventDescription">Description de l'Événement :</label>
+      <textarea id="eventDescription" rows="5" placeholder="Décrivez l'événement ici" required></textarea>
+
+      <label for="eventDate">Date de l'Événement :</label>
+      <input type="date" id="eventDate" required>
+
+      <label for="eventLocation">Lieu de l'Événement :</label>
+      <input type="text" id="eventLocation" placeholder="Lieu de l'événement" required>
+
+      <button type="submit">Créer l'Événement</button>
+    </form>
+  </main>
+
+</body>
+</html>
