@@ -3,18 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tableau de Bord</title>
+  <title>Tableau de Bord - Exploration des Profils</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-
     body {
-      margin: 0;
       font-family: 'Poppins', sans-serif;
       background-color: #f0f0f0;
-      overflow: hidden;
     }
 
-    /* Barre de navigation */
     .navbar {
       background-color: #800000;
       color: white;
@@ -29,10 +24,6 @@
       font-size: 1.5em;
     }
 
-    .navbar .menu {
-      display: flex;
-    }
-
     .navbar .menu a {
       color: white;
       margin: 0 10px;
@@ -45,18 +36,8 @@
       padding: 20px;
     }
 
-    /* Section Profil */
-    .profile-section {
-      width: 25%;
-      background-color: #fff;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Section Exploration */
     .exploration-section {
-      width: 50%;
+      width: 60%;
       background-color: #fff;
       border-radius: 10px;
       padding: 20px;
@@ -64,7 +45,7 @@
     }
 
     .event-group-section {
-      width: 20%;
+      width: 35%;
       background-color: #fff;
       border-radius: 10px;
       padding: 20px;
@@ -86,7 +67,6 @@
     button:hover {
       background-color: #b31e1e;
     }
-
   </style>
 </head>
 <body>
@@ -95,8 +75,8 @@
   <div class="navbar">
     <h1>Student Match</h1>
     <div class="menu">
-      <a href="#">Accueil</a>
-      <a href="#">Mon profil</a>
+      <a href="index.html">Accueil</a>
+      <a href="profil.html">Mon Profil</a>
     </div>
   </div>
 
@@ -104,20 +84,15 @@
   <div class="main-container">
     <!-- Section Exploration des profils -->
     <div class="exploration-section">
-      <h2>Exploration des Profils</h2>
-      <!-- Ajout des cartes de profils ici -->
+      <h2>Explorer les Profils</h2>
+      <!-- Ajoutez ici les cartes des profils à explorer -->
     </div>
 
-    <!-- Section Gestion des groupes et événements -->
+    <!-- Section Groupes & Événements -->
     <div class="event-group-section">
       <h2>Groupes & Événements</h2>
-      <!-- Gestion des événements et groupes ici -->
-    </div>
-
-    <!-- Section Profil utilisateur -->
-    <div class="profile-section">
-      <h2>Mon Profil</h2>
-      <!-- Affichage du profil utilisateur ici -->
+      <button onclick="location.href='groupes.html'">Créer un Groupe</button>
+      <button onclick="location.href='evenements.html'">Créer un Événement</button>
     </div>
   </div>
 
