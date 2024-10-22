@@ -8,12 +8,14 @@
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
     }
 
     .navbar {
       background-color: #800000;
       color: white;
-      padding: 10px;
+      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -28,28 +30,87 @@
       color: white;
       margin: 0 10px;
       text-decoration: none;
+      font-weight: bold;
+    }
+
+    .navbar .menu a:hover {
+      text-decoration: underline;
     }
 
     .main-container {
       display: flex;
       justify-content: space-between;
       padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .exploration-section, .event-group-section {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
     .exploration-section {
-      width: 60%;
-      background-color: #fff;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      width: 65%;
+      margin-right: 20px;
     }
 
     .event-group-section {
-      width: 35%;
-      background-color: #fff;
+      width: 30%;
+    }
+
+    h2 {
+      color: #800000;
+      margin-top: 0;
+    }
+
+    .profile-card {
+      background-color: #f9f9f9;
       border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .profile-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    .profile-card h3 {
+      margin: 0;
+      font-size: 1.2em;
+    }
+
+    .profile-card p {
+      margin: 5px 0;
+      color: #555;
+    }
+
+    .actions {
+      margin-top: 10px;
+    }
+
+    .actionButton {
+      background-color: #800000;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      margin-right: 10px;
+      font-size: 1em;
+      transition: background-color 0.3s ease;
+    }
+
+    .actionButton:hover {
+      background-color: #b31e1e;
     }
 
     button {
@@ -60,13 +121,17 @@
       border-radius: 5px;
       cursor: pointer;
       font-size: 1em;
-      margin-top: 20px;
+      margin-top: 10px;
+      display: block;
+      width: 100%;
+      text-align: center;
       transition: background-color 0.3s ease;
     }
 
     button:hover {
       background-color: #b31e1e;
     }
+
   </style>
 </head>
 <body>
@@ -82,109 +147,26 @@
 
   <!-- Contenu principal -->
   <div class="main-container">
+    
     <!-- Section Exploration des profils -->
     <div class="exploration-section">
       <h2>Explorer les Profils</h2>
-      <!-- Ajoutez ici les cartes des profils à explorer -->
-       <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: url('https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDMyfHxjb21tdW5pdHl8ZW58MHx8fHwxNjUyMzk2NjM2&ixlib=rb-1.2.1&q=80&w=1080') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      animation: fadeInBackground 10s ease-in-out infinite alternate;
-    }
+      
+      <!-- Carte de Profil -->
+      <div class="profile-card">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Photo de profil">
+        <div>
+          <h3>Marie Dupont, 23 ans</h3>
+          <p>🎬 Passions : Cinéma, Voyages, Cuisine</p>
+          <p>❤️ Recherche : Relation sérieuse</p>
+          <div class="actions">
+            <button class="actionButton">❌ Passer</button>
+            <button class="actionButton">❤️ Match</button>
+          </div>
+        </div>
+      </div>
 
-    @keyframes fadeInBackground {
-      0% { filter: brightness(1); }
-      100% { filter: brightness(0.7); }
-    }
-
-    #profileCard {
-      background-color: rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      width: 320px;
-      padding: 25px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-      text-align: center;
-      transition: transform 0.5s ease;
-    }
-
-    #profileCard img {
-      width: 100%;
-      border-radius: 15px;
-    }
-
-    #profileCard h2 {
-      color: #800000;
-      margin-bottom: 10px;
-    }
-
-    #profileCard p {
-      font-size: 1.1em;
-      color: #333;
-      margin: 5px 0;
-    }
-
-    .actions {
-      margin-top: 20px;
-    }
-
-    .actionButton {
-      background-color: #800000;
-      color: white;
-      padding: 10px;
-      border-radius: 50%;
-      border: none;
-      cursor: pointer;
-      margin: 0 10px;
-      font-size: 1.5em;
-      transition: all 0.3s ease;
-    }
-
-    .actionButton:hover {
-      background-color: #b31e1e;
-    }
-
-  </style>
-</head>
-<body>
-
-  <div id="profileCard">
-    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Photo de profil">
-    <h2>Marie Dupont, 23 ans</h2>
-    <p>🎬 Passions: Cinéma, Voyages, Cuisine</p>
-    <p>❤️ Recherche: Relation sérieuse</p>
-    
-    <div class="actions">
-      <button class="actionButton" id="passButton">❌</button>
-      <button class="actionButton" id="smashButton">❤️</button>
-    </div>
-  </div>
-
-  <script>
-    document.getElementById('smashButton').addEventListener('click', () => {
-        const profileCard = document.getElementById('profileCard');
-        profileCard.style.transform = 'translateX(1000px)';
-        setTimeout(() => {
-            // Charge un autre profil ici
-            profileCard.style.transform = 'translateX(0)';
-        }, 500);
-    });
-
-    document.getElementById('passButton').addEventListener('click', () => {
-        const profileCard = document.getElementById('profileCard');
-        profileCard.style.transform = 'translateX(-1000px)';
-        setTimeout(() => {
-            profileCard.style.transform = 'translateX(0)';
-        }, 500);
-    });
-  </script>
+      <!-- Ajoutez d'autres cartes de profils ici si nécessaire -->
 
     </div>
 
@@ -198,3 +180,4 @@
 
 </body>
 </html>
+
