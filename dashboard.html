@@ -78,6 +78,8 @@
       display: flex;
       align-items: center;
       gap: 15px;
+      position: relative;
+      transition: transform 0.5s ease;
     }
 
     .profile-card img {
@@ -118,6 +120,15 @@
       background-color: #b31e1e;
     }
 
+    /* Animation pour le swipe */
+    .swipe-left {
+      transform: translateX(-1000px);
+    }
+
+    .swipe-right {
+      transform: translateX(1000px);
+    }
+
     /* Style des boutons généraux */
     button {
       background-color: #800000;
@@ -136,6 +147,26 @@
 
     button:hover {
       background-color: #b31e1e;
+    }
+
+    /* Style pour la section des groupes et des événements */
+    .group-list, .event-list {
+      margin-top: 20px;
+    }
+
+    .group-item, .event-item {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .no-items {
+      color: #777;
+      font-style: italic;
+      text-align: center;
+      margin-top: 10px;
     }
 
   </style>
@@ -160,15 +191,15 @@
       <h2>Explorer les Profils</h2>
       
       <!-- Carte de Profil -->
-      <div class="profile-card">
+      <div class="profile-card" id="profileCard">
         <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Photo de profil">
         <div>
           <h3>Marie Dupont, 23 ans</h3>
           <p>🎬 Passions : Cinéma, Voyages, Cuisine</p>
           <p>❤️ Recherche : Relation sérieuse</p>
           <div class="actions">
-            <button class="actionButton">❌ Passer</button>
-            <button class="actionButton">❤️ Match</button>
+            <button class="actionButton" id="passButton">❌ Passer</button>
+            <button class="actionButton" id="smashButton">❤️ Match</button>
           </div>
         </div>
       </div>
@@ -180,10 +211,83 @@
     <!-- Section Groupes & Événements -->
     <div class="event-group-section">
       <h2>Groupes & Événements</h2>
+      
+      <!-- Boutons de création -->
       <button onclick="location.href='create_group.html'">Créer un Groupe</button>
       <button onclick="location.href='create_event.html'">Créer un Événement</button>
+
+      <!-- Section pour les groupes -->
+      <h3>Groupes créés</h3>
+      <div class="group-list" id="groupList">
+        <p class="no-items" id="noGroups">Aucun groupe disponible.</p>
+      </div>
+
+      <!-- Section pour les événements -->
+      <h3>Événements créés</h3>
+      <div class="event-list" id="eventList">
+        <p class="no-items" id="noEvents">Aucun événement disponible.</p>
+      </div>
     </div>
   </div>
+
+  <!-- Script pour gérer le swipe et les événements -->
+  <script>
+    const profileCard = document.getElementById('profileCard');
+    const passButton = document.getElementById('passButton');
+    const smashButton = document.getElementById('smashButton');
+
+    passButton.addEventListener('click', () => {
+      profileCard.classList.add('swipe-left');
+      setTimeout(() => {
+        profileCard.classList.remove('swipe-left');
+        // Ici, on peut recharger un nouveau profil si besoin
+      }, 500);
+    });
+
+    smashButton.addEventListener('click', () => {
+      profileCard.classList.add('swipe-right');
+      setTimeout(() => {
+        profileCard.classList.remove('swipe-right');
+        // Ici, on peut recharger un nouveau profil si besoin
+      }, 500);
+    });
+
+    // Simuler l'ajout de groupes et d'événements (tu pourrais le faire dynamiquement avec une base de données)
+    const groupList = document.getElementById('groupList');
+    const eventList = document.getElementById('eventList');
+    const noGroupsMessage = document.getElementById('noGroups');
+    const noEventsMessage = document.getElementById('noEvents');
+
+    // Exemple de données (tu pourras remplacer ces données par des vraies)
+    const groups = []; // Mettre ici les groupes créés
+    const events = []; // Mettre ici les événements créés
+
+    // Si des groupes existent, les afficher
+    if (groups.length > 0) {
+      noGroupsMessage.style.display = 'none'; // Cacher le message "aucun groupe"
+      groups.forEach(group => {
+        const groupItem = document.createElement('div');
+        groupItem.classList.add('group-item');
+        groupItem.innerHTML = `<strong>${group.name}</strong><br>${group.description}`;
+        groupList.appendChild(groupItem);
+      });
+    } else {
+      noGroupsMessage.style.display = 'block'; // Afficher le message "aucun groupe"
+    }
+
+    // Si des événements existent, les afficher
+    if (events.length > 0) {
+      noEventsMessage.style.display = 'none'; // Cacher le message "aucun événement"
+      events.forEach(event => {
+        const eventItem = document.createElement('div');
+        eventItem.classList.add('event-item');
+        eventItem.innerHTML = `<strong>${event.name}</strong><br>${event.description}`;
+        eventList.appendChild(eventItem);
+      });
+    } else {
+      noEventsMessage.style.display = 'block'; // Afficher le message "aucun événement"
+    }
+  </script>
 
 </body>
 </html>
