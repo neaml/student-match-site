@@ -3,234 +3,140 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Match - Inscription</title>
+  <title>Inscription | StudentMatch</title>
   <style>
+    /* Style simple pour le formulaire */
     body {
-      margin: 0;
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(135deg, #f3f4f6 25%, #e2e8f0 50%, #edf2f7 75%, #f7fafc);
-      animation: waveAnimation 10s ease-in-out infinite alternate;
-      color: #333;
-    }
-
-    @keyframes waveAnimation {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 100% 0%; }
-    }
-
-    main {
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 15px;
+      font-family: 'Helvetica', sans-serif;
+      background-color: #f4f4f4;
       padding: 20px;
-      max-width: 600px;
-      margin: 50px auto;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      position: relative;
     }
-
-    h1 {
-      color: #800000;
-      text-align: center;
-    }
-
-    p {
-      text-align: center;
-      font-size: 1.1em;
-      color: #555;
-    }
-
     form {
-      display: flex;
-      flex-direction: column;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      margin: auto;
     }
-
-    label {
-      margin-top: 10px;
-      font-size: 0.9em;
-      color: #555;
-    }
-
-    input, select {
+    input, select, button {
+      width: 100%;
       padding: 10px;
-      margin-top: 5px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
       border-radius: 5px;
-      border: 1px solid #ddd;
-      font-size: 1em;
     }
-
-    .bubbleContainer {
+    .bubbles-container {
       display: flex;
       flex-wrap: wrap;
-      margin: 10px 0;
     }
-
     .bubble {
-      background-color: #eee;
-      color: black;
+      background-color: #d1c4e9;
       border-radius: 20px;
-      padding: 8px 16px;
+      padding: 10px;
       margin: 5px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
+      color: #fff;
     }
-
     .bubble.selected {
-      background-color: #800000;
-      color: white;
-    }
-
-    .bubble:hover {
-      transform: scale(1.05);
-    }
-
-    .emoji {
-      font-size: 1.2em;
-      margin-right: 5px;
-    }
-
-    button {
-      background-color: #800000;
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1em;
-      margin-top: 20px;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #b31e1e;
-    }
-
-    .nav {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .nav a {
-      margin: 0 10px;
-      color: #800000;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .loginLink {
-      text-align: center;
-      margin-top: 20px;
+      background-color: #512da8;
     }
   </style>
 </head>
 <body>
 
-  <main>
-    <h1>Bienvenue sur Student Match</h1>
-    <p>Rejoins une communauté d'étudiants et découvre des personnes qui partagent tes passions !</p>
-
-   <div class="nav">
-    <!-- Lien vers la page d'accueil -->
-    <a href="index.html">Accueil</a>
-
-    <!-- Lien vers la page de profil -->
-    <a href="profil.html">Profil</a>
-
-    <!-- Lien vers le tableau de bord -->
-    <a href="dashboard.html">Tableau de Bord</a>
-    </div>
-
-<form id="registerForm">
-  <label for="firstName">Prénom:</label>
-  <input type="text" id="firstName" placeholder="Prénom" required>
-
-  <label for="lastName">Nom:</label>
-  <input type="text" id="lastName" placeholder="Nom" required>
-
-  <label for="email">Email:</label>
-  <input type="email" id="email" placeholder="Email" required>
-
-  <label for="password">Mot de passe:</label>
-  <input type="password" id="password" placeholder="Mot de passe" required>
-
-  <label for="age">Âge:</label>
-  <input type="number" id="age" placeholder="Âge" required>
-
-  <label for="passions">Passions (sélectionner):</label>
-  <select multiple id="passions">
-    <option value="cinéma">🎬 Cinéma</option>
-    <option value="sport">⚽ Sport</option>
-    <option value="musique">🎵 Musique</option>
-    <option value="jeux vidéos">🎮 Jeux Vidéos</option>
-    <option value="lecture">📚 Lecture</option>
-    <option value="voyages">✈️ Voyages</option>
-  </select>
-
-  <label for="relationship">Que recherchez-vous ?</label>
-  <select id="relationship">
-    <option value="relationSérieuse">💑 Relation Sérieuse</option>
-    <option value="amis">👫 Se faire des amis</option>
-    <option value="relationLongTerme">🕒 Relation long terme</option>
-  </select>
-
-  <button type="submit">S'inscrire</button>
-</form>
-
-<script>
-  // Gestion de l'inscription
-  document.getElementById('registerForm').addEventListener('submit', (e) => {
-    e.preventDefault();
+  <h2>Inscription à StudentMatch</h2>
+  <form id="signupForm">
+    <input type="text" id="firstName" placeholder="Prénom" required>
+    <input type="text" id="lastName" placeholder="Nom" required>
+    <input type="number" id="age" placeholder="Âge" required>
+    <input type="email" id="email" placeholder="Adresse email" required>
     
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const age = document.getElementById('age').value;
-    const passions = Array.from(document.getElementById('passions').selectedOptions).map(option => option.value);
-    const relationship = document.getElementById('relationship').value;
+    <label for="orientation">Orientation (facultatif)</label>
+    <select id="orientation">
+      <option value="">Ne pas préciser</option>
+      <option value="hétérosexuel">Hétérosexuel</option>
+      <option value="homosexuel">Homosexuel</option>
+      <option value="bisexuel">Bisexuel</option>
+    </select>
+    
+    <label>Passions</label>
+    <div class="bubbles-container" id="passionsContainer">
+      <!-- Les bulles de passions vont ici -->
+    </div>
+    
+    <label>Recherche</label>
+    <div class="bubbles-container" id="relationshipContainer">
+      <!-- Les bulles de relations vont ici -->
+    </div>
+    
+    <button type="submit">S'inscrire</button>
+ 
 
-    // Création d'un utilisateur dans Firebase Auth
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Ajouter les informations utilisateur dans Firestore
-        const user = userCredential.user;
-        db.collection('users').doc(user.uid).set({
-          firstName,
-          lastName,
-          email,
-          age,
-          passions,
-          relationship,
-        }).then(() => {
-          alert('Inscription réussie !');
-          window.location.href = 'dashboard.html';
-        }).catch((error) => {
-          console.error('Erreur lors de l\'enregistrement des données:', error);
+
+    
+    // Initialiser Firebase
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
+
+    // Ajouter des bulles dynamiques (passions et relations)
+    const passions = ["Cinéma 🎥", "Sport 🏀", "Musique 🎶", "Cuisine 🍳", "Lecture 📚", "Voyage 🌍"];
+    const relationshipTypes = ["Relation sérieuse ❤️", "Amitié 🤝", "Sans idée 🤔", "Relation à long terme 💑"];
+
+    // Fonction pour afficher les bulles
+    function generateBubbles(containerId, options) {
+      const container = document.getElementById(containerId);
+      options.forEach(option => {
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble');
+        bubble.textContent = option;
+        bubble.addEventListener('click', () => {
+          bubble.classList.toggle('selected');
         });
-      })
-      .catch((error) => {
-        console.error('Erreur lors de l\'inscription:', error);
-        alert(error.message);
+        container.appendChild(bubble);
       });
-  });
+    }
 
-      <button type="submit">S'inscrire</button>
-    </form>
+    // Générer les bulles pour passions et types de relations
+    generateBubbles('passionsContainer', passions);
+    generateBubbles('relationshipContainer', relationshipTypes);
 
-     <!-- Bouton "Se connecter" -->
-  <p> J'ai deja un compte ?  <a href="login.html" class="login-btn">Se connecter</a> </p>
+    // Formulaire d'inscription - Enregistrement dans Firebase
+    document.getElementById('signupForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const age = document.getElementById('age').value;
+      const email = document.getElementById('email').value;
+      const orientation = document.getElementById('orientation').value;
 
-  </main>
+      // Récupérer les passions sélectionnées
+      const selectedPassions = [];
+      document.querySelectorAll('#passionsContainer .bubble.selected').forEach(bubble => {
+        selectedPassions.push(bubble.textContent);
+      });
 
-  <script>
-    const bubbles = document.querySelectorAll('.bubble');
-    bubbles.forEach(bubble => {
-      bubble.addEventListener('click', () => {
-        bubble.classList.toggle('selected');
+      // Récupérer le type de relation sélectionné
+      const selectedRelationship = [];
+      document.querySelectorAll('#relationshipContainer .bubble.selected').forEach(bubble => {
+        selectedRelationship.push(bubble.textContent);
+      });
+
+      // Ajouter l'utilisateur dans la base de données
+      db.collection('users').add({
+        firstName,
+        lastName,
+        age,
+        email,
+        orientation,
+        passions: selectedPassions,
+        relationship: selectedRelationship
+      }).then(() => {
+        alert("Inscription réussie !");
+      }).catch(error => {
+        console.error("Erreur d'inscription :", error);
       });
     });
   </script>
-
 </body>
 </html>
