@@ -1,52 +1,172 @@
-<main id="signupPage" style="padding: 20px; font-family: Arial, sans-serif; background-color: #f9f9f9;">
-    <h1 style="color: #800000; text-align: center;">Bienvenue sur Student Match</h1>
-    <p style="text-align: center;">Créez un compte ou connectez-vous pour commencer !</p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Match - Inscription</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDIwfHxyZWR8ZW58MHx8fHwxNjU0MDUxMTAz&ixlib=rb-1.2.1&q=80&w=1080') no-repeat center center fixed;
+      background-size: cover;
+      animation: fadeInBackground 10s ease-in-out infinite alternate;
+    }
 
-    <form id="signupForm" style="max-width: 400px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
-        <label for="firstName">Prénom:</label>
-        <input type="text" id="firstName" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px;" required />
+    @keyframes fadeInBackground {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(0.7); }
+    }
 
-        <label for="lastName">Nom:</label>
-        <input type="text" id="lastName" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px;" required />
+    main {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 20px;
+      max-width: 600px;
+      margin: 50px auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
 
-        <label for="age">Âge:</label>
-        <input type="number" id="age" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px;" required />
+    h1 {
+      color: #800000;
+      text-align: center;
+    }
 
-        <label for="email">Adresse e-mail:</label>
-        <input type="email" id="email" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px;" required />
+    p {
+      text-align: center;
+      font-size: 1.1em;
+      color: #333;
+    }
 
-        <label for="sexualOrientation">Orientation sexuelle (optionnel):</label>
-        <div id="orientationOptions" style="display: flex; flex-wrap: wrap; margin-bottom: 10px;">
-            <button type="button" class="bubble" style="background-color: #eee; margin: 5px; padding: 10px; border: none; border-radius: 20px; cursor: pointer;">Hétérosexuel</button>
-            <button type="button" class="bubble" style="background-color: #eee; margin: 5px; padding: 10px; border: none; border-radius: 20px; cursor: pointer;">Homosexuel</button>
-            <button type="button" class="bubble" style="background-color: #eee; margin: 5px; padding: 10px; border: none; border-radius: 20px; cursor: pointer;">Bisexuel</button>
-        </div>
+    form {
+      display: flex;
+      flex-direction: column;
+    }
 
-        <label for="passions">Passions (sélectionnez plusieurs):</label>
-        <div id="passionOptions" style="display: flex; flex-wrap: wrap; margin-bottom: 10px;">
-            <button type="button" class="bubble" style="background-color: #eee; margin: 5px; padding: 10px; border: none; border-radius: 20px; cursor: pointer;">Cinéma</button>
-            <button type="button" class="bubble" style="background-color: #eee; margin: 5px; padding: 10px; border: none; border-radius: 20px; cursor: pointer;">Sport</button>
-            <button type="button" class="bubble" style="background-color: #eee; margin: 5px; padding: 10px; border: none; border-radius: 20px; cursor: pointer;">Voyages</button>
-            <!-- Ajoutez plus de passions ici -->
-        </div>
+    label {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #555;
+    }
 
-        <label for="lookingFor">Vous cherchez :</label>
-        <div id="lookingForOptions" style="display: flex; flex-wrap: wrap; margin-bottom: 20px;">
-            <button type="button" class="bubble" style="background-color: #eee; margin: 5px; padding: 10px; border: none; border-radius: 20px; cursor: pointer;">Relation sérieuse</button>
-            <button type="button" class="bubble" style="background-color: #eee; margin: 5px; padding: 10px; border: none; border-radius: 20px; cursor: pointer;">Faire des amis</button>
-            <button type="button" class="bubble" style="background-color: #eee; margin: 5px; padding: 10px; border: none; border-radius: 20px; cursor: pointer;">Relation longue durée</button>
-        </div>
+    input, select {
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 1em;
+    }
 
-        <button type="submit" style="background-color: #800000; color: white; padding: 10px; width: 100%; border: none; border-radius: 5px; cursor: pointer;">S'inscrire</button>
+    .bubbleContainer {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+
+    .bubble {
+      background-color: #eee;
+      color: black;
+      border-radius: 20px;
+      padding: 8px 16px;
+      margin: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .bubble.selected {
+      background-color: #800000;
+      color: white;
+    }
+
+    .bubble:hover {
+      transform: scale(1.05);
+    }
+
+    .emoji {
+      font-size: 1.2em;
+      margin-right: 5px;
+    }
+
+    button {
+      background-color: #800000;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #b31e1e;
+    }
+
+  </style>
+</head>
+<body>
+
+  <main>
+    <h1>Bienvenue sur Student Match</h1>
+    <p>Rejoins une communauté d'étudiants et découvre des personnes qui partagent tes passions !</p>
+
+    <form id="signupForm">
+      <label for="firstName">Prénom:</label>
+      <input type="text" id="firstName" placeholder="Ton prénom" required>
+
+      <label for="lastName">Nom:</label>
+      <input type="text" id="lastName" placeholder="Ton nom" required>
+
+      <label for="age">Âge:</label>
+      <input type="number" id="age" placeholder="Ton âge" required>
+
+      <label for="email">Adresse e-mail:</label>
+      <input type="email" id="email" placeholder="exemple@etudiant.fr" required>
+
+      <label for="orientation">Orientation sexuelle (optionnel):</label>
+      <div class="bubbleContainer">
+        <div class="bubble"><span class="emoji">👩‍❤️‍👨</span>Hétérosexuel</div>
+        <div class="bubble"><span class="emoji">🏳️‍🌈</span>Homosexuel</div>
+        <div class="bubble"><span class="emoji">🟣</span>Bisexuel</div>
+        <div class="bubble"><span class="emoji">🟡</span>Pansexuel</div>
+        <div class="bubble"><span class="emoji">⚫️</span>Asexuel</div>
+      </div>
+
+      <label for="passions">Passions :</label>
+      <div class="bubbleContainer">
+        <div class="bubble"><span class="emoji">🎬</span>Cinéma</div>
+        <div class="bubble"><span class="emoji">⚽</span>Sport</div>
+        <div class="bubble"><span class="emoji">📚</span>Lecture</div>
+        <div class="bubble"><span class="emoji">🎮</span>Jeux vidéo</div>
+        <div class="bubble"><span class="emoji">✈️</span>Voyages</div>
+        <div class="bubble"><span class="emoji">🎶</span>Musique</div>
+        <div class="bubble"><span class="emoji">🍳</span>Cuisine</div>
+        <div class="bubble"><span class="emoji">👗</span>Mode</div>
+      </div>
+
+      <label for="searchingFor">Vous recherchez :</label>
+      <div class="bubbleContainer">
+        <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
+        <div class="bubble"><span class="emoji">👫</span>Des Amis</div>
+        <div class="bubble"><span class="emoji">💍</span>Une relation courte durée</div>
+        <div class="bubble"><span class="emoji">🤷‍♂️🤷‍♀️</span>J'ai pas encore décidé</div>
+      </div>
+
+      <button type="submit">S'inscrire</button>
     </form>
-</main>
+  </main>
 
-<script>
-    const bubbleButtons = document.querySelectorAll('.bubble');
-    bubbleButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            button.style.backgroundColor = button.style.backgroundColor === '#800000' ? '#eee' : '#800000';
-            button.style.color = button.style.backgroundColor === '#800000' ? 'white' : 'black';
-        });
+  <script>
+    const bubbles = document.querySelectorAll('.bubble');
+    bubbles.forEach(bubble => {
+      bubble.addEventListener('click', () => {
+        bubble.classList.toggle('selected');
+      });
     });
-</script>
+  </script>
+
+</body>
+</html>
