@@ -1,67 +1,94 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Accueil - Student Match</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #F5F5F5;
-            color: #333;
-        }
-        header {
-            background-color: #800020;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        nav {
-            margin: 20px;
-            text-align: center;
-        }
-        nav a {
-            margin: 0 15px;
-            color: #800020;
-            text-decoration: none;
-            font-size: 18px;
-        }
-        section {
-            text-align: center;
-            margin: 20px;
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #800020;
-            color: white;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Match - Accueil</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    /* Barre de navigation */
+    .navbar {
+      background-color: #800000;
+      color: white;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar h1 {
+      margin: 0;
+      font-size: 1.5em;
+    }
+
+    .navbar .menu {
+      display: flex;
+    }
+
+    .navbar .menu a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #800000;
+    }
+
+    p {
+      font-size: 1.2em;
+    }
+
+    button {
+      background-color: #800000;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #b31e1e;
+    }
+
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Bienvenue sur Student Match</h1>
-        <p>Rencontrez des étudiants, créez des activités et élargissez votre réseau !</p>
-    </header>
 
-    <nav>
-        <a href="inscription.html">Inscription / Connexion</a>
-        <a href="dashboard.html">Tableau de Bord</a>
-        <a href="profil.html">Profil</a>
-        <a href="aide.html">Aide & Contact</a>
-    </nav>
+  <!-- Barre de navigation -->
+  <div class="navbar">
+    <h1>Student Match</h1>
+    <div class="menu">
+      <a href="exploration.html">Explorer les Profils</a>
+      <a href="profil.html">Mon Profil</a>
+      <a href="groupes.html">Groupes</a>
+      <a href="evenements.html">Événements</a>
+    </div>
+  </div>
 
-    <section>
-        <h2>Bienvenue sur la plateforme Student Match</h2>
-        <p>Inscrivez-vous ou connectez-vous pour commencer à explorer des profils et organiser des activités.</p>
-    </section>
+  <!-- Contenu principal -->
+  <div class="container">
+    <h2>Bienvenue sur Student Match</h2>
+    <p>Un réseau étudiant dynamique pour rencontrer, partager et organiser des événements.</p>
 
-    <footer>
-        <p>&copy; 2024 Student Match. Tous droits réservés.</p>
-    </footer>
+    <button onclick="location.href='inscription.html'">S'inscrire</button>
+    <button onclick="location.href='connexion.html'">Se Connecter</button>
+  </div>
+
 </body>
 </html>
