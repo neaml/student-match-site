@@ -75,43 +75,45 @@
       padding: 15px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
       position: relative;
       transition: transform 0.5s ease;
+      text-align: center;
     }
 
     .profile-card img {
-      width: 80px;
-      height: 80px;
+      width: 150px;
+      height: 150px;
       border-radius: 50%;
       object-fit: cover;
+      margin-bottom: 15px;
     }
 
     .profile-card h3 {
-      margin: 0;
-      font-size: 1.2em;
+      margin: 10px 0;
+      font-size: 1.4em;
     }
 
     .profile-card p {
-      margin: 5px 0;
+      font-size: 1.1em;
       color: #555;
+      margin: 5px 0;
     }
 
     /* Boutons d'actions */
     .actions {
-      margin-top: 10px;
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
     }
 
     .actionButton {
       background-color: #800000;
       color: white;
-      padding: 10px;
+      padding: 10px 20px;
       border-radius: 5px;
       border: none;
       cursor: pointer;
-      margin-right: 10px;
+      margin: 0 10px;
       font-size: 1em;
       transition: background-color 0.3s ease;
     }
@@ -193,18 +195,15 @@
       <!-- Carte de Profil -->
       <div class="profile-card" id="profileCard">
         <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Photo de profil">
-        <div>
-          <h3>Marie Dupont, 23 ans</h3>
-          <p>🎬 Passions : Cinéma, Voyages, Cuisine</p>
-          <p>❤️ Recherche : Relation sérieuse</p>
-          <div class="actions">
-            <button class="actionButton" id="passButton">❌ Passer</button>
-            <button class="actionButton" id="smashButton">❤️ Match</button>
-          </div>
+        <h3>Marie Dupont, 23 ans</h3>
+        <p>🎬 Passions : Cinéma, Voyages, Cuisine</p>
+        <p>❤️ Recherche : Relation sérieuse</p>
+        
+        <div class="actions">
+          <button class="actionButton" id="passButton">❌ Passer</button>
+          <button class="actionButton" id="smashButton">❤️ Match</button>
         </div>
       </div>
-
-      <!-- Ajoutez d'autres cartes de profils ici si nécessaire -->
 
     </div>
 
@@ -291,3 +290,4 @@
 
 </body>
 </html>
+
