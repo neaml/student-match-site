@@ -3,39 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Match - Inscription</title>
+  <title>Student Match - Inscription/Connexion</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: url('https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDIwfHxyZWR8ZW58MHx8fHwxNjU0MDUxMTAz&ixlib=rb-1.2.1&q=80&w=1080') no-repeat center center fixed;
-      background-size: cover;
-      animation: fadeInBackground 10s ease-in-out infinite alternate;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f0f0;
+      overflow: hidden;
     }
 
-    @keyframes fadeInBackground {
-      0% { filter: brightness(1); }
-      100% { filter: brightness(0.7); }
+    /* Animation de fond en vague */
+    body:before {
+      content: "";
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(135deg, #800000, #b31e1e);
+      top: -50%;
+      left: -50%;
+      z-index: -1;
+      animation: wave 10s infinite linear;
+    }
+
+    @keyframes wave {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
     }
 
     main {
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: rgba(255, 255, 255, 0.95);
       border-radius: 15px;
       padding: 20px;
       max-width: 600px;
-      margin: 50px auto;
+      margin: 100px auto;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
 
     h1 {
       color: #800000;
       text-align: center;
+      font-weight: 600;
     }
 
     p {
       text-align: center;
       font-size: 1.1em;
-      color: #333;
+      color: #555;
     }
 
     form {
@@ -49,7 +68,7 @@
       color: #555;
     }
 
-    input, select {
+    input {
       padding: 10px;
       margin-top: 5px;
       border-radius: 5px;
@@ -105,68 +124,51 @@
       background-color: #b31e1e;
     }
 
+    /* Lien pour ceux qui ont déjà un compte */
+    .account-switch {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.9em;
+    }
+
+    .account-switch a {
+      color: #800000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
   </style>
 </head>
 <body>
 
   <main>
     <h1>Bienvenue sur Student Match</h1>
-    <p>Rejoins une communauté d'étudiants et découvre des personnes qui partagent tes passions !</p>
+    <p>Rejoignez la communauté ou connectez-vous à votre compte !</p>
 
     <form id="signupForm">
       <label for="firstName">Prénom:</label>
-      <input type="text" id="firstName" placeholder="Ton prénom" required>
+      <input type="text" id="firstName" placeholder="Votre prénom" required>
 
       <label for="lastName">Nom:</label>
-      <input type="text" id="lastName" placeholder="Ton nom" required>
+      <input type="text" id="lastName" placeholder="Votre nom" required>
 
       <label for="age">Âge:</label>
-      <input type="number" id="age" placeholder="Ton âge" required>
+      <input type="number" id="age" placeholder="Votre âge" required>
 
       <label for="email">Adresse e-mail:</label>
       <input type="email" id="email" placeholder="exemple@etudiant.fr" required>
 
-      <label for="orientation">Orientation sexuelle (optionnel):</label>
-      <div class="bubbleContainer">
-        <div class="bubble"><span class="emoji">👩‍❤️‍👨</span>Hétérosexuel</div>
-        <div class="bubble"><span class="emoji">🏳️‍🌈</span>Homosexuel</div>
-        <div class="bubble"><span class="emoji">🟣</span>Bisexuel</div>
-        <div class="bubble"><span class="emoji">🟡</span>Pansexuel</div>
-        <div class="bubble"><span class="emoji">⚫️</span>Asexuel</div>
-      </div>
-
-      <label for="passions">Passions :</label>
-      <div class="bubbleContainer">
-        <div class="bubble"><span class="emoji">🎬</span>Cinéma</div>
-        <div class="bubble"><span class="emoji">⚽</span>Sport</div>
-        <div class="bubble"><span class="emoji">📚</span>Lecture</div>
-        <div class="bubble"><span class="emoji">🎮</span>Jeux vidéo</div>
-        <div class="bubble"><span class="emoji">✈️</span>Voyages</div>
-        <div class="bubble"><span class="emoji">🎶</span>Musique</div>
-        <div class="bubble"><span class="emoji">🍳</span>Cuisine</div>
-        <div class="bubble"><span class="emoji">👗</span>Mode</div>
-      </div>
-
-      <label for="searchingFor">Vous recherchez :</label>
-      <div class="bubbleContainer">
-        <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
-        <div class="bubble"><span class="emoji">👫</span>Des Amis</div>
-        <div class="bubble"><span class="emoji">💍</span>Une relation courte durée</div>
-        <div class="bubble"><span class="emoji">🤷‍♂️🤷‍♀️</span>J'ai pas encore décidé</div>
-      </div>
-
+      <!-- Ajout des autres champs ici (orientation sexuelle, passions, etc.) -->
+      
       <button type="submit">S'inscrire</button>
     </form>
-  </main>
 
-  <script>
-    const bubbles = document.querySelectorAll('.bubble');
-    bubbles.forEach(bubble => {
-      bubble.addEventListener('click', () => {
-        bubble.classList.toggle('selected');
-      });
-    });
-  </script>
+    <div class="account-switch">
+      <p>Déjà un compte ? <a href="#">Connectez-vous</a></p>
+    </div>
+
+  </main>
 
 </body>
 </html>
+
