@@ -141,47 +141,79 @@
     <a href="dashboard.html">Tableau de Bord</a>
     </div>
 
-    <form id="signupForm">
-      <label for="firstName">Prénom:</label>
-      <input type="text" id="firstName" placeholder="Ton prénom" required>
+<form id="registerForm">
+  <label for="firstName">Prénom:</label>
+  <input type="text" id="firstName" placeholder="Prénom" required>
 
-      <label for="lastName">Nom:</label>
-      <input type="text" id="lastName" placeholder="Ton nom" required>
+  <label for="lastName">Nom:</label>
+  <input type="text" id="lastName" placeholder="Nom" required>
 
-      <label for="age">Âge:</label>
-      <input type="number" id="age" placeholder="Ton âge" required>
+  <label for="email">Email:</label>
+  <input type="email" id="email" placeholder="Email" required>
 
-      <label for="email">Adresse e-mail:</label>
-      <input type="email" id="email" placeholder="exemple@etudiant.fr" required>
+  <label for="password">Mot de passe:</label>
+  <input type="password" id="password" placeholder="Mot de passe" required>
 
-      <label for="orientation">Orientation sexuelle (optionnel):</label>
-      <div class="bubbleContainer">
-        <div class="bubble"><span class="emoji">👩‍❤️‍👨</span>Hétérosexuel</div>
-        <div class="bubble"><span class="emoji">🏳️‍🌈</span>Homosexuel</div>
-        <div class="bubble"><span class="emoji">🟣</span>Bisexuel</div>
-        <div class="bubble"><span class="emoji">🟡</span>Pansexuel</div>
-        <div class="bubble"><span class="emoji">⚫️</span>Asexuel</div>
-      </div>
+  <label for="age">Âge:</label>
+  <input type="number" id="age" placeholder="Âge" required>
 
-      <label for="passions">Passions :</label>
-      <div class="bubbleContainer">
-        <div class="bubble"><span class="emoji">🎬</span>Cinéma</div>
-        <div class="bubble"><span class="emoji">⚽</span>Sport</div>
-        <div class="bubble"><span class="emoji">📚</span>Lecture</div>
-        <div class="bubble"><span class="emoji">🎮</span>Jeux vidéo</div>
-        <div class="bubble"><span class="emoji">✈️</span>Voyages</div>
-        <div class="bubble"><span class="emoji">🎶</span>Musique</div>
-        <div class="bubble"><span class="emoji">🍳</span>Cuisine</div>
-        <div class="bubble"><span class="emoji">👗</span>Mode</div>
-      </div>
+  <label for="passions">Passions (sélectionner):</label>
+  <select multiple id="passions">
+    <option value="cinéma">🎬 Cinéma</option>
+    <option value="sport">⚽ Sport</option>
+    <option value="musique">🎵 Musique</option>
+    <option value="jeux vidéos">🎮 Jeux Vidéos</option>
+    <option value="lecture">📚 Lecture</option>
+    <option value="voyages">✈️ Voyages</option>
+  </select>
 
-      <label for="searchingFor">Tu recherches :</label>
-      <div class="bubbleContainer">
-        <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
-        <div class="bubble"><span class="emoji">👫</span>Des Amis</div>
-        <div class="bubble"><span class="emoji">💍</span>Une relation courte durée</div>
-        <div class="bubble"><span class="emoji">🤷‍♂️🤷‍♀️</span>J'ai pas encore décidé</div>
-      </div>
+  <label for="relationship">Que recherchez-vous ?</label>
+  <select id="relationship">
+    <option value="relationSérieuse">💑 Relation Sérieuse</option>
+    <option value="amis">👫 Se faire des amis</option>
+    <option value="relationLongTerme">🕒 Relation long terme</option>
+  </select>
+
+  <button type="submit">S'inscrire</button>
+</form>
+
+<script>
+  // Gestion de l'inscription
+  document.getElementById('registerForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const age = document.getElementById('age').value;
+    const passions = Array.from(document.getElementById('passions').selectedOptions).map(option => option.value);
+    const relationship = document.getElementById('relationship').value;
+
+    // Création d'un utilisateur dans Firebase Auth
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Ajouter les informations utilisateur dans Firestore
+        const user = userCredential.user;
+        db.collection('users').doc(user.uid).set({
+          firstName,
+          lastName,
+          email,
+          age,
+          passions,
+          relationship,
+        }).then(() => {
+          alert('Inscription réussie !');
+          window.location.href = 'exploration.html';
+        }).catch((error) => {
+          console.error('Erreur lors de l\'enregistrement des données:', error);
+        });
+      })
+      .catch((error) => {
+        console.error('Erreur lors de l\'inscription:', error);
+        alert(error.message);
+      });
+  });
 
       <button type="submit">S'inscrire</button>
     </form>
