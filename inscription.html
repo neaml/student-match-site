@@ -4,70 +4,167 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Match - Inscription</title>
-
-  <!-- Lien vers le fichier CSS -->
+    <!-- Lien vers le fichier CSS global -->
   <link rel="stylesheet" href="styles.css">
+  <style>
+         <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
+    authDomain: "student-match-but3.firebaseapp.com",
+    projectId: "student-match-but3",
+    storageBucket: "student-match-but3.appspot.com",
+    messagingSenderId: "1096075545413",
+    appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
+    measurementId: "G-XK5N6FLSYJ"
+  };
 
-    // Config Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDHWYEB...",
-      authDomain: "student-match.firebaseapp.com",
-      projectId: "student-match",
-      storageBucket: "student-match.appspot.com",
-      messagingSenderId: "123456789",
-      appId: "1:123456789:web:abc123def456",
-      measurementId: "G-XK5N6FLSYJ"
-    };
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #f3f4f6 25%, #e2e8f0 50%, #edf2f7 75%, #f7fafc);
+      animation: waveAnimation 10s ease-in-out infinite alternate;
+      color: #333;
+    }
 
-    // Initialize Firebase and Firestore
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    @keyframes waveAnimation {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 0%; }
+    }
 
-    // Form submit logic
-    document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('signupForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
+    main {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 20px;
+      max-width: 600px;
+      margin: 50px auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
 
-        // Récupérer les informations du formulaire
-        const firstName = document.getElementById('firstName').value;
-        const lastName = document.getElementById('lastName').value;
-        const age = parseInt(document.getElementById('age').value);
-        const email = document.getElementById('email').value;
-        const orientation = document.querySelectorAll('.orientation .bubble.selected').textContent;
-        const passions = Array.from(document.querySelectorAll('.passions .bubble.selected')).map(b => b.textContent);
-        const searchingFor = Array.from(document.querySelectorAll('.searchingFor .bubble.selected')).map(b => b.textContent);
+    h1 {
+      color: #800000;
+      text-align: center;
+    }
 
-        try {
-          // Enregistrer dans Firestore
-          await addDoc(collection(db, 'users'), {
-            firstName, lastName, age, email, orientation, passions, searchingFor
-          });
-          alert('Inscription réussie');
-        } catch (error) {
-          console.error("Erreur lors de l'inscription :", error);
-        }
-      });
+    p {
+      text-align: center;
+      font-size: 1.1em;
+      color: #555;
+    }
 
-      // Gestion des bulles interactives
-      document.querySelectorAll('.bubble').forEach(bubble => {
-        bubble.addEventListener('click', () => {
-          bubble.classList.toggle('selected');
-        });
-      });
-    });
-  </script>
+    form {
+      display: flex;
+      flex-direction: column;
+    }
 
+    label {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    input, select {
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 1em;
+    }
+
+    .bubbleContainer {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+
+    .bubble {
+      background-color: #eee;
+      color: black;
+      border-radius: 20px;
+      padding: 8px 16px;
+      margin: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .bubble.selected {
+      background-color: #800000;
+      color: white;
+    }
+
+    .bubble:hover {
+      transform: scale(1.05);
+    }
+
+    .emoji {
+      font-size: 1.2em;
+      margin-right: 5px;
+    }
+
+    button {
+      background-color: #800000;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #b31e1e;
+    }
+
+    .nav {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .nav a {
+      margin: 0 10px;
+      color: #800000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .loginLink {
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
 
   <main>
     <h1>Bienvenue sur Student Match</h1>
-    <p>Rejoins une communauté d'étudiants qui partagent tes passions !</p>
+    <p>Rejoins une communauté d'étudiants et découvre des personnes qui partagent tes passions !</p>
+
+   <div class="nav">
+    <!-- Lien vers la page d'accueil -->
+    <a href="index.html">Accueil</a>
+
+    <!-- Lien vers la page de profil -->
+    <a href="profil.html">Profil</a>
+
+    <!-- Lien vers le tableau de bord -->
+    <a href="dashboard.html">Tableau de Bord</a>
+    </div>
 
     <form id="signupForm">
       <label for="firstName">Prénom:</label>
@@ -82,41 +179,96 @@
       <label for="email">Adresse e-mail:</label>
       <input type="email" id="email" placeholder="exemple@etudiant.fr" required>
 
-      <label>Orientation sexuelle :</label>
-      <div class="bubbleContainer orientation">
-        <div class="bubble">👩‍❤️‍👨 Hétérosexuel</div>
-        <div class="bubble">🏳️‍🌈 Homosexuel</div>
-        <div class="bubble">🟣 Bisexuel</div>
-        <div class="bubble">🟡 Pansexuel</div>
-        <div class="bubble">⚫️ Asexuel</div>
+      <label for="orientation">Orientation sexuelle (optionnel):</label>
+      <div class="bubbleContainer">
+        <div class="bubble"><span class="emoji">👩‍❤️‍👨</span>Hétérosexuel</div>
+        <div class="bubble"><span class="emoji">🏳️‍🌈</span>Homosexuel</div>
+        <div class="bubble"><span class="emoji">🟣</span>Bisexuel</div>
+        <div class="bubble"><span class="emoji">🟡</span>Pansexuel</div>
+        <div class="bubble"><span class="emoji">⚫️</span>Asexuel</div>
       </div>
 
-      <label>Passions :</label>
-      <div class="bubbleContainer passions">
-        <div class="bubble">🎬 Cinéma</div>
-        <div class="bubble">⚽ Sport</div>
-        <div class="bubble">📚 Lecture</div>
-        <div class="bubble">🎮 Jeux vidéo</div>
-        <div class="bubble">✈️ Voyages</div>
-        <div class="bubble">🎶 Musique</div>
-        <div class="bubble">🍳 Cuisine</div>
-        <div class="bubble">👗 Mode</div>
+      <label for="passions">Passions :</label>
+      <div class="bubbleContainer">
+        <div class="bubble"><span class="emoji">🎬</span>Cinéma</div>
+        <div class="bubble"><span class="emoji">⚽</span>Sport</div>
+        <div class="bubble"><span class="emoji">📚</span>Lecture</div>
+        <div class="bubble"><span class="emoji">🎮</span>Jeux vidéo</div>
+        <div class="bubble"><span class="emoji">✈️</span>Voyages</div>
+        <div class="bubble"><span class="emoji">🎶</span>Musique</div>
+        <div class="bubble"><span class="emoji">🍳</span>Cuisine</div>
+        <div class="bubble"><span class="emoji">👗</span>Mode</div>
       </div>
 
-      <label>Tu recherches :</label>
-      <div class="bubbleContainer searchingFor">
-        <div class="bubble">❤️ Une relation sérieuse</div>
-        <div class="bubble">👫 Des amis</div>
-        <div class="bubble">💍 Une relation longue durée</div>
-        <div class="bubble">🥂 Une relation d'un soir</div>
-        <div class="bubble">🤷‍♂️🤷‍♀️ J'ai pas encore décidé</div>
+      <label for="searchingFor">Tu recherches :</label>
+      <div class="bubbleContainer">
+        <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
+        <div class="bubble"><span class="emoji">👫</span>Des Amis</div>
+        <div class="bubble"><span class="emoji">💍</span>Une relation longue durée</div>
+        <div class="bubble"><span class="emoji">🥂</span>Une relation d'un soir</div>
+        <div class="bubble"><span class="emoji">🤷‍♂️🤷‍♀️</span>J'ai pas encore décidé</div>
       </div>
 
       <button type="submit">S'inscrire</button>
     </form>
+<script>
+  document.getElementById('signupForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Empêche le rechargement de la page
+    
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
-    <p class="loginLink">Déjà inscrit ? <a href="login.html">Se connecter</a></p>
+// Initialiser Firebase et Firestore
+const db = getFirestore();
+
+    // Récupérer les informations du formulaire
+    var firstName = document.getElementById('firstName').value;
+    var lastName = document.getElementById('lastName').value;
+    var age = parseInt(document.getElementById('age').value);
+    var email = document.getElementById('email').value;
+    var orientation = document.getElementById('orientation').value;
+    
+    // Récupérer les passions sélectionnées
+    var passions = [];
+    document.querySelectorAll('#passionsContainer .bubble.selected').forEach(bubble => {
+      passions.push(bubble.textContent);
+    });
+    
+    // Récupérer le type de relation sélectionné
+    var searchingFor = [];
+    document.querySelectorAll('#relationshipContainer .bubble.selected').forEach(bubble => {
+      searchingFor.push(bubble.textContent);
+    });
+
+    // Ajouter les données dans Firestore
+ addDoc(collection(db, 'users'), {
+      firstName: firstName,
+      lastName: lastName,
+      age: age,
+      email: email,
+      orientation: orientation,
+      passions: passions,
+      searchingFor: searchingFor
+    }).then(() => {
+      alert('Inscription réussie et informations enregistrées dans Firebase');
+    }).catch(error => {
+      console.error('Erreur lors de l\'enregistrement : ', error);
+    });
+  });
+</script>
+
+     <!-- Bouton "Se connecter" -->
+  <p> J'ai deja un compte ?  <a href="login.html" class="login-btn">Se connecter</a> </p>
+
   </main>
+
+  <script>
+    const bubbles = document.querySelectorAll('.bubble');
+    bubbles.forEach(bubble => {
+      bubble.addEventListener('click', () => {
+        bubble.classList.toggle('selected');
+      });
+    });
+  </script>
 
 </body>
 </html>
