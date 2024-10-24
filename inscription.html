@@ -138,7 +138,6 @@
       background-color: #800000;
       color: white;
     }
-
     .bubble:hover {
       transform: scale(1.05);
     }
@@ -247,14 +246,16 @@
   </main>
 
   <script>
- const bubbles = document.querySelectorAll('.bubble');
-bubbles.forEach(bubble => {
-  bubble.addEventListener('click', () => {
+    // Sélectionner toutes les bulles
+    const bubbles = document.querySelectorAll('.bubble');
     
-    // Ajoute la classe 'selected' à la bulle cliquée
-    bubble.classList.add('selected');
-  });
-});
+    // Ajouter un événement click à chaque bulle
+    bubbles.forEach(bubble => {
+      bubble.addEventListener('click', () => {
+        // Toggle de la classe 'selected' pour changer le style
+        bubble.classList.toggle('selected');
+      });
+    });
 
     document.getElementById('signupForm').addEventListener('submit', function (e) {
       e.preventDefault(); // Empêche le rechargement de la page
