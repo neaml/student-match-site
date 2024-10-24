@@ -250,8 +250,7 @@
  const bubbles = document.querySelectorAll('.bubble');
 bubbles.forEach(bubble => {
   bubble.addEventListener('click', () => {
-    // Enlève la classe 'selected' de toutes les bulles
-    bubbles.forEach(b => b.classList.remove('selected'));
+    
     // Ajoute la classe 'selected' à la bulle cliquée
     bubble.classList.add('selected');
   });
