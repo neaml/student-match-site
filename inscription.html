@@ -6,28 +6,61 @@
   <title>Student Match - Inscription</title>
   <!-- Lien vers le fichier CSS global -->
   <link rel="stylesheet" href="styles.css">
-  <script type="module">
-    // Importer les fonctions nécessaires
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-analytics.js";
-    
-    // Configuration de votre application Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
-      authDomain: "student-match-but3.firebaseapp.com",
-      projectId: "student-match-but3",
-      storageBucket: "student-match-but3.appspot.com",
-      messagingSenderId: "1096075545413",
-      appId: "1:1096075545413:web:85451af9e19c5c54830c2",
-      measurementId: "G-XK5N6FLSYJ"
-    };
+<script type="module">
+  // Importer les fonctions nécessaires
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+  
+  // Configuration de votre application Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
+    authDomain: "student-match-but3.firebaseapp.com",
+    projectId: "student-match-but3",
+    storageBucket: "student-match-but3.appspot.com",
+    messagingSenderId: "1096075545413",
+    appId: "1:1096075545413:web:85451af9e19c5c54830c2",
+    measurementId: "G-XK5N6FLSYJ"
+  };
 
-    // Initialiser Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app); // Initialiser Firestore
-  </script>
+  // Initialiser Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app); // Initialiser Firestore
+  const auth = getAuth(app); // Initialiser l'authentification Firebase
+
+  // Événement de soumission du formulaire
+  document.getElementById('signupForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Empêche le rechargement de la page
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    // Créer un nouvel utilisateur
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+
+        // Maintenant, ajoutez les données supplémentaires à Firestore
+        addDoc(collection(db, 'users'), {
+          uid: user.uid, // Enregistrez l'UID de l'utilisateur
+          firstName: document.getElementById('firstName').value,
+          lastName: document.getElementById('lastName').value,
+          age: parseInt(document.getElementById('age').value),
+          orientation: document.querySelector('.bubble.selected').textContent || null,
+          passions: [], // Traitez les passions comme auparavant
+          searchingFor: [] // Traitez le type de relation comme auparavant
+        }).then(() => {
+          alert('Inscription réussie et informations enregistrées dans Firebase');
+        }).catch(error => {
+          console.error('Erreur lors de l\'enregistrement : ', error);
+        });
+      })
+      .catch((error) => {
+        console.error('Erreur lors de l\'inscription : ', error);
+      });
+  });
+</script>
+
   <style>
     /* Styles CSS ici (comme votre code original) */
     body {
@@ -229,10 +262,16 @@
       const password = document.getElementById('password').value; // Ajoutez le mot de passe ici
 
       // Créer un nouvel utilisateur
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Inscription réussie
-          const user = userCredential.user;
+     createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Inscription réussie
+    console.log('Inscription réussie', userCredential.user);
+    // Ajouter des données à Firestore...
+  })
+  .catch((error) => {
+    console.error('Erreur lors de l\'inscription : ', error);
+  });
+
 
           // Récupérer les passions sélectionnées
           const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected')).map(bubble => bubble.textContent);
