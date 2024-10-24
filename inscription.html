@@ -5,17 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Match - Inscription</title>
 
-  <!-- Import de la police Nunito -->
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
-
-  <!-- Lien vers le fichier CSS global -->
+  <!-- Lien vers le fichier CSS -->
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+    // Config Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHWYEB...",
+      authDomain: "student-match.firebaseapp.com",
+      projectId: "student-match",
+      storageBucket: "student-match.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abc123def456",
+      measurementId: "G-XK5N6FLSYJ"
+    };
+
+    // Initialize Firebase and Firestore
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Form submit logic
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('signupForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        // Récupérer les informations du formulaire
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const age = parseInt(document.getElementById('age').value);
+        const email = document.getElementById('email').value;
+        const orientation = document.querySelectorAll('.orientation .bubble.selected').textContent;
+        const passions = Array.from(document.querySelectorAll('.passions .bubble.selected')).map(b => b.textContent);
+        const searchingFor = Array.from(document.querySelectorAll('.searchingFor .bubble.selected')).map(b => b.textContent);
+
+        try {
+          // Enregistrer dans Firestore
+          await addDoc(collection(db, 'users'), {
+            firstName, lastName, age, email, orientation, passions, searchingFor
+          });
+          alert('Inscription réussie');
+        } catch (error) {
+          console.error("Erreur lors de l'inscription :", error);
+        }
+      });
+
+      // Gestion des bulles interactives
+      document.querySelectorAll('.bubble').forEach(bubble => {
+        bubble.addEventListener('click', () => {
+          bubble.classList.toggle('selected');
+        });
+      });
+    });
+  </script>
+
 </head>
 <body>
 
   <main>
-    <h1>Inscription</h1>
-    <p>Rejoins des étudiants qui partagent tes passions et crée des liens !</p>
+    <h1>Bienvenue sur Student Match</h1>
+    <p>Rejoins une communauté d'étudiants qui partagent tes passions !</p>
 
     <form id="signupForm">
       <label for="firstName">Prénom:</label>
@@ -30,91 +82,41 @@
       <label for="email">Adresse e-mail:</label>
       <input type="email" id="email" placeholder="exemple@etudiant.fr" required>
 
-      <label>Orientation sexuelle (optionnel):</label>
+      <label>Orientation sexuelle :</label>
       <div class="bubbleContainer orientation">
-        <div class="bubble"><span class="emoji">👩‍❤️‍👨</span> Hétérosexuel</div>
-        <div class="bubble"><span class="emoji">🏳️‍🌈</span> Homosexuel</div>
-        <div class="bubble"><span class="emoji">🟣</span> Bisexuel</div>
-        <div class="bubble"><span class="emoji">🟡</span> Pansexuel</div>
-        <div class="bubble"><span class="emoji">⚫️</span> Asexuel</div>
+        <div class="bubble">👩‍❤️‍👨 Hétérosexuel</div>
+        <div class="bubble">🏳️‍🌈 Homosexuel</div>
+        <div class="bubble">🟣 Bisexuel</div>
+        <div class="bubble">🟡 Pansexuel</div>
+        <div class="bubble">⚫️ Asexuel</div>
       </div>
 
       <label>Passions :</label>
       <div class="bubbleContainer passions">
-        <div class="bubble"><span class="emoji">🎬</span> Cinéma</div>
-        <div class="bubble"><span class="emoji">⚽</span> Sport</div>
-        <div class="bubble"><span class="emoji">📚</span> Lecture</div>
-        <div class="bubble"><span class="emoji">🎮</span> Jeux vidéo</div>
-        <div class="bubble"><span class="emoji">✈️</span> Voyages</div>
-        <div class="bubble"><span class="emoji">🎶</span> Musique</div>
-        <div class="bubble"><span class="emoji">🍳</span> Cuisine</div>
-        <div class="bubble"><span class="emoji">👗</span> Mode</div>
+        <div class="bubble">🎬 Cinéma</div>
+        <div class="bubble">⚽ Sport</div>
+        <div class="bubble">📚 Lecture</div>
+        <div class="bubble">🎮 Jeux vidéo</div>
+        <div class="bubble">✈️ Voyages</div>
+        <div class="bubble">🎶 Musique</div>
+        <div class="bubble">🍳 Cuisine</div>
+        <div class="bubble">👗 Mode</div>
       </div>
 
       <label>Tu recherches :</label>
       <div class="bubbleContainer searchingFor">
-        <div class="bubble"><span class="emoji">❤️</span> Une relation sérieuse</div>
-        <div class="bubble"><span class="emoji">👫</span> Des Amis</div>
-        <div class="bubble"><span class="emoji">💍</span> Une relation longue durée</div>
-        <div class="bubble"><span class="emoji">🥂</span> Une relation d'un soir</div>
-        <div class="bubble"><span class="emoji">🤷‍♂️🤷‍♀️</span> J'ai pas encore décidé</div>
+        <div class="bubble">❤️ Une relation sérieuse</div>
+        <div class="bubble">👫 Des amis</div>
+        <div class="bubble">💍 Une relation longue durée</div>
+        <div class="bubble">🥂 Une relation d'un soir</div>
+        <div class="bubble">🤷‍♂️🤷‍♀️ J'ai pas encore décidé</div>
       </div>
 
       <button type="submit">S'inscrire</button>
     </form>
 
     <p class="loginLink">Déjà inscrit ? <a href="login.html">Se connecter</a></p>
-
   </main>
-
-  <script>
-    document.getElementById('signupForm').addEventListener('submit', async function (e) {
-      e.preventDefault(); // Empêche le rechargement de la page
-
-      // Récupération des valeurs du formulaire
-      const firstName = document.getElementById('firstName').value;
-      const lastName = document.getElementById('lastName').value;
-      const age = parseInt(document.getElementById('age').value);
-      const email = document.getElementById('email').value;
-
-      // Gestion des bulles sélectionnées
-      const getSelectedBubbles = (selector) => {
-        let selected = [];
-        document.querySelectorAll(`${selector} .bubble.selected`).forEach(bubble => {
-          selected.push(bubble.textContent.trim());
-        });
-        return selected;
-      };
-
-      const orientation = getSelectedBubbles('.orientation');
-      const passions = getSelectedBubbles('.passions');
-      const searchingFor = getSelectedBubbles('.searchingFor');
-
-      // Envoi vers Firestore (ajout)
-      try {
-        await addDoc(collection(db, 'users'), {
-          firstName,
-          lastName,
-          age,
-          email,
-          orientation,
-          passions,
-          searchingFor
-        });
-        alert('Inscription réussie !');
-      } catch (error) {
-        console.error('Erreur :', error);
-      }
-    });
-
-    // Gestion de la sélection des bulles
-    const bubbles = document.querySelectorAll('.bubble');
-    bubbles.forEach(bubble => {
-      bubble.addEventListener('click', () => {
-        bubble.classList.toggle('selected');
-      });
-    });
-  </script>
 
 </body>
 </html>
