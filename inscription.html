@@ -10,8 +10,8 @@
     // Importer les fonctions nécessaires
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
- import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-analytics.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-analytics.js";
     
     // Configuration de votre application Firebase
     const firebaseConfig = {
@@ -175,8 +175,7 @@ import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com
       <input type="email" id="email" placeholder="exemple@etudiant.fr" required>
       
       <label for="password">Mot de passe:</label>
-<input type="password" id="password" placeholder="Choisis un mot de passe" required>
-
+      <input type="password" id="password" placeholder="Choisis un mot de passe" required>
 
       <label for="orientation">Orientation sexuelle (optionnel):</label>
       <div id="orientationContainer" class="bubbleContainer">
@@ -222,38 +221,43 @@ import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com
       });
     });
 
-   <script>
-  document.getElementById('signupForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // Empêche le rechargement de la page
+    document.getElementById('signupForm').addEventListener('submit', function (e) {
+      e.preventDefault(); // Empêche le rechargement de la page
 
-    const auth = getAuth();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value; // Ajoutez le mot de passe ici
+      const auth = getAuth();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value; // Ajoutez le mot de passe ici
 
-    // Créer un nouvel utilisateur
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Inscription réussie
-        const user = userCredential.user;
+      // Créer un nouvel utilisateur
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Inscription réussie
+          const user = userCredential.user;
 
-        // Maintenant, ajoutez les données supplémentaires à Firestore
-        const db = getFirestore();
-        addDoc(collection(db, 'users'), {
-          uid: user.uid, // Enregistrez l'UID de l'utilisateur
-          firstName: document.getElementById('firstName').value,
-          lastName: document.getElementById('lastName').value,
-          age: parseInt(document.getElementById('age').value),
-          orientation: document.querySelector('.bubble.selected').textContent || null,
-          passions: [], // Traitez les passions comme auparavant
-          searchingFor: [] // Traitez le type de relation comme auparavant
-        }).then(() => {
-          alert('Inscription réussie et informations enregistrées dans Firebase');
-        }).catch(error => {
-          console.error('Erreur lors de l\'enregistrement : ', error);
+          // Récupérer les passions sélectionnées
+          const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected')).map(bubble => bubble.textContent);
+          const selectedOrientation = document.querySelector('#orientationContainer .bubble.selected')?.textContent || null;
+          const selectedRelationship = Array.from(document.querySelectorAll('#relationshipContainer .bubble.selected')).map(bubble => bubble.textContent);
+
+          // Maintenant, ajoutez les données supplémentaires à Firestore
+          addDoc(collection(db, 'users'), {
+            uid: user.uid, // Enregistrez l'UID de l'utilisateur
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            age: parseInt(document.getElementById('age').value),
+            orientation: selectedOrientation,
+            passions: selectedPassions,
+            searchingFor: selectedRelationship
+          }).then(() => {
+            alert('Inscription réussie et informations enregistrées dans Firebase');
+          }).catch(error => {
+            console.error('Erreur lors de l\'enregistrement : ', error);
+          });
+        })
+        .catch((error) => {
+          console.error('Erreur lors de l\'inscription : ', error);
         });
-      })
-      .catch((error) => {
-        console.error('Erreur lors de l\'inscription : ', error);
-      });
-  });
-</script>
+    });
+  </script>
+</body>
+</html>
