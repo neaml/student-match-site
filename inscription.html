@@ -202,7 +202,8 @@
       <div class="bubbleContainer">
         <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
         <div class="bubble"><span class="emoji">👫</span>Des Amis</div>
-        <div class="bubble"><span class="emoji">💍</span>Une relation courte durée</div>
+        <div class="bubble"><span class="emoji">💍</span>Une relation longue durée</div>
+        <div class="bubble"><span class="emoji">🥂</span>Une relation d'un soir</div>
         <div class="bubble"><span class="emoji">🤷‍♂️🤷‍♀️</span>J'ai pas encore décidé</div>
       </div>
 
@@ -225,15 +226,15 @@ const db = getFirestore();
     var orientation = document.getElementById('orientation').value;
     
     // Récupérer les passions sélectionnées
-    var selectedPassions = [];
+    var passions = [];
     document.querySelectorAll('#passionsContainer .bubble.selected').forEach(bubble => {
-      selectedPassions.push(bubble.textContent);
+      passions.push(bubble.textContent);
     });
     
     // Récupérer le type de relation sélectionné
-    var selectedRelationship = [];
+    var searchingFor = [];
     document.querySelectorAll('#relationshipContainer .bubble.selected').forEach(bubble => {
-      selectedRelationship.push(bubble.textContent);
+      searchingFor.push(bubble.textContent);
     });
 
     // Ajouter les données dans Firestore
@@ -243,8 +244,8 @@ const db = getFirestore();
       age: age,
       email: email,
       orientation: orientation,
-      passions: selectedPassions,
-      relationship: selectedRelationship
+      passions: passions,
+      searchingFor: searchingFor
     }).then(() => {
       alert('Inscription réussie et informations enregistrées dans Firebase');
     }).catch(error => {
