@@ -5,46 +5,124 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Match - Inscription</title>
 
-  <!-- Lien vers le fichier CSS -->
-  <link rel="stylesheet" href="styles.css">
-
-  <!-- Importation de la police Nunito -->
+  <!-- Import de la police Nunito -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <!-- SDK Firebase -->
-  <script type="module">
-    // Import des fonctions Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  <!-- Lien vers le fichier CSS global -->
+  <link rel="stylesheet" href="styles.css">
 
-    // Configuration Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
-      authDomain: "student-match-but3.firebaseapp.com",
-      projectId: "student-match-but3",
-      storageBucket: "student-match-but3.appspot.com",
-      messagingSenderId: "1096075545413",
-      appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
-      measurementId: "G-XK5N6FLSYJ"
-    };
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Nunito', sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-    // Initialisation Firebase et Firestore
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-  </script>
-  
+    main {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      color: #ff5864; /* Couleur principale style Tinder */
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9em;
+      margin-bottom: 10px;
+      text-align: left;
+      color: #555;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 30px;
+      border: 1px solid #ddd;
+      font-size: 1em;
+      box-sizing: border-box;
+    }
+
+    /* Bulles */
+    .bubbleContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .bubble {
+      background-color: #f1f1f1;
+      color: #333;
+      padding: 10px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin: 5px;
+      flex: 1 0 45%; /* Pour rendre responsive */
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .bubble.selected {
+      background-color: #ff5864;
+      color: #fff;
+      border: 2px solid #ff4050;
+    }
+
+    button {
+      background-color: #ff5864;
+      color: white;
+      padding: 15px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1em;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ff4050;
+    }
+
+    .loginLink {
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .loginLink a {
+      color: #ff5864;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
   <main>
-    <h1>Bienvenue sur Student Match</h1>
-    <p>Rejoins une communauté d'étudiants et découvre des personnes qui partagent tes passions !</p>
-
-    <div class="nav">
-      <a href="index.html">Accueil</a>
-      <a href="profil.html">Profil</a>
-      <a href="dashboard.html">Tableau de Bord</a>
-    </div>
+    <h1>Inscription</h1>
+    <p>Rejoins des étudiants qui partagent tes passions et crée des liens !</p>
 
     <form id="signupForm">
       <label for="firstName">Prénom:</label>
@@ -61,88 +139,82 @@
 
       <label>Orientation sexuelle (optionnel):</label>
       <div class="bubbleContainer orientation">
-        <div class="bubble"><span class="emoji">👩‍❤️‍👨</span>Hétérosexuel</div>
-        <div class="bubble"><span class="emoji">🏳️‍🌈</span>Homosexuel</div>
-        <div class="bubble"><span class="emoji">🟣</span>Bisexuel</div>
-        <div class="bubble"><span class="emoji">🟡</span>Pansexuel</div>
-        <div class="bubble"><span class="emoji">⚫️</span>Asexuel</div>
+        <div class="bubble"><span class="emoji">👩‍❤️‍👨</span> Hétérosexuel</div>
+        <div class="bubble"><span class="emoji">🏳️‍🌈</span> Homosexuel</div>
+        <div class="bubble"><span class="emoji">🟣</span> Bisexuel</div>
+        <div class="bubble"><span class="emoji">🟡</span> Pansexuel</div>
+        <div class="bubble"><span class="emoji">⚫️</span> Asexuel</div>
       </div>
 
       <label>Passions :</label>
       <div class="bubbleContainer passions">
-        <div class="bubble"><span class="emoji">🎬</span>Cinéma</div>
-        <div class="bubble"><span class="emoji">⚽</span>Sport</div>
-        <div class="bubble"><span class="emoji">📚</span>Lecture</div>
-        <div class="bubble"><span class="emoji">🎮</span>Jeux vidéo</div>
-        <div class="bubble"><span class="emoji">✈️</span>Voyages</div>
-        <div class="bubble"><span class="emoji">🎶</span>Musique</div>
-        <div class="bubble"><span class="emoji">🍳</span>Cuisine</div>
-        <div class="bubble"><span class="emoji">👗</span>Mode</div>
+        <div class="bubble"><span class="emoji">🎬</span> Cinéma</div>
+        <div class="bubble"><span class="emoji">⚽</span> Sport</div>
+        <div class="bubble"><span class="emoji">📚</span> Lecture</div>
+        <div class="bubble"><span class="emoji">🎮</span> Jeux vidéo</div>
+        <div class="bubble"><span class="emoji">✈️</span> Voyages</div>
+        <div class="bubble"><span class="emoji">🎶</span> Musique</div>
+        <div class="bubble"><span class="emoji">🍳</span> Cuisine</div>
+        <div class="bubble"><span class="emoji">👗</span> Mode</div>
       </div>
 
       <label>Tu recherches :</label>
       <div class="bubbleContainer searchingFor">
-        <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
-        <div class="bubble"><span class="emoji">👫</span>Des Amis</div>
-        <div class="bubble"><span class="emoji">💍</span>Une relation longue durée</div>
-        <div class="bubble"><span class="emoji">🥂</span>Une relation d'un soir</div>
-        <div class="bubble"><span class="emoji">🤷‍♂️🤷‍♀️</span>J'ai pas encore décidé</div>
+        <div class="bubble"><span class="emoji">❤️</span> Une relation sérieuse</div>
+        <div class="bubble"><span class="emoji">👫</span> Des Amis</div>
+        <div class="bubble"><span class="emoji">💍</span> Une relation longue durée</div>
+        <div class="bubble"><span class="emoji">🥂</span> Une relation d'un soir</div>
+        <div class="bubble"><span class="emoji">🤷‍♂️🤷‍♀️</span> J'ai pas encore décidé</div>
       </div>
 
       <button type="submit">S'inscrire</button>
     </form>
 
-    <p class="loginLink">J'ai déjà un compte ? <a href="login.html" class="login-btn">Se connecter</a></p>
+    <p class="loginLink">Déjà inscrit ? <a href="login.html">Se connecter</a></p>
 
   </main>
 
-  <!-- Script pour gérer les bulles sélectionnées et l'envoi vers Firestore -->
   <script>
     document.getElementById('signupForm').addEventListener('submit', async function (e) {
       e.preventDefault(); // Empêche le rechargement de la page
 
-      // Récupérer les valeurs du formulaire
+      // Récupération des valeurs du formulaire
       const firstName = document.getElementById('firstName').value;
       const lastName = document.getElementById('lastName').value;
       const age = parseInt(document.getElementById('age').value);
       const email = document.getElementById('email').value;
 
-      // Récupérer les orientations sélectionnées
-      let orientation = [];
-      document.querySelectorAll('.orientation .bubble.selected').forEach(bubble => {
-        orientation.push(bubble.textContent.trim());
-      });
-
-      // Récupérer les passions sélectionnées
-      let passions = [];
-      document.querySelectorAll('.passions .bubble.selected').forEach(bubble => {
-        passions.push(bubble.textContent.trim());
-      });
-
-      // Récupérer ce que l'utilisateur recherche
-      let searchingFor = [];
-      document.querySelectorAll('.searchingFor .bubble.selected').forEach(bubble => {
-        searchingFor.push(bubble.textContent.trim());
-      });
-
-      // Envoi des données dans Firestore
-      try{
-        await addDoc(collection(db, 'users'), {
-          firstName: firstName,
-          lastName: lastName,
-          age: age,
-          email: email,
-          orientation: orientation,
-          passions: passions,
-          searchingFor: searchingFor
+      // Gestion des bulles sélectionnées
+      const getSelectedBubbles = (selector) => {
+        let selected = [];
+        document.querySelectorAll(`${selector} .bubble.selected`).forEach(bubble => {
+          selected.push(bubble.textContent.trim());
         });
-        alert('Inscription réussie et informations enregistrées dans Firebase');
+        return selected;
+      };
+
+      const orientation = getSelectedBubbles('.orientation');
+      const passions = getSelectedBubbles('.passions');
+      const searchingFor = getSelectedBubbles('.searchingFor');
+
+      // Envoi vers Firestore (ajout)
+      try {
+        await addDoc(collection(db, 'users'), {
+          firstName,
+          lastName,
+          age,
+          email,
+          orientation,
+          passions,
+          searchingFor
+        });
+        alert('Inscription réussie !');
       } catch (error) {
-        console.error('Erreur lors de l\'enregistrement : ', error);
+        console.error('Erreur :', error);
       }
     });
 
-    // Gérer la sélection des bulles
+    // Gestion de la sélection des bulles
     const bubbles = document.querySelectorAll('.bubble');
     bubbles.forEach(bubble => {
       bubble.addEventListener('click', () => {
@@ -153,4 +225,3 @@
 
 </body>
 </html>
-
