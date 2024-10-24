@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Match - Inscription</title>
   <!-- Lien vers le fichier CSS global -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style.css">
 <script type="module">
   // Importer les fonctions nécessaires
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
@@ -247,11 +247,16 @@
   </main>
 
   <script>
-    const bubbles = document.querySelectorAll('.bubble');
-    bubbles.forEach(bubble => {
-      bubble.addEventListener('click', () => {
-        bubble.classList.toggle('selected');
-      });
+ const bubbles = document.querySelectorAll('.bubble');
+bubbles.forEach(bubble => {
+  bubble.addEventListener('click', () => {
+    // Enlève la classe 'selected' de toutes les bulles
+    bubbles.forEach(b => b.classList.remove('selected'));
+    // Ajoute la classe 'selected' à la bulle cliquée
+    bubble.classList.add('selected');
+  });
+});
+
     });
 
     document.getElementById('signupForm').addEventListener('submit', function (e) {
@@ -271,6 +276,12 @@
   .catch((error) => {
     console.error('Erreur lors de l\'inscription : ', error);
   });
+console.log("Email:", email);
+console.log("Mot de passe:", password);
+console.log("Orientation:", orientation);
+console.log("Prénom:", document.getElementById('firstName').value);
+console.log("Nom:", document.getElementById('lastName').value);
+console.log("Âge:", parseInt(document.getElementById('age').value));
 
 
           // Récupérer les passions sélectionnées
