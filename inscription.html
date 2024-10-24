@@ -211,11 +211,16 @@
 <script>
   document.getElementById('signupForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Empêche le rechargement de la page
+    
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+
+// Initialiser Firebase et Firestore
+const db = getFirestore();
 
     // Récupérer les informations du formulaire
     var firstName = document.getElementById('firstName').value;
     var lastName = document.getElementById('lastName').value;
-    var age = document.getElementById('age').value;
+    var age = parseInt(document.getElementById('age').value);
     var email = document.getElementById('email').value;
     var orientation = document.getElementById('orientation').value;
     
@@ -232,7 +237,7 @@
     });
 
     // Ajouter les données dans Firestore
-    db.collection('users').add({
+ addDoc(collection(db, 'users'), {
       firstName: firstName,
       lastName: lastName,
       age: age,
