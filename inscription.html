@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Match - Inscription</title>
-  <style>
-         <script type="module">
+   <!-- Lien vers le fichier CSS global -->
+  <link rel="stylesheet" href="style.css">         <script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-analytics.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -211,6 +213,17 @@
 <script>
   document.getElementById('signupForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Empêche le rechargement de la page
+const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    // Créer un nouvel utilisateur
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+
+        // Maintenant, ajoutez les données supplémentaires à Firestore
+        const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected'))
+          .map(bubble => bubble.textContent);
 
     // Récupérer les informations du formulaire
     var firstName = document.getElementById('firstName').value;
@@ -218,7 +231,12 @@
     var age = document.getElementById('age').value;
     var email = document.getElementById('email').value;
     var orientation = document.getElementById('orientation').value;
-    
+    // Récupérer les orientations sélectionnées
+    var selectedOrientation = [];
+    document.querySelectorAll('# orientationContainer .bubble.selected').forEach(bubble => {
+      selectedOrientation.push(bubble.textContent);
+    });
+
     // Récupérer les passions sélectionnées
     var selectedPassions = [];
     document.querySelectorAll('#passionsContainer .bubble.selected').forEach(bubble => {
@@ -226,20 +244,19 @@
     });
     
     // Récupérer le type de relation sélectionné
-    var selectedRelationship = [];
-    document.querySelectorAll('#relationshipContainer .bubble.selected').forEach(bubble => {
-      selectedRelationship.push(bubble.textContent);
+    var selectedSearchingFor = [];
+    document.querySelectorAll('#SearchingForContainer .bubble.selected').forEach(bubble => {
+      selectedSearchingFor.push(bubble.textContent);
     });
 
     // Ajouter les données dans Firestore
-    db.collection('users').add({
-      firstName: firstName,
-      lastName: lastName,
-      age: age,
-      email: email,
-      orientation: orientation,
+addDoc(collection(db, 'users'), {
+          uid: user.uid, // Enregistrez l'UID de l'utilisateur
+          firstName: document.getElementById('firstName').value,
+          lastName: document.getElementById('lastName').value,
+          age: parseInt(document.getElementById('age').value),      orientation: orientation,
       passions: selectedPassions,
-      relationship: selectedRelationship
+      relationship: selectedSearchingFor
     }).then(() => {
       alert('Inscription réussie et informations enregistrées dans Firebase');
     }).catch(error => {
