@@ -228,10 +228,6 @@ const email = document.getElementById('email').value;
       .then((userCredential) => {
         const user = userCredential.user;
 
-        // Maintenant, ajoutez les données supplémentaires à Firestore
-        const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected'))
-          .map(bubble => bubble.textContent);
-
     // Récupérer les informations du formulaire
     var firstName = document.getElementById('firstName').value;
     var lastName = document.getElementById('lastName').value;
