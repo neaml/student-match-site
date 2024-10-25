@@ -4,13 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Match - Inscription</title>
-   <!-- Lien vers le fichier CSS global -->
-  <link rel="stylesheet" href="style.css">         <script type="module">
+  <style>
+         <script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-analytics.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -29,9 +27,6 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
 </script>
     body {
       margin: 0;
@@ -181,13 +176,9 @@
 
       <label for="email">Adresse e-mail:</label>
       <input type="email" id="email" placeholder="exemple@etudiant.fr" required>
-      
-      <label for="password">Mot de passe :</label>
-      <input type="password" id="password" placeholder="Ton mot de passe" required>
-
 
       <label for="orientation">Orientation sexuelle (optionnel):</label>
-    <div id="orientationContainer" class="bubbleContainer">
+      <div class="bubbleContainer">
         <div class="bubble"><span class="emoji">👩‍❤️‍👨</span>Hétérosexuel</div>
         <div class="bubble"><span class="emoji">🏳️‍🌈</span>Homosexuel</div>
         <div class="bubble"><span class="emoji">🟣</span>Bisexuel</div>
@@ -196,7 +187,7 @@
       </div>
 
       <label for="passions">Passions :</label>
-   <div id="passionsContainer" class="bubbleContainer">
+      <div class="bubbleContainer">
         <div class="bubble"><span class="emoji">🎬</span>Cinéma</div>
         <div class="bubble"><span class="emoji">⚽</span>Sport</div>
         <div class="bubble"><span class="emoji">📚</span>Lecture</div>
@@ -208,7 +199,7 @@
       </div>
 
       <label for="searchingFor">Tu recherches :</label>
-   <div id="searchingForContainer" class="bubbleContainer">
+      <div class="bubbleContainer">
         <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
         <div class="bubble"><span class="emoji">👫</span>Des Amis</div>
         <div class="bubble"><span class="emoji">💍</span>Une relation courte durée</div>
@@ -220,13 +211,6 @@
 <script>
   document.getElementById('signupForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Empêche le rechargement de la page
-const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    // Créer un nouvel utilisateur
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
 
     // Récupérer les informations du formulaire
     var firstName = document.getElementById('firstName').value;
@@ -234,12 +218,7 @@ const email = document.getElementById('email').value;
     var age = document.getElementById('age').value;
     var email = document.getElementById('email').value;
     var orientation = document.getElementById('orientation').value;
-    // Récupérer les orientations sélectionnées
-    var selectedOrientation = [];
-    document.querySelectorAll('#orientationContainer .bubble.selected').forEach(bubble => {
-      selectedOrientation.push(bubble.textContent);
-    });
-
+    
     // Récupérer les passions sélectionnées
     var selectedPassions = [];
     document.querySelectorAll('#passionsContainer .bubble.selected').forEach(bubble => {
@@ -247,19 +226,20 @@ const email = document.getElementById('email').value;
     });
     
     // Récupérer le type de relation sélectionné
-    var selectedSearchingFor = [];
-    document.querySelectorAll('#SearchingForContainer .bubble.selected').forEach(bubble => {
-      selectedSearchingFor.push(bubble.textContent);
+    var selectedRelationship = [];
+    document.querySelectorAll('#relationshipContainer .bubble.selected').forEach(bubble => {
+      selectedRelationship.push(bubble.textContent);
     });
 
     // Ajouter les données dans Firestore
-addDoc(collection(db, 'users'), {
-          uid: user.uid, // Enregistrez l'UID de l'utilisateur
-          firstName: document.getElementById('firstName').value,
-          lastName: document.getElementById('lastName').value,
-          age: parseInt(document.getElementById('age').value),      orientation: orientation,
+    db.collection('users').add({
+      firstName: firstName,
+      lastName: lastName,
+      age: age,
+      email: email,
+      orientation: orientation,
       passions: selectedPassions,
-      relationship: selectedSearchingFor
+      relationship: selectedRelationship
     }).then(() => {
       alert('Inscription réussie et informations enregistrées dans Firebase');
     }).catch(error => {
