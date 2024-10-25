@@ -212,7 +212,7 @@
       <input type="password" id="password" placeholder="Choisis un mot de passe" required>
 
       <label for="orientation">Orientation sexuelle (optionnel):</label>
-      <div class="bubbleContainer">
+     <div id="orientationContainer" class="bubbleContainer">
         <div class="bubble"><span class="emoji">👩‍❤️‍👨</span>Hétérosexuel</div>
         <div class="bubble"><span class="emoji">🏳️‍🌈</span>Homosexuel</div>
         <div class="bubble"><span class="emoji">🟣</span>Bisexuel</div>
@@ -221,7 +221,7 @@
       </div>
 
       <label for="passions">Passions :</label>
-      <div class="bubbleContainer">
+<div id="passionsContainer" class="bubbleContainer">
         <div class="bubble"><span class="emoji">🎬</span>Cinéma</div>
         <div class="bubble"><span class="emoji">⚽</span>Sport</div>
         <div class="bubble"><span class="emoji">📚</span>Lecture</div>
@@ -233,7 +233,7 @@
       </div>
 
       <label for="searchingFor">Tu recherches :</label>
-      <div class="bubbleContainer">
+ <div id="searchingForContainer" class="bubbleContainer">
         <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
         <div class="bubble"><span class="emoji">👫</span>Des Amis</div>
         <div class="bubble"><span class="emoji">💍</span>Une relation longue durée</div>
@@ -248,16 +248,12 @@
   </main>
 
   <script>
-    // Sélectionner toutes les bulles
-    const bubbles = document.querySelectorAll('.bubble');
-    
-    // Ajouter un événement click à chaque bulle
-    bubbles.forEach(bubble => {
-      bubble.addEventListener('click', () => {
-        // Toggle de la classe 'selected' pour changer le style
-        bubble.classList.toggle('selected');
-      });
-    });
+   // Sélectionne toutes les bulles et ajoute l'événement de clic
+document.querySelectorAll('.bubble').forEach(bubble => {
+  bubble.addEventListener('click', () => {
+    bubble.classList.toggle('selected'); // Toggle de la classe 'selected'
+  });
+});
 
     document.getElementById('signupForm').addEventListener('submit', function (e) {
       e.preventDefault(); // Empêche le rechargement de la page
@@ -285,9 +281,15 @@ console.log("Âge:", parseInt(document.getElementById('age').value));
 
 
           // Récupérer les passions sélectionnées
-          const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected')).map(bubble => bubble.textContent);
-          const selectedOrientation = document.querySelector('#orientationContainer .bubble.selected')?.textContent || null;
-          const selectedRelationship = Array.from(document.querySelectorAll('#relationshipContainer .bubble.selected')).map(bubble => bubble.textContent);
+  const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected'))
+    .map(bubble => bubble.textContent);
+
+  // Récupérer l'orientation sélectionnée (une seule sélection)
+  const selectedOrientation = document.querySelector('#orientationContainer .bubble.selected')?.textContent || null;
+
+  // Récupérer les types de relation sélectionnés
+  const selectedRelationship = Array.from(document.querySelectorAll('#relationshipContainer .bubble.selected'))
+    .map(bubble => bubble.textContent);
 
           // Maintenant, ajoutez les données supplémentaires à Firestore
           addDoc(collection(db, 'users'), {
