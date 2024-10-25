@@ -29,6 +29,9 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
 </script>
     body {
       margin: 0;
@@ -178,9 +181,13 @@
 
       <label for="email">Adresse e-mail:</label>
       <input type="email" id="email" placeholder="exemple@etudiant.fr" required>
+      
+      <label for="password">Mot de passe :</label>
+      <input type="password" id="password" placeholder="Ton mot de passe" required>
+
 
       <label for="orientation">Orientation sexuelle (optionnel):</label>
-      <div class="bubbleContainer">
+    <div id="orientationContainer" class="bubbleContainer">
         <div class="bubble"><span class="emoji">👩‍❤️‍👨</span>Hétérosexuel</div>
         <div class="bubble"><span class="emoji">🏳️‍🌈</span>Homosexuel</div>
         <div class="bubble"><span class="emoji">🟣</span>Bisexuel</div>
@@ -189,7 +196,7 @@
       </div>
 
       <label for="passions">Passions :</label>
-      <div class="bubbleContainer">
+   <div id="passionsContainer" class="bubbleContainer">
         <div class="bubble"><span class="emoji">🎬</span>Cinéma</div>
         <div class="bubble"><span class="emoji">⚽</span>Sport</div>
         <div class="bubble"><span class="emoji">📚</span>Lecture</div>
@@ -201,7 +208,7 @@
       </div>
 
       <label for="searchingFor">Tu recherches :</label>
-      <div class="bubbleContainer">
+   <div id="searchingForContainer" class="bubbleContainer">
         <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
         <div class="bubble"><span class="emoji">👫</span>Des Amis</div>
         <div class="bubble"><span class="emoji">💍</span>Une relation courte durée</div>
@@ -233,7 +240,7 @@ const email = document.getElementById('email').value;
     var orientation = document.getElementById('orientation').value;
     // Récupérer les orientations sélectionnées
     var selectedOrientation = [];
-    document.querySelectorAll('# orientationContainer .bubble.selected').forEach(bubble => {
+    document.querySelectorAll('#orientationContainer .bubble.selected').forEach(bubble => {
       selectedOrientation.push(bubble.textContent);
     });
 
