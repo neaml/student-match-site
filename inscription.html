@@ -260,6 +260,21 @@ document.querySelectorAll('.bubble').forEach(bubble => {
 
       <button type="submit">S'inscrire</button>
     </form>
+    <script>
+    // Sélectionnez toutes les bulles
+    const bubbles = document.querySelectorAll('.bubble');
+
+    // Ajoutez un événement de clic à chaque bulle
+    bubbles.forEach(bubble => {
+        bubble.addEventListener('click', () => {
+            // Enlevez la classe 'selected' de toutes les bulles
+            bubbles.forEach(b => b.classList.remove('selected'));
+            // Ajoutez la classe 'selected' à la bulle cliquée
+            bubble.classList.add('selected');
+        });
+    });
+</script>
+
 
     <div class="loginLink">
       <p>Déjà un compte ? <a href="login.html">Connecte-toi ici</a></p>
