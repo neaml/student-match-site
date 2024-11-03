@@ -29,20 +29,22 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app); // Initialiser Firestore
   const auth = getAuth(app); // Initialiser l'authentification Firebase
-
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      // Gestionnaire d'événements pour les bulles de sélection
+      document.querySelectorAll('.bubble').forEach(bubble => {
+        bubble.addEventListener('click', function() {
+          this.classList.toggle('selected');
+        });
+      });
+  
   // Ajouter un gestionnaire d'événements pour le formulaire
   document.getElementById('signupForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Empêche le rechargement de la page
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    
-// Gestionnaire d'événements pour les bulles de sélection
-document.querySelectorAll('.bubble').forEach(bubble => {
-  bubble.addEventListener('click', function() {
-    this.classList.toggle('selected'); // Ajoute ou retire la classe .selected
-  });
-});
+  
 
     // Créer un nouvel utilisateur
     createUserWithEmailAndPassword(auth, email, password)
@@ -239,12 +241,12 @@ document.querySelectorAll('.bubble').forEach(bubble => {
         <div class="bubble"><span class="emoji">🌈</span> Intersexuel(le)</div>
         <div class="bubble"><span class="emoji">💖</span> Demi-sexuel(le)</div>
         <div class="bubble"><span class="emoji">💛</span> Sapiosexuel(le)</div>
-        <div class="bubble"><span class="emoji">🌟</span> Agenre</div>
+        <div class="bubble"><span class="emoji">🌟</span> Agenré</div>
         <div class="bubble"><span class="emoji">💌</span> Monosexuel(le)</div>
         <div class="bubble"><span class="emoji">🏳️‍⚧️</span> Demiromantique</div>
         <div class="bubble"><span class="emoji">💚</span> Aromantique</div>
         <div class="bubble"><span class="emoji">❓</span> En questionnement</div>
-        <div class="bubble"><span class=</span> Autre</div>
+        <div class="bubble"><span class= </span> Autre</div>
       </div>
 
       <label for="passions">Passions :</label>
@@ -281,15 +283,7 @@ document.querySelectorAll('.bubble').forEach(bubble => {
       <button type="submit">S'inscrire</button>
     </form>
     <script>
-    // Sélectionnez toutes les bulles
-  document.querySelectorAll('.bubble').forEach((bubble) => {
-  bubble.addEventListener('click', () => {
-    bubble.classList.toggle('selected');
-  });
-});
-
-    });
-</script>
+  
 
 
     <div class="loginLink">
