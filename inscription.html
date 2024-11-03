@@ -262,16 +262,12 @@ document.querySelectorAll('.bubble').forEach(bubble => {
     </form>
     <script>
     // Sélectionnez toutes les bulles
-    const bubbles = document.querySelectorAll('.bubble');
+  document.querySelectorAll('.bubble').forEach((bubble) => {
+  bubble.addEventListener('click', () => {
+    bubble.classList.toggle('selected');
+  });
+});
 
-    // Ajoutez un événement de clic à chaque bulle
-    bubbles.forEach(bubble => {
-        bubble.addEventListener('click', () => {
-            // Enlevez la classe 'selected' de toutes les bulles
-            bubbles.forEach(b => b.classList.remove('selected'));
-            // Ajoutez la classe 'selected' à la bulle cliquée
-            bubble.classList.add('selected');
-        });
     });
 </script>
 
