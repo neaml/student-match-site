@@ -36,6 +36,13 @@
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    
+// Gestionnaire d'événements pour les bulles de sélection
+document.querySelectorAll('.bubble').forEach(bubble => {
+  bubble.addEventListener('click', function() {
+    this.classList.toggle('selected'); // Ajoute ou retire la classe .selected
+  });
+});
 
     // Créer un nouvel utilisateur
     createUserWithEmailAndPassword(auth, email, password)
