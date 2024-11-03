@@ -11,9 +11,9 @@
 <script type="module">
   // Importer les fonctions nécessaires
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  import { getFirestore, collection, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
   import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-  
+
   // Configuration de votre application Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
@@ -30,7 +30,7 @@
   const db = getFirestore(app); // Initialiser Firestore
   const auth = getAuth(app); // Initialiser l'authentification Firebase
 
-  // Événement de soumission du formulaire
+  // Ajouter un gestionnaire d'événements pour le formulaire
   document.getElementById('signupForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Empêche le rechargement de la page
 
@@ -42,19 +42,17 @@
       .then((userCredential) => {
         const user = userCredential.user;
 
-        // Maintenant, ajoutez les données supplémentaires à Firestore
+        // Sélectionner les données supplémentaires
         const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected'))
           .map(bubble => bubble.textContent);
 
-        // Récupérer l'orientation sélectionnée (une seule sélection)
         const selectedOrientation = document.querySelector('#orientationContainer .bubble.selected')?.textContent || null;
 
-        // Récupérer les types de relation sélectionnés
         const selectedRelationship = Array.from(document.querySelectorAll('#searchingForContainer .bubble.selected'))
           .map(bubble => bubble.textContent);
 
-        addDoc(collection(db, 'users'), {
-          uid: user.uid, // Enregistrez l'UID de l'utilisateur
+        // Enregistrez les informations dans Firestore avec l'UID de l'utilisateur comme identifiant de document
+        setDoc(doc(db, 'users', user.uid), {
           firstName: document.getElementById('firstName').value,
           lastName: document.getElementById('lastName').value,
           age: parseInt(document.getElementById('age').value),
@@ -72,6 +70,7 @@
       });
   });
 </script>
+
 
   <style>
     /* Styles CSS ici (comme votre code original) */
