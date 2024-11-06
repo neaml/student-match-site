@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "./",  // Indique que tous les fichiers dans la racine doivent être déployés
+    "public": "p", 
     "ignore": [
       "firebase.json",
       "**/.*",
