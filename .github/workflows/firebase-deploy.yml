@@ -22,6 +22,6 @@ jobs:
 
       - name: Firebase deploy
         run: |
-          echo ${{ secrets.FIREBASE_TOKEN }} | firebase deploy --only hosting
+          echo "${{ secrets.FIREBASE_TOKEN }}" | firebase deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
