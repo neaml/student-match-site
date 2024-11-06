@@ -3,7 +3,7 @@ name: Firebase Deploy
 on:
   push:
     branches:
-      - main  # Assure-toi que c'est bien la branche sur laquelle tu travailles (parfois 'master' selon ton repo)
+      - main
 
 jobs:
   deploy:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Mise à jour vers Node.js 20 pour éviter l'avertissement
+          node-version: '20'  # Spécifie Node.js 20
 
       - name: Install dependencies
         run: npm install
@@ -26,4 +26,3 @@ jobs:
           echo ${{ secrets.FIREBASE_TOKEN }} | firebase deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-
