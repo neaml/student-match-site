@@ -30,16 +30,30 @@
   const db = getFirestore(app); // Initialiser Firestore
   const auth = getAuth(app); // Initialiser l'authentification Firebase
   
-    document.addEventListener('DOMContentLoaded', () => {
-      // Gestionnaire d'événements pour les bulles de sélection
-      document.querySelectorAll('.bubble').forEach(bubble => {
-        bubble.addEventListener('click', function() {
-          this.classList.toggle('selected');
-        });
-      });
+document.addEventListener('DOMContentLoaded', () => {
+  // Gestion des bulles de sélection
+  const bubbles = document.querySelectorAll('.bubble');
+  bubbles.forEach(bubble => {
+    bubble.addEventListener('click', function () {
+      // Toggle de la classe 'selected'
+      this.classList.toggle('selected');
+    });
+  });
+});
+
+
+      document.getElementById('signupForm').addEventListener('input', function () {
+  const isValid = document.getElementById('firstName').value &&
+                  document.getElementById('lastName').value &&
+                  document.getElementById('age').value &&
+                  document.getElementById('email').value &&
+                  document.getElementById('password').value;
+  document.querySelector('button[type="submit"]').disabled = !isValid;
+});
+
   
   // Ajouter un gestionnaire d'événements pour le formulaire
-  document.getElementById('signupForm').addEventListener('submit', function (e) {
+ document.getElementById('signupForm').addEventListener('submit', async function (e) {
     e.preventDefault(); // Empêche le rechargement de la page
 
     const email = document.getElementById('email').value;
@@ -52,13 +66,32 @@
         const user = userCredential.user;
 
         // Sélectionner les données supplémentaires
+
+        const selectedOrientation = document.querySelector('#orientationContainer .bubble.selected')?.textContent || null;
+        
         const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected'))
           .map(bubble => bubble.textContent);
 
-        const selectedOrientation = document.querySelector('#orientationContainer .bubble.selected')?.textContent || null;
-
         const selectedRelationship = Array.from(document.querySelectorAll('#searchingForContainer .bubble.selected'))
           .map(bubble => bubble.textContent);
+        
+         const Photodeprofil = document.getElementById('Photodeprofil').files[0];
+ // Télécharger la photo de profil sur Cloudinary
+          let photoURL = null;
+         if (Photodeprofil) {
+            const formData = new FormData();
+            formData.append("file", Photodeprofil);
+            formData.append("upload_preset", "Student Match"); // Remplace par ton upload preset exact
+            formData.append("cloud_name", "dcejsj6me"); // Remplace par ton cloud name exact
+
+            const response = await fetch("https://api.cloudinary.com/v1_1/dcejsj6me/image/upload", {
+              method: "POST",
+              body: formData
+            });
+
+            const data = await response.json();
+            photoURL = data.secure_url;
+          }
 
         // Enregistrez les informations dans Firestore avec l'UID de l'utilisateur comme identifiant de document
         setDoc(doc(db, 'users', user.uid), {
@@ -67,7 +100,8 @@
           age: parseInt(document.getElementById('age').value),
           orientation: selectedOrientation,
           passions: selectedPassions,
-          searchingFor: selectedRelationship
+          searchingFor: selectedRelationship,
+          Photodeprofil: photoURL // URL de la photo stockée
         }).then(() => {
           alert('Inscription réussie et informations enregistrées dans Firebase');
         }).catch(error => {
@@ -143,24 +177,26 @@
     }
 
     .bubble {
-      background-color: #eee;
+      background-color: lightgray;
       color: black;
       border-radius: 20px;
       padding: 8px 16px;
       margin: 5px;
       cursor: pointer;
       transition: all 0.3s ease;
-      display: flex;
+      display: inline-block;
       align-items: center;
     }
+.bubble.selected {
+  background-color: #800000;  /* Changer la couleur de fond */
+  color: white;               /* Changer la couleur du texte */
+}
 
-    .bubble.selected {
-      background-color: #800000;
-      color: white;
     }
-    .bubble:hover {
-      transform: scale(1.05);
-    }
+ .bubble:hover {
+  transform: scale(1.05);  /* Effet de zoom léger au survol */
+}
+
 
     .emoji {
       font-size: 1.2em;
@@ -231,42 +267,43 @@
 
       <label for="orientation">Orientation sexuelle (optionnel):</label>
       <div id="orientationContainer" class="bubbleContainer">
-        <div class="bubble"><span class="emoji">👩‍❤️‍👨</span> Hétérosexuel(le)</div>
-        <div class="bubble"><span class="emoji">🏳️‍🌈</span> Homosexuel(le)</div>
-        <div class="bubble"><span class="emoji">🟣</span> Bisexuel(le)</div>
-        <div class="bubble"><span class="emoji">🟡</span> Pansexuel(le)</div>
-        <div class="bubble"><span class="emoji">⚫️</span> Asexuel(le)</div>
-        <div class="bubble"><span class="emoji">💜</span> Queer</div>
-        <div class="bubble"><span class="emoji">⚧️</span> Non-binaire</div>
-        <div class="bubble"><span class="emoji">🌈</span> Intersexuel(le)</div>
-        <div class="bubble"><span class="emoji">💖</span> Demi-sexuel(le)</div>
-        <div class="bubble"><span class="emoji">💛</span> Sapiosexuel(le)</div>
-        <div class="bubble"><span class="emoji">🌟</span> Agenré</div>
-        <div class="bubble"><span class="emoji">💌</span> Monosexuel(le)</div>
-        <div class="bubble"><span class="emoji">🏳️‍⚧️</span> Demiromantique</div>
-        <div class="bubble"><span class="emoji">💚</span> Aromantique</div>
-        <div class="bubble"><span class="emoji">❓</span> En questionnement</div>
-        <div class="bubble"><span class= </span> Autre</div>
+        <div class="bubble"><span class="emoji">👩‍❤️‍👨</span>Hétérosexuel(le)</div>
+        <div class="bubble"><span class="emoji">🏳️‍🌈</span>Homosexuel(le)</div>
+        <div class="bubble"><span class="emoji">🟣</span>Bisexuel(le)</div>
+        <div class="bubble"><span class="emoji">🟡</span>Pansexuel(le)</div>
+        <div class="bubble"><span class="emoji">⚫️</span>Asexuel(le)</div>
+        <div class="bubble"><span class="emoji">💜</span>Queer</div>
+        <div class="bubble"><span class="emoji">⚧️</span>Non-binaire</div>
+        <div class="bubble"><span class="emoji">🌈</span>Intersexuel(le)</div>
+        <div class="bubble"><span class="emoji">💖</span>Demi-sexuel(le)</div>
+        <div class="bubble"><span class="emoji">💛</span>Sapiosexuel(le)</div>
+        <div class="bubble"><span class="emoji">🌟</span>Agenré</div>
+        <div class="bubble"><span class="emoji">💌</span>Monosexuel(le)</div>
+        <div class="bubble"><span class="emoji">🏳️‍⚧️</span>Demiromantique</div>
+        <div class="bubble"><span class="emoji">💚</span>Aromantique</div>
+        <div class="bubble"><span class="emoji">❓</span>En questionnement</div>
+        <div class="bubble"><span class="emoji">❓</span>Autre</div>
+
       </div>
 
       <label for="passions">Passions :</label>
       <div id="passionsContainer" class="bubbleContainer">
        <div class="bubble"><span class="emoji">🎬</span>Cinéma</div>
         <div class="bubble"><span class="emoji">⚽</span>Sport</div>
-        <div class="bubble"><span class="emoji">🧘</span> Méditation & Yoga</div>
+        <div class="bubble"><span class="emoji">🧘</span>Méditation & Yoga</div>
         <div class="bubble"><span class="emoji">📚</span>Lecture</div>
-        <div class="bubble"><span class="emoji">🧖</span> Bien-être, Spa</div>
+        <div class="bubble"><span class="emoji">🧖</span>Bien-être, Spa</div>
         <div class="bubble"><span class="emoji">👫</span>Sorties entre Amis</div>
-        <div class="bubble"><span class="emoji">🎸</span> Concert & Festivals</div>
+        <div class="bubble"><span class="emoji">🎸</span>Concert & Festivals</div>
         <div class="bubble"><span class="emoji">🎉</span>Fêtes</div>
         <div class="bubble"><span class="emoji">🎮</span>Jeux vidéo</div>
-        <div class="bubble"><span class="emoji">📸</span> Réseaux sociaux</div>
+        <div class="bubble"><span class="emoji">📸</span>Réseaux sociaux</div>
         <div class="bubble"><span class="emoji">✈️</span>Voyages</div>
-        <div class="bubble"><span class="emoji">🤝</span> Développement social</div>
+        <div class="bubble"><span class="emoji">🤝</span>Développement social</div>
         <div class="bubble"><span class="emoji">🎶</span>Musique</div>
         <div class="bubble"><span class="emoji">🍳</span>Cuisine</div>
         <div class="bubble"><span class="emoji">👗</span>Mode & Sneakers</div>
-        <div class="bubble"><span class="emoji">💄</span> Cosmétiques</div>
+        <div class="bubble"><span class="emoji">💄</span>Cosmétiques</div>
         <div class="bubble"><span class="emoji">🎨</span>Arts</div>
       </div>
 
@@ -277,15 +314,16 @@
         <div class="bubble"><span class="emoji">💍</span>Une relation longue durée</div>
         <div class="bubble"><span class="emoji">🥂</span>Une relation d'un soir</div>
         <div class="bubble"><span class="emoji">🤷‍♂️🤷‍♀️</span>J'ai pas encore décidé</div>
-        <div class="bubble"><span class=</span> Autre</div>
+       <div class="bubble"><span class="emoji">❓</span>Autre</div>
+
       </div>
+        <!-- Champ pour le téléchargement de la photo de profil -->
+      <label for="profilePhoto">Photo de profil :</label>
+      <input type="file" id="Photodeprofil" accept="image/*">
 
       <button type="submit">S'inscrire</button>
     </form>
-    <script>
-  
-
-
+</script>
     <div class="loginLink">
       <p>Déjà un compte ? <a href="login.html">Connecte-toi ici</a></p>
     </div>
