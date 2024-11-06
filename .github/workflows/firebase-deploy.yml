@@ -23,6 +23,11 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools  # Installation de Firebase CLI
 
+      - name: Set Firebase project
+        run: firebase use --add ${{ secrets.FIREBASE_PROJECT_ID }}  # Configurer le projet Firebase actif
+        env:
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}  # Ajoute ton project ID secret dans les secrets GitHub
+
       - name: Firebase deploy
         run: |
           echo "${{ secrets.FIREBASE_TOKEN }}" | firebase deploy --only hosting
