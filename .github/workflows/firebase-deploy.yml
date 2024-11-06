@@ -26,32 +26,3 @@ jobs:
           echo ${{ secrets.FIREBASE_TOKEN }} | firebase deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-name: Firebase Deploy
-
-on:
-  push:
-    branches:
-      - main  # Assure-toi que c'est bien la branche sur laquelle tu travailles (parfois 'master' selon ton repo)
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'  # Remplace par la version de Node.js que tu utilises
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Firebase deploy
-        run: |
-          echo ${{ secrets.FIREBASE_TOKEN }} | firebase deploy --only hosting
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-
