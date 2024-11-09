@@ -7,6 +7,22 @@
   <!-- Lien vers le fichier CSS global -->
   <link rel="stylesheet" href="style.css">
 <script type="module">
+
+  document.addEventListener('DOMContentLoaded', () => {
+  console.log('Page chargée et script exécuté !'); // Vérifiez que l'événement est bien déclenché
+  
+  // Sélection des bulles
+  const bubbles = document.querySelectorAll('.bubble');
+  
+  // Ajout d'un événement de clic sur chaque bulle
+  bubbles.forEach(bubble => {
+    bubble.addEventListener('click', function () {
+      console.log('Bulle cliquée:', this); // Vérifiez si la bulle est cliquée
+      this.classList.toggle('selected');
+    });
+  });
+});
+  
   // Importer les fonctions nécessaires
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
   import { getFirestore, collection, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
@@ -28,17 +44,6 @@
   const db = getFirestore(app); // Initialiser Firestore
   const auth = getAuth(app); // Initialiser l'authentification Firebase
   
-document.addEventListener('DOMContentLoaded', () => {
-  const bubbles = document.querySelectorAll('.bubble');
-  bubbles.forEach(bubble => {
-    bubble.addEventListener('click', function () {
-      console.log('Bulle cliquée:', this);  // Vérification du clic sur la bulle
-      this.classList.toggle('selected');
-    });
-  });
-});
-
-
 
       document.getElementById('signupForm').addEventListener('input', function () {
   const isValid = document.getElementById('firstName').value &&
