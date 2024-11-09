@@ -30,4 +30,5 @@ jobs:
           export GOOGLE_APPLICATION_CREDENTIALS=$HOME/firebase-service-account.json
 
       - name: Deploy to Firebase
-        run: firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
+        run: firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }} --project student-match-but3
+
