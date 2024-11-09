@@ -65,6 +65,15 @@ document.addEventListener('DOMContentLoaded', () => {
       .then((userCredential) => {
         const user = userCredential.user;
 
+        try {
+    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+} catch (error) {
+    if (error.code === 'auth/email-already-in-use') {
+        alert("Cet email est déjà utilisé.");
+    }
+}
+
+
         // Sélectionner les données supplémentaires
 
 
@@ -85,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append("upload_preset", "Student Match"); // Remplace par ton upload preset exact
             formData.append("cloud_name", "dcejsj6me"); // Remplace par ton cloud name exact
 
-            const response = awaitfetch("https://api.cloudinary.com/v1_1/dcejsj6me/image/upload", {
+            const response = await fetch("https://api.cloudinary.com/v1_1/dcejsj6me/image/upload", {
               method: "POST",
               body: formData
             });
