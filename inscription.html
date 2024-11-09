@@ -1,139 +1,99 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Match - Inscription</title>
-  <!-- Lien vers le fichier CSS global -->
   <link rel="stylesheet" href="style.css">
-<script type="module">
-  // Importer les fonctions nécessaires
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getFirestore, collection, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-
-  // Configuration de votre application Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
-    authDomain: "student-match-but3.firebaseapp.com",
-    projectId: "student-match-but3",
-    storageBucket: "student-match-but3.appspot.com",
-    messagingSenderId: "1096075545413",
-    appId: "1:1096075545413:web:85451af9e19c5c54830c2",
-    measurementId: "G-XK5N6FLSYJ"
-  };
-
-  // Initialiser Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app); // Initialiser Firestore
-  const auth = getAuth(app); // Initialiser l'authentification Firebase
   
-document.addEventListener('DOMContentLoaded', () => {
-  // Gestion des bulles de sélection
-  const bubbles = document.querySelectorAll('.bubble');
-  bubbles.forEach(bubble => {
-    bubble.addEventListener('click', function () {
-      // Toggle de la classe 'selected'
-      this.classList.toggle('selected');
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+    import { getFirestore, collection, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
+      authDomain: "student-match-but3.firebaseapp.com",
+      projectId: "student-match-but3",
+      storageBucket: "student-match-but3.appspot.com",
+      messagingSenderId: "1096075545413",
+      appId: "1:1096075545413:web:85451af9e19c5c54830c2",
+      measurementId: "G-XK5N6FLSYJ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const bubbles = document.querySelectorAll('.bubble');
+      bubbles.forEach(bubble => {
+        bubble.addEventListener('click', function () {
+          this.classList.toggle('selected');
+        });
+      });
     });
-  });
-});
 
+    async function handleSignUp(event) {
+      event.preventDefault();
 
-      document.getElementById('signupForm').addEventListener('input', function () {
-  const isValid = document.getElementById('firstName').value &&
-                  document.getElementById('lastName').value &&
-                  document.getElementById('age').value &&
-                  document.getElementById('email').value &&
-                  document.getElementById('password').value;
-  document.querySelector('button[type="submit"]').disabled = !isValid;
-});
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const age = parseInt(document.getElementById('age').value);
 
-  
-  // Ajouter un gestionnaire d'événements pour le formulaire
- document.getElementById('signupForm').addEventListener('submit', async function (e) {
-    e.preventDefault(); // Empêche le rechargement de la page
+      const selectedOrientation = document.querySelector('#orientationContainer .bubble.selected')?.textContent || null;
+      const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected')).map(bubble => bubble.textContent);
+      const selectedRelationship = Array.from(document.querySelectorAll('#searchingForContainer .bubble.selected')).map(bubble => bubble.textContent);
+      const photoFile = document.getElementById('profileImage').files[0];
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-  
-
-    // Créer un nouvel utilisateur
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        try {
-    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-} catch (error) {
-    if (error.code === 'auth/email-already-in-use') {
-        alert("Cet email est déjà utilisé.");
-    }
-}
+        let photoURL = null;
+        if (photoFile) {
+          const formData = new FormData();
+          formData.append("file", photoFile);
+          formData.append("upload_preset", "Student Match");
+          formData.append("cloud_name", "dcejsj6me");
 
+          const response = await fetch("https://api.cloudinary.com/v1_1/dcejsj6me/image/upload", {
+            method: "POST",
+            body: formData
+          });
 
-        // Sélectionner les données supplémentaires
+          const data = await response.json();
+          photoURL = data.secure_url;
+        }
 
-
-        const selectedOrientation = document.querySelector('#orientationContainer .bubble.selected')?.textContent || null;
-        
-        const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected'))
-          .map(bubble => bubble.textContent);
-
-        const selectedRelationship = Array.from(document.querySelectorAll('#searchingForContainer .bubble.selected'))
-          .map(bubble => bubble.textContent);
-        
-         const Photodeprofil = document.getElementById('Photodeprofil').files[0];
- // Télécharger la photo de profil sur Cloudinary
-          let photoURL = null;
-         if (Photodeprofil) {
-            const formData = new FormData();
-            formData.append("file", Photodeprofil);
-            formData.append("upload_preset", "Student Match"); // Remplace par ton upload preset exact
-            formData.append("cloud_name", "dcejsj6me"); // Remplace par ton cloud name exact
-
-            const response = await fetch("https://api.cloudinary.com/v1_1/dcejsj6me/image/upload", {
-              method: "POST",
-              body: formData
-            });
-
-            const data = awaitresponse.json();
-            photoURL = data.secure_url;
-          }
-
-        // Enregistrez les informations dans Firestore avec l'UID de l'utilisateur comme identifiant de document
-        setDoc(doc(db, 'users', user.uid), {
-          firstName: document.getElementById('firstName').value,
-          lastName: document.getElementById('lastName').value,
-          age: parseInt(document.getElementById('age').value),
+        await setDoc(doc(db, 'users', user.uid), {
+          firstName,
+          lastName,
+          age,
           orientation: selectedOrientation,
           passions: selectedPassions,
           searchingFor: selectedRelationship,
-          Photodeprofil: photoURL // URL de la photo stockée
-
-        }).then(() => {
-          alert('Inscription réussie et informations enregistrées dans Firebase');
-        }).catch(error => {
-          console.error('Erreur lors de l\'enregistrement : ', error);
+          photoURL
         });
-      })
-      .catch((error) => {
-        console.error('Erreur lors de l\'inscription : ', error);
-      });
-  });
-</script>
 
+        alert('Inscription réussie et informations enregistrées dans Firebase');
+        window.location.href = "tableauDeBord.html";
+      } catch (error) {
+        document.getElementById("generalError").textContent = `Erreur d'inscription: ${error.message}`;
+        document.getElementById("generalError").style.display = "block";
+      }
+    }
+
+    document.getElementById('signupForm').addEventListener('submit', handleSignUp);
+
+  </script>
 
   <style>
-    /* Styles CSS ici (comme votre code original) */
-    body {
-      margin: 0;
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(135deg, #f3f4f6 25%, #e2e8f0 50%, #edf2f7 75%, #f7fafc);
-      animation: waveAnimation 10s ease-in-out infinite alternate;
-      color: #333;
-    }
+    /* Styles CSS ici */
+    body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, #f3f4f6 25%, #e2e8f0 50%, #edf2f7 75%, #f7fafc); color: #333; }
+    #generalError { color: red; display: none; }
 
     @keyframes waveAnimation {
       0% { background-position: 0% 0%; }
@@ -335,8 +295,12 @@ document.addEventListener('DOMContentLoaded', () => {
         <!-- Champ pour le téléchargement de la photo de profil -->
       <label for="profilePhoto">Photo de profil :</label>
       <input type="file" id="Photodeprofil" accept="image/*">
+      <p>
+    En continuant, vous acceptez notre <a href="lien-vers-la-politique-de-confidentialité" target="_blank">politique de confidentialité</a>.
+</p>
 
-      <button type="submit">S'inscrire</button>
+
+     <button onclick="handleSignUp()">S'inscrire</button>
     </form>
 </script>
 
