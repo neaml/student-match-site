@@ -109,13 +109,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Enregistrez les informations dans Firestore avec l'UID de l'utilisateur comme identifiant de document
         setDoc(doc(db, 'users', user.uid), {
-          first Name: document.getElementById('firstName').value,
-          last Name: document.getElementById('lastName').value,
+          firstName: document.getElementById('firstName').value,
+          lastName: document.getElementById('lastName').value,
           age: parseInt(document.getElementById('age').value),
           orientation: selectedOrientation,
           passions: selectedPassions,
           searchingFor: selectedRelationship,
-          Photo de profil: photoURL // URL de la photo stockée
+          Photodeprofil: photoURL // URL de la photo stockée
 
         }).then(() => {
           alert('Inscription réussie et informations enregistrées dans Firebase');
