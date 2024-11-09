@@ -1,15 +1,11 @@
-{
+ {
   "name": "student-match-site",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Site d'inscription étudiant",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "firebase deploy --only hosting"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "firebase-tools": "^13.24.1"
   }
 }
