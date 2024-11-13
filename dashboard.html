@@ -225,37 +225,45 @@
     </div>
   </div>
 
-  <!-- Script Firebase pour récupérer les profils -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+ <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-    // Firebase Configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
-      authDomain: "student-match-but3.firebaseapp.com",
-      projectId: "student-match-but3",
-      storageBucket: "student-match-but3.appspot.com",
-      messagingSenderId: "1096075545413",
-      appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
-      measurementId: "G-XK5N6FLSYJ"
-    };
+  // Configuration Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
+    authDomain: "student-match-but3.firebaseapp.com",
+    projectId: "student-match-but3",
+    storageBucket: "student-match-but3.appspot.com",
+    messagingSenderId: "1096075545413",
+    appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
+    measurementId: "G-XK5N6FLSYJ"
+  };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  // Initialiser Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    // Fonction pour récupérer les profils
-    async function loadProfiles() {
+  // Fonction pour charger les profils
+  async function loadProfiles() {
+    try {
+      // Récupérer les documents de la collection 'users'
       const querySnapshot = await getDocs(collection(db, "users"));
+      if (querySnapshot.empty) {
+        console.log("Aucun profil trouvé.");
+        return;
+      }
+
       querySnapshot.forEach((doc) => {
         const userData = doc.data();
         
-        // Créer une carte pour chaque profil
+        console.log("Profil récupéré : ", userData); // Affichage des données dans la console pour vérifier
+
+        // Créer une carte de profil pour chaque utilisateur
         const profileCard = document.createElement('div');
         profileCard.classList.add('profile-card');
 
-        // Insérer les informations de l'utilisateur dans la carte
+        // Insérer les données dans la carte
         profileCard.innerHTML = `
           <img src="${userData.profilePicture || 'https://via.placeholder.com/150'}" alt="Photo de Profil" />
           <h3>${userData.firstName} ${userData.lastName}</h3>
@@ -264,13 +272,16 @@
           <p>Recherche: ${userData.relationship}</p>
         `;
 
-        // Ajouter la carte dans le conteneur de profils
+        // Ajouter la carte de profil dans le conteneur
         document.getElementById('profilesContainer').appendChild(profileCard);
       });
+    } catch (error) {
+      console.error("Erreur lors de la récupération des profils : ", error);
     }
+  }
 
-    // Charger les profils au démarrage
-    loadProfiles();
-  </script>
+  // Charger les profils dès que la page est chargée
+  loadProfiles();
+</script>
 </body>
 </html>
