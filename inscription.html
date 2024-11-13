@@ -8,17 +8,6 @@
   <link rel="stylesheet" href="style.css">
 <script type="module">
 
-document.addEventListener("DOMContentLoaded", function () {
-    const bubbles = document.querySelectorAll(".bubble");
-
-    bubbles.forEach(bubble => {
-        bubble.addEventListener("click", function () {
-            // Ajoute ou retire la classe 'active' de la bulle cliquée
-            this.classList.toggle("active");
-        });
-    });
-});
-
   // Importer les fonctions nécessaires
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
   import { getFirestore, collection, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
@@ -78,7 +67,8 @@ document.addEventListener("DOMContentLoaded", function () {
         // Sélectionner les données supplémentaires
 
 
-        const selectedOrientation = document.querySelector('#orientationContainer .bubble.selected')?.textContent || null;
+        const selectedOrientation = Array.from(document.querySelectorAll('#orientationContainer .bubble.selected'))
+          .map(bubble => bubble.textContent);
         
         const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected'))
           .map(bubble => bubble.textContent);
@@ -421,6 +411,21 @@ async function handleSignUp() {
         <div class="bubble"><span class="emoji">❓</span>Autre</div>
 
       </div>
+  
+<script>
+  // Logique de sélection multiple des bulles
+  document.addEventListener("DOMContentLoaded", function () {
+      const bubbles = document.querySelectorAll(".bubble");
+
+      bubbles.forEach(bubble => {
+          bubble.addEventListener("click", function () {
+              // Ajoute ou retire la classe 'selected' de la bulle cliquée pour permettre la sélection multiple
+              this.classList.toggle("selected");
+          });
+      });
+  });
+</script>
+
         <!-- Champ pour le téléchargement de la photo de profil -->
       <label for="Photodeprofil">Photo de profil :</label>
   <input type="file" id="Photodeprofil" accept="image/*">
