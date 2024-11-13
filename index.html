@@ -8,107 +8,105 @@
     <style>
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(to bottom right, #f0f4f8, #d1e3eb);
-            color: #333;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333333;
             margin: 0;
             overflow-x: hidden;
         }
-        
+
         header {
             text-align: center;
-            padding: 50px 20px;
-            background-color: #5A6F7B;
-            color: #fefefe;
+            padding: 60px 20px;
+            color: #fff;
+            background-color: #800020; /* Bordeaux mis en avant */
             animation: fadeIn 1.5s ease-in;
         }
-        
+
         .logo {
-            width: 80px;
+            width: 200px;
             height: auto;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         header h1 {
-            font-size: 2.8em;
-            margin: 10px 0;
+            font-size: 2.5em;
+            margin-bottom: 0;
         }
 
         header p {
             font-size: 1.2em;
-            margin-top: 8px;
+            margin-top: 5px;
         }
 
         nav {
             text-align: center;
-            padding: 15px;
-            background-color: #fefefe;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            animation: slideIn 2s ease-in-out;
+            padding: 20px;
+            background-color: #e6ebf0; /* Bleu gris en couleur secondaire */
+            animation: slideIn 3s ease-in-out;
         }
 
         nav a {
-            margin: 0 20px;
-            color: #5A6F7B;
-            font-weight: bold;
+            margin: 0 15px;
+            color: #800020; /* Bordeaux pour le texte */
             text-decoration: none;
             font-size: 18px;
             transition: color 0.3s ease;
         }
 
         nav a:hover {
-            color: #8c2f39;
+            color: #4a0d23;
         }
 
         .cta-button {
             display: inline-block;
-            margin: 30px auto;
-            padding: 12px 28px;
-            background-color: #8c2f39;
-            color: #ffffff;
+            margin: 20px auto;
+            padding: 15px 30px;
+            background-color: #800020;
+            color: white;
             font-size: 18px;
             border-radius: 50px;
             text-decoration: none;
-            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .cta-button:hover {
-            background-color: #5A6F7B;
+            background-color: #4a0d23;
             transform: scale(1.05);
         }
 
         section {
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
             animation: fadeInUp 1.5s ease-in-out;
         }
 
         .info-section {
-            background: #ffffff;
-            padding: 30px;
-            margin: 20px;
-            border-radius: 12px;
-            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-            color: #5A6F7B;
+            background: #f7f2f2;
+            padding: 40px 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            color: #333333;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .info-section h3 {
             font-size: 1.8em;
-            margin-bottom: 15px;
-            color: #8c2f39;
+            margin-bottom: 10px;
+            color: #800020; /* Bordeaux pour les titres */
         }
 
         .info-section p {
             font-size: 1.1em;
             line-height: 1.6;
-            color: #333;
         }
 
         footer {
             text-align: center;
             padding: 20px;
-            background-color: #5A6F7B;
-            color: #ffffff;
+            background-color: #800020;
+            color: #fff;
             font-size: 0.9em;
         }
 
