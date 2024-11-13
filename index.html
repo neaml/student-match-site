@@ -76,7 +76,102 @@
             background-color: #a65362;
             transform: scale(1.05);
         }
+  /* Style du carrousel */
+        .carousel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+            width: 80%;
+            margin: 40px auto;
+            position: relative;
+        }
 
+        .carousel .card {
+            position: absolute;
+            width: 300px;
+            height: 250px;
+            padding: 20px;
+            background-color: #e6ebf0;
+            color: #333;
+            border-radius: 12px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 1s ease, opacity 1s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8) translateZ(-300px);
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Carte active */
+        .carousel .card.active {
+            opacity: 1;
+            transform: scale(1) translateZ(0px);
+            z-index: 1;
+        }
+
+        /* Cartes précédentes et suivantes */
+        .carousel .card.prev, .carousel .card.next {
+            opacity: 0.5;
+            transform: scale(0.9) translateX(-150px) rotateY(15deg);
+            z-index: 0;
+        }
+        .carousel .card.next {
+            transform: scale(0.9) translateX(150px) rotateY(-15deg);
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            color: #800020;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title img, .card-description img {
+            width: 30px;
+            height: 30px;
+            margin-right: 8px;
+        }
+
+        .card-description {
+            font-size: 1em;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        /* Styles des boutons d'interaction */
+        .carousel-buttons {
+            position: absolute;
+            bottom: -20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .carousel-buttons button {
+            padding: 10px 15px;
+            background-color: #800020;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .carousel-buttons button:hover {
+            background-color: #a33e50;
+        }
         section {
             text-align: center;
             padding: 40px 20px;
@@ -148,7 +243,30 @@
         <p>Inscrivez-vous pour explorer des profils d'autres étudiants et organiser des activités en toute simplicité.</p>
         <a href="inscription.html" class="cta-button">Rejoignez Student Match</a>
     </section>
+  <!-- Carrousel de cartes -->
+    <section class="carousel">
+        <div class="card active">
+            <h3 class="card-title"><img src="friend-icon.png" alt="Ami"> À la recherche d'un ami</h3>
+            <p class="card-description">👫 Envie de rencontrer quelqu'un avec qui partager des activités et passer du temps.</p>
+        </div>
+        <div class="card next">
+            <h3 class="card-title"><img src="heart-icon.png" alt="Relation"> Relation sérieuse</h3>
+            <p class="card-description">💖 Prêt(e) pour une relation engagée et durable avec quelqu'un de spécial.</p>
+        </div>
+        <div class="card">
+            <h3 class="card-title"><img src="study-icon.png" alt="Étude"> Groupe d'étude</h3>
+            <p class="card-description">📚 Trouver des personnes motivées pour travailler ensemble et réussir ses études.</p>
+        </div>
+        <div class="card prev">
+            <h3 class="card-title"><img src="sports-icon.png" alt="Sport"> Activités sportives</h3>
+            <p class="card-description">🏃‍♂️ Cherche des partenaires pour faire du sport et rester en forme.</p>
+        </div>
 
+        <!-- Boutons pour interagir avec le carrousel -->
+        <div class="carousel-buttons">
+            <button onclick="showPrevCard()">Précédent</button>
+            <button onclick="showNextCard()">Suivant</button>
+        </div>
     <section class="info-section">
         <h3>Pourquoi avons-nous créé Student Match ?</h3>
         <p>Student Match est né de la volonté de connecter les étudiants dans un cadre sûr et convivial. Nous savons que la vie étudiante peut être solitaire, surtout pour ceux qui viennent d'autres villes ou pays. Notre objectif est de vous offrir un espace pour rencontrer de nouveaux amis, partager des activités et élargir votre cercle social.</p>
@@ -167,5 +285,38 @@
     <footer>
         <p>&copy; 2024 Student Match. Tous droits réservés.</p>
     </footer>
+        <script>
+        // JavaScript pour faire défiler les cartes automatiquement
+        const cards = document.querySelectorAll('.carousel .card');
+        let currentIndex = 0;
+
+        function updateCards() {
+            // Réinitialiser les classes de toutes les cartes
+            cards.forEach((card, index) => {
+                card.classList.remove('active', 'prev', 'next');
+            });
+
+            // Ajouter les classes pour les cartes précédentes, actuelles, et suivantes
+            cards[currentIndex].classList.add('active');
+            cards[(currentIndex + 1) % cards.length].classList.add('next');
+            cards[(currentIndex - 1 + cards.length) % cards.length].classList.add('prev');
+        }
+
+        function showNextCard() {
+            currentIndex = (currentIndex + 1) % cards.length;
+            updateCards();
+        }
+
+        function showPrevCard() {
+            currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+            updateCards();
+        }
+
+        // Changer de carte toutes les 5 secondes
+        setInterval(showNextCard, 5000);
+
+        // Initialiser les classes de position
+        updateCards();
+    </script>
 </body>
 </html>
