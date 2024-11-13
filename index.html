@@ -8,105 +8,107 @@
     <style>
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('background.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: #4a0d23;
+            background: linear-gradient(to bottom right, #f0f4f8, #d1e3eb);
+            color: #333;
             margin: 0;
             overflow-x: hidden;
         }
         
         header {
             text-align: center;
-            padding: 60px 20px;
-            color: #fff;
-            background-color: #800020;
+            padding: 50px 20px;
+            background-color: #5A6F7B;
+            color: #fefefe;
             animation: fadeIn 1.5s ease-in;
         }
         
         .logo {
-            width: 100px; /* Taille du logo, ajuste selon tes préférences */
+            width: 80px;
             height: auto;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         header h1 {
-            font-size: 2.5em;
-            margin-bottom: 0;
+            font-size: 2.8em;
+            margin: 10px 0;
         }
 
         header p {
             font-size: 1.2em;
-            margin-top: 5px;
+            margin-top: 8px;
         }
 
         nav {
             text-align: center;
-            padding: 20px;
-            background-color: #fff;
-            animation: slideIn 3s ease-in-out;
+            padding: 15px;
+            background-color: #fefefe;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            animation: slideIn 2s ease-in-out;
         }
 
         nav a {
-            margin: 0 15px;
-            color: #800020;
+            margin: 0 20px;
+            color: #5A6F7B;
+            font-weight: bold;
             text-decoration: none;
             font-size: 18px;
             transition: color 0.3s ease;
         }
 
         nav a:hover {
-            color: #4a0d23;
+            color: #8c2f39;
         }
 
         .cta-button {
             display: inline-block;
-            margin: 20px auto;
-            padding: 15px 30px;
-            background-color: #800020;
-            color: white;
+            margin: 30px auto;
+            padding: 12px 28px;
+            background-color: #8c2f39;
+            color: #ffffff;
             font-size: 18px;
             border-radius: 50px;
             text-decoration: none;
-            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .cta-button:hover {
-            background-color: #4a0d23;
+            background-color: #5A6F7B;
             transform: scale(1.05);
         }
 
         section {
             text-align: center;
-            padding: 60px 20px;
+            padding: 40px 20px;
             animation: fadeInUp 1.5s ease-in-out;
         }
 
         .info-section {
-            background: #f7f2f2;
-            padding: 40px 20px;
-            margin: 20px 0;
-            border-radius: 10px;
-            color: #4a0d23;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            padding: 30px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            color: #5A6F7B;
         }
 
         .info-section h3 {
             font-size: 1.8em;
-            margin-bottom: 10px;
-            color: #800020;
+            margin-bottom: 15px;
+            color: #8c2f39;
         }
 
         .info-section p {
             font-size: 1.1em;
             line-height: 1.6;
+            color: #333;
         }
 
         footer {
             text-align: center;
             padding: 20px;
-            background-color: #800020;
-            color: #fff;
+            background-color: #5A6F7B;
+            color: #ffffff;
             font-size: 0.9em;
         }
 
