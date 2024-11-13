@@ -29,7 +29,7 @@ body {
         }
 
         header h1 {
-            font-size: 3.5em;
+            font-size: 3em;
             margin: 10px 0;
         }
 
@@ -83,7 +83,7 @@ body {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 60px;
+            margin-bottom: 80px; /* Augmente l'espacement sous le carrousel */
         }
 
         .carousel {
@@ -93,7 +93,7 @@ body {
             align-items: center;
             perspective: 1000px;
             width: 100%;
-            max-width: 1000px;
+            max-width: 800px; /* Réduit la largeur pour mieux centrer */
         }
 
         .carousel .card {
@@ -207,6 +207,7 @@ body {
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+
     </style>
 </head>
 <body>
