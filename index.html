@@ -6,7 +6,7 @@
     <title>Accueil - Student Match</title>
     <link rel="stylesheet" href="style.css">
   
-      <style>
+    <style>
         /* Styles de base et animations */
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -240,7 +240,8 @@
         <p>Inscrivez-vous pour explorer des profils d'autres étudiants et organiser des activités en toute simplicité.</p>
         <a href="inscription.html" class="cta-button">Rejoignez Student Match</a>
     </section>
-  <!-- Carrousel de cartes -->
+
+    <!-- Carrousel de cartes -->
     <section class="carousel">
         <div class="card active">
             <h3 class="card-title"><img src="friend-icon.png" alt="Ami"> À la recherche d'un ami</h3>
@@ -261,59 +262,44 @@
 
         <!-- Boutons pour interagir avec le carrousel -->
         <div class="carousel-buttons">
-            <button onclick="showPrevCard()">Précédent</button>
-            <button onclick="showNextCard()">Suivant</button>
+            <button id="prev-btn">← Précédent</button>
+            <button id="next-btn">Suivant →</button>
         </div>
-    <section class="info-section">
-        <h3>Pourquoi avons-nous créé Student Match ?</h3>
-        <p>Student Match est né de la volonté de connecter les étudiants dans un cadre sûr et convivial. Nous savons que la vie étudiante peut être solitaire, surtout pour ceux qui viennent d'autres villes ou pays. Notre objectif est de vous offrir un espace pour rencontrer de nouveaux amis, partager des activités et élargir votre cercle social.</p>
-    </section>
-
-    <section class="info-section">
-        <h3>Nos valeurs</h3>
-        <p>Nous croyons en la communauté, la bienveillance et la diversité. Student Match est un espace où chacun peut être soi-même, échanger avec des personnes partageant les mêmes centres d'intérêt, et développer des relations durables. Rejoignez-nous et faites partie d'une communauté d’étudiants qui s'entraident et se soutiennent.</p>
-    </section>
-
-    <section class="info-section">
-        <h3>Les avantages de Student Match</h3>
-        <p>Grâce à Student Match, vous pouvez facilement organiser des rencontres, planifier des événements et découvrir des activités dans votre région. Que vous soyez passionné de sport, de musique, de cuisine ou de jeux vidéo, trouvez des personnes qui partagent vos intérêts et créez des moments mémorables.</p>
     </section>
 
     <footer>
-        <p>&copy; 2024 Student Match. Tous droits réservés.</p>
+        <p>© 2024 Student Match - Tous droits réservés</p>
     </footer>
-        <script>
-        // JavaScript pour faire défiler les cartes automatiquement
+
+    <script>
+        // Carrousel interactif
         const cards = document.querySelectorAll('.carousel .card');
         let currentIndex = 0;
 
-        function updateCards() {
-            // Réinitialiser les classes de toutes les cartes
+        const updateCarousel = () => {
             cards.forEach((card, index) => {
                 card.classList.remove('active', 'prev', 'next');
+                if (index === currentIndex) {
+                    card.classList.add('active');
+                } else if (index === currentIndex - 1 || (currentIndex === 0 && index === cards.length - 1)) {
+                    card.classList.add('prev');
+                } else if (index === currentIndex + 1 || (currentIndex === cards.length - 1 && index === 0)) {
+                    card.classList.add('next');
+                }
             });
+        };
 
-            // Ajouter les classes pour les cartes précédentes, actuelles, et suivantes
-            cards[currentIndex].classList.add('active');
-            cards[(currentIndex + 1) % cards.length].classList.add('next');
-            cards[(currentIndex - 1 + cards.length) % cards.length].classList.add('prev');
-        }
-
-        function showNextCard() {
+        document.getElementById('next-btn').addEventListener('click', () => {
             currentIndex = (currentIndex + 1) % cards.length;
-            updateCards();
-        }
+            updateCarousel();
+        });
 
-        function showPrevCard() {
+        document.getElementById('prev-btn').addEventListener('click', () => {
             currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-            updateCards();
-        }
+            updateCarousel();
+        });
 
-        // Changer de carte toutes les 5 secondes
-        setInterval(showNextCard, 5000);
-
-        // Initialiser les classes de position
-        updateCards();
+        updateCarousel();
     </script>
 </body>
 </html>
