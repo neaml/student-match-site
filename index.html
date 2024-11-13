@@ -6,7 +6,7 @@
     <title>Accueil - Student Match</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        body {
+           body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(to bottom right, #f7f4f4, #e4d4d4);
             color: #8c2f39;
@@ -71,25 +71,29 @@
         }
 
         .carousel-container {
-            padding: 80px 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 80px 0;
+            max-width: 100%;
         }
 
         .carousel {
-            position: relative;
             display: flex;
+            gap: 30px;
+            justify-content: center;
             align-items: center;
-            perspective: 1000px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
             width: 100%;
             max-width: 1000px;
-            overflow: visible;
+            padding: 20px;
         }
 
         .carousel .card {
-            position: absolute;
-            width: 280px;
+            scroll-snap-align: center;
+            min-width: 280px;
             height: 300px;
             padding: 20px;
             background-color: #f7f8fa;
@@ -101,27 +105,6 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            transition: transform 1s ease, opacity 1s ease;
-            opacity: 0;
-            transform: scale(0.8) translateZ(-300px);
-        }
-
-        .carousel .card.active {
-            opacity: 1;
-            transform: scale(1) translateZ(0px);
-            z-index: 2;
-        }
-
-        .carousel .card.prev {
-            opacity: 0.6;
-            transform: scale(0.9) translateX(-180px) rotateY(20deg);
-            z-index: 1;
-        }
-
-        .carousel .card.next {
-            opacity: 0.6;
-            transform: scale(0.9) translateX(180px) rotateY(-20deg);
-            z-index: 1;
         }
 
         .card-title {
@@ -131,12 +114,10 @@
         }
 
         .carousel-buttons {
-            position: absolute;
-            bottom: -60px;
             display: flex;
             gap: 15px;
             justify-content: center;
-            width: 100%;
+            margin-top: 20px;
         }
 
         .carousel-buttons button {
@@ -166,13 +147,7 @@
             border-radius: 12px;
             box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
             color: #5A6F7B;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
             max-width: 800px;
-        }
-
-        .info-section:hover {
-            transform: scale(1.03);
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
         }
 
         .info-section h3 {
