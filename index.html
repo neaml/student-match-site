@@ -6,7 +6,7 @@
     <title>Accueil - Student Match</title>
     <link rel="stylesheet" href="style.css">
     <style>
-body {
+        body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(to bottom right, #f7f4f4, #e4d4d4);
             color: #8c2f39;
@@ -19,7 +19,6 @@ body {
             padding: 60px 20px;
             background-color: #672934;
             color: #fefefe;
-            animation: fadeIn 1.5s ease-in;
         }
 
         .logo {
@@ -38,7 +37,6 @@ body {
             padding: 20px;
             background-color: #fefefe;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            animation: slideIn 2s ease-in-out;
         }
 
         nav a {
@@ -72,28 +70,21 @@ body {
             transform: scale(1.08);
         }
 
-        section {
-            text-align: center;
-            padding: 60px 20px;
-            margin-bottom: 60px;
-            animation: fadeInUp 1.5s ease-in-out;
-        }
-
         .carousel-container {
+            padding: 80px 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 80px; /* Augmente l'espacement sous le carrousel */
         }
 
         .carousel {
             position: relative;
             display: flex;
-            justify-content: center;
             align-items: center;
             perspective: 1000px;
             width: 100%;
-            max-width: 800px; /* Réduit la largeur pour mieux centrer */
+            max-width: 1000px;
+            overflow: visible;
         }
 
         .carousel .card {
@@ -163,15 +154,20 @@ body {
             background-color: #a33e50;
         }
 
+        section {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
         .info-section {
             background: #ffffff;
-            padding: 40px;
+            padding: 50px;
             margin: 60px auto;
             border-radius: 12px;
             box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
             color: #5A6F7B;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            max-width: 900px;
+            max-width: 800px;
         }
 
         .info-section:hover {
@@ -180,34 +176,18 @@ body {
         }
 
         .info-section h3 {
-            font-size: 2em;
-            margin-bottom: 20px;
+            font-size: 1.8em;
+            margin-bottom: 15px;
             color: #8c2f39;
         }
 
         footer {
             text-align: center;
-            padding: 30px;
+            padding: 20px;
             background-color: #672934;
             color: #ffffff;
-            font-size: 1em;
+            font-size: 0.9em;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes fadeInUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
     </style>
 </head>
 <body>
