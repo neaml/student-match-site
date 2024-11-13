@@ -78,6 +78,7 @@
       position: relative;
       transition: transform 0.5s ease;
       text-align: center;
+      overflow: hidden; /* Empêche le texte de déborder */
     }
 
     .profile-card img {
@@ -91,12 +92,16 @@
     .profile-card h3 {
       margin: 10px 0;
       font-size: 1.4em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .profile-card p {
       font-size: 1.1em;
       color: #555;
       margin: 5px 0;
+      word-wrap: break-word; /* Gère le texte long */
     }
 
     /* Boutons d'actions */
@@ -173,22 +178,6 @@
       text-align: center;
       margin-top: 10px;
     }
-
-    /* Style des boutons Rejoindre, Participer et Chat */
-    .join-button, .participate-button, .chat-button {
-      background-color: #800000;
-      color: white;
-      padding: 5px 15px;
-      border-radius: 5px;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .join-button:hover, .participate-button:hover, .chat-button:hover {
-      background-color: #b31e1e;
-    }
-
   </style>
 </head>
 <body>
@@ -209,75 +198,8 @@
     <!-- Section Exploration des profils -->
     <div class="exploration-section">
       <h2>Explorer les Profils</h2>
-         <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
-    authDomain: "student-match-but3.firebaseapp.com",
-    projectId: "student-match-but3",
-    storageBucket: "student-match-but3.appspot.com",
-    messagingSenderId: "1096075545413",
-    appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
-    measurementId: "G-XK5N6FLSYJ"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-        <!-- Script pour récupérer les profils et les afficher -->
-  <script>
-    // Récupérer et afficher les profils d'utilisateurs
-    db.collection('users').get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const userData = doc.data();
-        
-        // Créer une carte pour chaque profil
-        const profileCard = document.createElement('div');
-        profileCard.classList.add('profile-card');
-
-        // Insérer les informations de l'utilisateur dans la carte
-        profileCard.innerHTML = `
-          <img src="https://via.placeholder.com/150" alt="Photo de Profil" />
-          <h3>${userData.firstName} ${userData.lastName}</h3>
-          <p>Âge: ${userData.age}</p>
-          <p>Passions: ${userData.passions.join(', ')}</p>
-          <p>Recherche: ${userData.relationship}</p>
-        `;
-
-        // Ajouter la carte dans le conteneur de profils
-        document.getElementById('profilesContainer').appendChild(profileCard);
-      });
-    });
-  </script>
-</body>
-</html>
-
-      <!-- Carte de Profil -->
-      <div class="profile-card" id="profileCard">
-        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Photo de profil">
-        <h3>Marie Dupont, 23 ans</h3>
-        <p>🎬 Passions : Cinéma, Voyages, Cuisine</p>
-        <p>❤️ Recherche : Relation sérieuse</p>
-        
-        <div class="actions">
-          <button class="actionButton" id="passButton">❌ Passer</button>
-          <button class="actionButton" id="smashButton">❤️ Match</button>
-        </div>
-      </div>
-
-      <!-- Section des matchs -->
-      <h3>Mes Matchs</h3>
-      <div class="match-list" id="matchList">
-        <p class="no-items" id="noMatches">Aucun match pour le moment.</p>
-      </div>
+      
+      <div id="profilesContainer"></div> <!-- Conteneur pour les cartes de profils -->
 
     </div>
 
@@ -303,91 +225,52 @@
     </div>
   </div>
 
-  <!-- Script pour gérer le swipe, les matchs, et les événements -->
-  <script>
-    const profileCard = document.getElementById('profileCard');
-    const passButton = document.getElementById('passButton');
-    const smashButton = document.getElementById('smashButton');
+  <!-- Script Firebase pour récupérer les profils -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-    passButton.addEventListener('click', () => {
-      profileCard.classList.add('swipe-left');
-      setTimeout(() => {
-        profileCard.classList.remove('swipe-left');
-        // Ici, on peut recharger un nouveau profil si besoin
-      }, 500);
-    });
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
+      authDomain: "student-match-but3.firebaseapp.com",
+      projectId: "student-match-but3",
+      storageBucket: "student-match-but3.appspot.com",
+      messagingSenderId: "1096075545413",
+      appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
+      measurementId: "G-XK5N6FLSYJ"
+    };
 
-    smashButton.addEventListener('click', () => {
-      profileCard.classList.add('swipe-right');
-      setTimeout(() => {
-        profileCard.classList.remove('swipe-right');
-        // Ici, on peut recharger un nouveau profil si besoin
-      }, 500);
-    });
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-    // Simuler l'ajout de groupes et d'événements
-    const groupList = document.getElementById('groupList');
-    const eventList = document.getElementById('eventList');
-    const matchList = document.getElementById('matchList');
-    const noGroupsMessage = document.getElementById('noGroups');
-    const noEventsMessage = document.getElementById('noEvents');
-    const noMatchesMessage = document.getElementById('noMatches');
+    // Fonction pour récupérer les profils
+    async function loadProfiles() {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach((doc) => {
+        const userData = doc.data();
+        
+        // Créer une carte pour chaque profil
+        const profileCard = document.createElement('div');
+        profileCard.classList.add('profile-card');
 
-    const groups = [
-      { name: "Groupe Cinéma", description: "Discussions autour du cinéma." },
-      { name: "Groupe Cuisine", description: "Partage de recettes et astuces culinaires." }
-    ];
+        // Insérer les informations de l'utilisateur dans la carte
+        profileCard.innerHTML = `
+          <img src="${userData.profilePicture || 'https://via.placeholder.com/150'}" alt="Photo de Profil" />
+          <h3>${userData.firstName} ${userData.lastName}</h3>
+          <p>Âge: ${userData.age}</p>
+          <p>Passions: ${userData.passions.join(', ')}</p>
+          <p>Recherche: ${userData.relationship}</p>
+        `;
 
-    const events = [
-      { name: "Soirée Jeux", description: "Amène tes jeux préférés !" },
-      { name: "Conférence sur l'IA", description: "Discussion autour des dernières innovations." }
-    ];
-
-    const matches = [
-      { name: "Julie Bernard", age: 22, passions: "Musique, Voyages", recherche: "Amitié" },
-      { name: "Luc Martin", age: 24, passions: "Sport, Technologie", recherche: "Relation sérieuse" }
-    ];
-
-    // Afficher les groupes
-    if (groups.length > 0) {
-      noGroupsMessage.style.display = 'none'; // Cacher le message "aucun groupe"
-      groups.forEach(group => {
-        const groupItem = document.createElement('div');
-        groupItem.classList.add('group-item');
-        groupItem.innerHTML = `<strong>${group.name}</strong><br>${group.description} <button class="join-button">Rejoindre</button>`;
-        groupList.appendChild(groupItem);
+        // Ajouter la carte dans le conteneur de profils
+        document.getElementById('profilesContainer').appendChild(profileCard);
       });
-    } else {
-      noGroupsMessage.style.display = 'block'; // Afficher le message "aucun groupe"
     }
 
-    // Afficher les événements
-    if (events.length > 0) {
-      noEventsMessage.style.display = 'none'; // Cacher le message "aucun événement"
-      events.forEach(event => {
-        const eventItem = document.createElement('div');
-        eventItem.classList.add('event-item');
-        eventItem.innerHTML = `<strong>${event.name}</strong><br>${event.description} <button class="participate-button">Participer</button>`;
-        eventList.appendChild(eventItem);
-      });
-    } else {
-      noEventsMessage.style.display = 'block'; // Afficher le message "aucun événement"
-    }
-
-    // Afficher les matchs
-    if (matches.length > 0) {
-      noMatchesMessage.style.display = 'none'; // Cacher le message "aucun match"
-      matches.forEach(match => {
-        const matchItem = document.createElement('div');
-        matchItem.classList.add('match-item');
-        matchItem.innerHTML = `<strong>${match.name}, ${match.age} ans</strong><br>Passions: ${match.passions}<br>Recherche: ${match.recherche} <button class="chat-button">Chat</button>`;
-        matchList.appendChild(matchItem);
-      });
-    } else {
-      noMatchesMessage.style.display = 'block'; // Afficher le message "aucun match"
-    }
+    // Charger les profils au démarrage
+    loadProfiles();
   </script>
-
 </body>
 </html>
-
