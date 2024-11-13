@@ -19,7 +19,6 @@
             padding: 60px 20px;
             background-color: #672934;
             color: #fefefe;
-            animation: fadeIn 1.5s ease-in;
         }
 
         .logo {
@@ -38,7 +37,6 @@
             padding: 20px;
             background-color: #fefefe;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            animation: slideIn 2s ease-in-out;
         }
 
         nav a {
@@ -47,7 +45,6 @@
             font-weight: bold;
             text-decoration: none;
             font-size: 18px;
-            transition: color 0.3s ease;
         }
 
         nav a:hover {
@@ -63,77 +60,52 @@
             font-size: 20px;
             border-radius: 50px;
             text-decoration: none;
-            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .cta-button:hover {
-            background-color: #a65362;
-            transform: scale(1.08);
         }
 
         .carousel {
             display: flex;
             align-items: center;
             justify-content: center;
-            perspective: 1000px;
             width: 100%;
-            max-width: 1000px;
-            margin: 40px auto;
             overflow: hidden;
             position: relative;
+            margin: 40px auto;
         }
 
         .carousel .card {
-            position: absolute;
-            width: 280px;
-            height: 240px;
+            min-width: 280px;
+            max-width: 280px;
+            margin: 0 20px;
             padding: 20px;
             background-color: #f7f8fa;
             color: #333;
             border-radius: 15px;
             box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             text-align: center;
-            transition: transform 1s ease, opacity 1s ease;
             opacity: 0;
-            transform: scale(0.8) translateZ(-300px);
+            transition: transform 0.6s ease, opacity 0.6s ease;
         }
 
         .carousel .card.active {
             opacity: 1;
-            transform: scale(1) translateZ(0px);
+            transform: translateX(0);
             z-index: 2;
         }
 
-        .carousel .card.prev {
-            opacity: 0.6;
-            transform: scale(0.9) translateX(-180px) rotateY(20deg);
-            z-index: 1;
+        .carousel .card.prev, .carousel .card.next {
+            opacity: 0.5;
+            transform: translateX(-100%) scale(0.9);
         }
 
         .carousel .card.next {
-            opacity: 0.6;
-            transform: scale(0.9) translateX(180px) rotateY(-20deg);
-            z-index: 1;
-        }
-
-        .card-title {
-            font-size: 1.6em;
-            color: #800020;
-            margin-bottom: 10px;
+            transform: translateX(100%) scale(0.9);
         }
 
         .carousel-buttons {
             position: absolute;
-            bottom: -50px;
+            bottom: -40px;
             display: flex;
             gap: 15px;
-            justify-content: center;
-            width: 100%;
         }
 
         .carousel-buttons button {
@@ -143,39 +115,24 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s;
-        }
-
-        .carousel-buttons button:hover {
-            background-color: #a33e50;
-        }
-
-        section {
-            text-align: center;
-            padding: 50px 20px;
-            animation: fadeInUp 1.5s ease-in-out;
         }
 
         .info-section {
-            background: #ffffff;
-            padding: 30px;
-            margin: 20px;
-            border-radius: 12px;
-            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-            color: #5A6F7B;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .info-section:hover {
-            transform: scale(1.03);
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
         }
 
         .info-section h3 {
-            font-size: 1.8em;
-            margin-bottom: 15px;
+            font-size: 2em;
             color: #8c2f39;
+            margin-bottom: 10px;
+        }
+
+        .info-section p {
+            font-size: 1.1em;
+            color: #333;
+            line-height: 1.6;
         }
 
         footer {
@@ -184,21 +141,6 @@
             background-color: #672934;
             color: #ffffff;
             font-size: 0.9em;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes fadeInUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
         }
     </style>
 </head>
@@ -245,8 +187,8 @@
             <button onclick="showNextCard()">Suivant</button>
         </div>
     </section>
-    
-<section class="info-section">
+
+    <section class="info-section">
         <h3>Pourquoi avons-nous créé Student Match ?</h3>
         <p>Student Match est né de la volonté de connecter les étudiants dans un cadre sûr et convivial. Nous savons que la vie étudiante peut être solitaire, surtout pour ceux qui viennent d'autres villes ou pays. Notre objectif est de vous offrir un espace pour rencontrer de nouveaux amis, partager des activités et élargir votre cercle social.</p>
     </section>
@@ -261,13 +203,10 @@
         <p>Grâce à Student Match, vous pouvez facilement organiser des rencontres, planifier des événements et découvrir des activités dans votre région. Que vous soyez passionné de sport, de musique, de cuisine ou de jeux vidéo, trouvez des personnes qui partagent vos intérêts et créez des moments mémorables.</p>
     </section>
 
-
     <footer>
         &copy; 2024 Student Match. Tous droits réservés.
     </footer>
 </body>
-<script> 
-    
 <script>
     let activeIndex = 0;
     const cards = document.querySelectorAll('.carousel .card');
@@ -275,9 +214,13 @@
     function updateCards() {
         cards.forEach((card, index) => {
             card.classList.remove('prev', 'next', 'active');
-            if (index === activeIndex) card.classList.add('active');
-            else if (index === (activeIndex + 1) % cards.length) card.classList.add('next');
-            else if (index === (activeIndex - 1 + cards.length) % cards.length) card.classList.add('prev');
+            if (index === activeIndex) {
+                card.classList.add('active');
+            } else if (index === (activeIndex + 1) % cards.length) {
+                card.classList.add('next');
+            } else if (index === (activeIndex - 1 + cards.length) % cards.length) {
+                card.classList.add('prev');
+            }
         });
     }
 
@@ -290,6 +233,9 @@
         activeIndex = (activeIndex - 1 + cards.length) % cards.length;
         updateCards();
     }
+
+    // Défilement automatique toutes les 5 secondes
+    setInterval(showNextCard, 5000);
 
     updateCards();
 </script>
