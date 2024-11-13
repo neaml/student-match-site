@@ -77,8 +77,10 @@
             align-items: center;
             justify-content: center;
             perspective: 1000px;
-            width: 90%;
+            width: 100%;
+            max-width: 1000px;
             margin: 40px auto;
+            overflow: hidden;
             position: relative;
         }
 
@@ -107,14 +109,16 @@
             z-index: 2;
         }
 
-        .carousel .card.prev, .carousel .card.next {
+        .carousel .card.prev {
             opacity: 0.6;
             transform: scale(0.9) translateX(-180px) rotateY(20deg);
             z-index: 1;
         }
 
         .carousel .card.next {
+            opacity: 0.6;
             transform: scale(0.9) translateX(180px) rotateY(-20deg);
+            z-index: 1;
         }
 
         .card-title {
@@ -125,9 +129,11 @@
 
         .carousel-buttons {
             position: absolute;
-            bottom: -25px;
+            bottom: -50px;
             display: flex;
             gap: 15px;
+            justify-content: center;
+            width: 100%;
         }
 
         .carousel-buttons button {
@@ -260,6 +266,8 @@
         &copy; 2024 Student Match. Tous droits réservés.
     </footer>
 </body>
+<script> 
+    
 <script>
     let activeIndex = 0;
     const cards = document.querySelectorAll('.carousel .card');
