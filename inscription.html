@@ -8,21 +8,17 @@
   <link rel="stylesheet" href="style.css">
 <script type="module">
 
-  document.addEventListener('DOMContentLoaded', () => {
-  console.log('Page chargée et script exécuté !'); // Vérifiez que l'événement est bien déclenché
-  
-  // Sélection des bulles
-  const bubbles = document.querySelectorAll('.bubble');
-  
-  // Ajout d'un événement de clic sur chaque bulle
-  bubbles.forEach(bubble => {
-    bubble.addEventListener('click', function () {
-      console.log('Bulle cliquée:', this); // Vérifiez si la bulle est cliquée
-      this.classList.toggle('selected');
+document.addEventListener("DOMContentLoaded", function () {
+    const bubbles = document.querySelectorAll(".bubble");
+
+    bubbles.forEach(bubble => {
+        bubble.addEventListener("click", function () {
+            // Ajoute ou retire la classe 'active' de la bulle cliquée
+            this.classList.toggle("active");
+        });
     });
-  });
 });
-  
+
   // Importer les fonctions nécessaires
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
   import { getFirestore, collection, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
@@ -396,7 +392,7 @@ async function handleSignUp() {
 
       <label for="passions">Passions :</label>
       <div id="passionsContainer" class="bubbleContainer">
-       <div class="bubble"><span class="emoji">🎬</span>Cinéma</div>
+        <div class="bubble"><span class="emoji">🎬</span>Cinéma</div>
         <div class="bubble"><span class="emoji">⚽</span>Sport</div>
         <div class="bubble"><span class="emoji">🧘</span>Méditation & Yoga</div>
         <div class="bubble"><span class="emoji">📚</span>Lecture</div>
@@ -417,12 +413,12 @@ async function handleSignUp() {
 
       <label for="searchingFor">Je recherche :</label>
     <div id="searchingForContainer" class="bubbleContainer">
-      <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
+        <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
         <div class="bubble"><span class="emoji">👫</span>Des Amis</div>
         <div class="bubble"><span class="emoji">💍</span>Une relation longue durée</div>
         <div class="bubble"><span class="emoji">🥂</span>Une relation d'un soir</div>
         <div class="bubble"><span class="emoji">🤷‍♂️🤷‍♀️</span>J'ai pas encore décidé</div>
-       <div class="bubble"><span class="emoji">❓</span>Autre</div>
+        <div class="bubble"><span class="emoji">❓</span>Autre</div>
 
       </div>
         <!-- Champ pour le téléchargement de la photo de profil -->
