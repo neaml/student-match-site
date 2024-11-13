@@ -72,22 +72,27 @@
             transform: scale(1.08);
         }
 
+        .carousel-container {
+            padding: 80px 0; /* Augmente l'espacement autour du carrousel */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .carousel {
+            position: relative;
             display: flex;
             align-items: center;
-            justify-content: center;
             perspective: 1000px;
             width: 100%;
             max-width: 1000px;
-            margin: 40px auto;
-            overflow: hidden;
-            position: relative;
+            overflow: visible;
         }
 
         .carousel .card {
             position: absolute;
             width: 280px;
-            height: 240px;
+            height: 300px; /* Réduit la hauteur des cartes pour éviter les débordements */
             padding: 20px;
             background-color: #f7f8fa;
             color: #333;
@@ -129,7 +134,7 @@
 
         .carousel-buttons {
             position: absolute;
-            bottom: -50px;
+            bottom: -60px;
             display: flex;
             gap: 15px;
             justify-content: center;
