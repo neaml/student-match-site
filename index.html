@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil - Student Match</title>
     <link rel="stylesheet" href="style.css">
-    <style>
+  
+      <style>
+        /* Styles de base et animations */
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(to bottom right, #f8f0f0, #e3c3c3);
@@ -13,7 +15,7 @@
             margin: 0;
             overflow-x: hidden;
         }
-        
+
         header {
             text-align: center;
             padding: 50px 20px;
@@ -21,7 +23,7 @@
             color: #fefefe;
             animation: fadeIn 1.5s ease-in;
         }
-        
+
         .logo {
             width: 170px;
             height: auto;
@@ -76,7 +78,8 @@
             background-color: #a65362;
             transform: scale(1.05);
         }
-  /* Style du carrousel */
+
+        /* Style du carrousel */
         .carousel {
             display: flex;
             align-items: center;
@@ -107,25 +110,18 @@
             animation: fadeIn 1s ease-out;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Carte active */
         .carousel .card.active {
             opacity: 1;
             transform: scale(1) translateZ(0px);
             z-index: 1;
         }
 
-        /* Cartes précédentes et suivantes */
         .carousel .card.prev, .carousel .card.next {
             opacity: 0.5;
             transform: scale(0.9) translateX(-150px) rotateY(15deg);
             z-index: 0;
         }
+
         .carousel .card.next {
             transform: scale(0.9) translateX(150px) rotateY(-15deg);
         }
@@ -172,6 +168,7 @@
         .carousel-buttons button:hover {
             background-color: #a33e50;
         }
+
         section {
             text-align: center;
             padding: 40px 20px;
