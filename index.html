@@ -6,81 +6,115 @@
     <title>Accueil - Student Match</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(to bottom right, #f7f4f4, #e4d4d4);
-            color: #8c2f39;
+        /* Style de base */
+        * {
+            box-sizing: border-box;
             margin: 0;
-            overflow-x: hidden;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #4a4a4a;
         }
 
         header {
             text-align: center;
-            padding: 60px 20px;
-            background-color: #672934;
-            color: #fefefe;
+            padding: 50px 20px;
+            background-color: #800020;
+            color: #ffffff;
         }
 
-        .logo {
-            width: 160px;
+        header img.logo {
+            width: 140px;
             height: auto;
             margin-bottom: 20px;
         }
 
         header h1 {
-            font-size: 3em;
-            margin: 10px 0;
+            font-size: 2.5em;
+            margin-bottom: 10px;
         }
 
+        header p {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Barre de navigation */
         nav {
+            background-color: #fff;
+            padding: 15px;
             text-align: center;
-            padding: 20px;
-            background-color: #fefefe;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         nav a {
-            margin: 0 20px;
-            color: #a65362;
+            margin: 0 15px;
+            color: #800020;
             font-weight: bold;
             text-decoration: none;
-            font-size: 18px;
+            font-size: 1em;
         }
 
         nav a:hover {
-            color: #8c2f39;
+            color: #a32638;
+        }
+
+        /* Section CTA */
+        .cta-section {
+            text-align: center;
+            padding: 30px 20px;
+            background-color: #fefefe;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-section h2 {
+            font-size: 2em;
+            color: #800020;
+            margin-bottom: 15px;
+        }
+
+        .cta-section p {
+            font-size: 1.1em;
+            color: #4a4a4a;
+            max-width: 700px;
+            margin: 0 auto;
+            margin-bottom: 20px;
         }
 
         .cta-button {
             display: inline-block;
-            margin: 30px auto;
-            padding: 15px 35px;
-            background-color: #8c2f39;
-            color: #ffffff;
-            font-size: 20px;
+            padding: 15px 30px;
+            background-color: #800020;
+            color: #fff;
             border-radius: 50px;
             text-decoration: none;
+            font-size: 1em;
         }
 
+        /* Carousel */
         .carousel {
             display: flex;
-            align-items: center;
             justify-content: center;
-            width: 100%;
+            align-items: center;
             overflow: hidden;
-            position: relative;
-            margin: 40px auto;
+            padding: 40px 0;
+            background-color: #f9f9f9;
         }
 
         .carousel .card {
-            min-width: 280px;
-            max-width: 280px;
-            margin: 0 20px;
+            min-width: 250px;
+            max-width: 250px;
+            margin: 0 10px;
             padding: 20px;
-            background-color: #f7f8fa;
+            background-color: #ffffff;
             color: #333;
             border-radius: 15px;
-            box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
             text-align: center;
             opacity: 0;
             transition: transform 0.6s ease, opacity 0.6s ease;
@@ -88,69 +122,68 @@
 
         .carousel .card.active {
             opacity: 1;
-            transform: translateX(0);
+            transform: scale(1.1);
             z-index: 2;
         }
 
-        .carousel .card.prev, .carousel .card.next {
-            opacity: 0.5;
-            transform: translateX(-100%) scale(0.9);
-        }
-
-        .carousel .card.next {
-            transform: translateX(100%) scale(0.9);
-        }
-
         .carousel-buttons {
-            position: absolute;
-            bottom: -40px;
             display: flex;
-            gap: 15px;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         .carousel-buttons button {
-            padding: 12px 18px;
+            padding: 10px;
             background-color: #800020;
-            color: #fff;
+            color: #ffffff;
             border: none;
-            border-radius: 8px;
+            border-radius: 5px;
             cursor: pointer;
         }
 
+        /* Section d'information */
         .info-section {
             max-width: 800px;
             margin: 50px auto;
-            padding: 0 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
         }
 
         .info-section h3 {
-            font-size: 2em;
-            color: #8c2f39;
+            font-size: 1.8em;
+            color: #800020;
             margin-bottom: 10px;
         }
 
         .info-section p {
             font-size: 1.1em;
-            color: #333;
+            color: #4a4a4a;
             line-height: 1.6;
         }
 
+        /* Footer */
         footer {
             text-align: center;
             padding: 20px;
-            background-color: #672934;
+            background-color: #800020;
             color: #ffffff;
             font-size: 0.9em;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
+
+    <!-- En-tête -->
     <header>
         <img src="logo.png" alt="Logo Student Match" class="logo">
         <h1>Bienvenue sur Student Match</h1>
         <p>Rencontrez des étudiants, créez des activités et élargissez votre réseau !</p>
     </header>
 
+    <!-- Navigation -->
     <nav>
         <a href="inscription.html">Inscription / Connexion</a>
         <a href="dashboard.html">Tableau de Bord</a>
@@ -158,36 +191,34 @@
         <a href="aide.html">Aide & Contact</a>
     </nav>
 
-    <section>
+    <!-- Section CTA -->
+    <section class="cta-section">
         <h2>Créez des liens dès aujourd'hui !</h2>
         <p>Inscrivez-vous pour explorer des profils d'autres étudiants et organiser des activités en toute simplicité.</p>
         <a href="inscription.html" class="cta-button">Rejoignez Student Match</a>
     </section>
 
+    <!-- Carousel -->
     <section class="carousel">
         <div class="card active">
-            <h3 class="card-title">À la recherche d'un ami</h3>
+            <h3>À la recherche d'un ami</h3>
             <p>👫 Envie de rencontrer quelqu'un avec qui partager des activités et passer du temps.</p>
         </div>
-        <div class="card next">
-            <h3 class="card-title">Relation sérieuse</h3>
+        <div class="card">
+            <h3>Relation sérieuse</h3>
             <p>💖 Prêt(e) pour une relation engagée et durable avec quelqu'un de spécial.</p>
         </div>
         <div class="card">
-            <h3 class="card-title">Groupe d'étude</h3>
+            <h3>Groupe d'étude</h3>
             <p>📚 Trouver des personnes motivées pour travailler ensemble et réussir ses études.</p>
         </div>
-        <div class="card prev">
-            <h3 class="card-title">Activités sportives</h3>
+        <div class="card">
+            <h3>Activités sportives</h3>
             <p>🏃‍♂️ Cherche des partenaires pour faire du sport et rester en forme.</p>
-        </div>
-
-        <div class="carousel-buttons">
-            <button onclick="showPrevCard()">Précédent</button>
-            <button onclick="showNextCard()">Suivant</button>
         </div>
     </section>
 
+    <!-- Sections d'information -->
     <section class="info-section">
         <h3>Pourquoi avons-nous créé Student Match ?</h3>
         <p>Student Match est né de la volonté de connecter les étudiants dans un cadre sûr et convivial. Nous savons que la vie étudiante peut être solitaire, surtout pour ceux qui viennent d'autres villes ou pays. Notre objectif est de vous offrir un espace pour rencontrer de nouveaux amis, partager des activités et élargir votre cercle social.</p>
@@ -203,40 +234,32 @@
         <p>Grâce à Student Match, vous pouvez facilement organiser des rencontres, planifier des événements et découvrir des activités dans votre région. Que vous soyez passionné de sport, de musique, de cuisine ou de jeux vidéo, trouvez des personnes qui partagent vos intérêts et créez des moments mémorables.</p>
     </section>
 
+    <!-- Pied de page -->
     <footer>
         &copy; 2024 Student Match. Tous droits réservés.
     </footer>
+
+    <!-- Script Carousel -->
+    <script>
+        let activeIndex = 0;
+        const cards = document.querySelectorAll('.carousel .card');
+
+        function updateCards() {
+            cards.forEach((card, index) => {
+                card.classList.remove('active');
+                if (index === activeIndex) {
+                    card.classList.add('active');
+                }
+            });
+        }
+
+        function showNextCard() {
+            activeIndex = (activeIndex + 1) % cards.length;
+            updateCards();
+        }
+
+        // Défilement automatique toutes les 5 secondes
+        setInterval(showNextCard, 5000);
+    </script>
 </body>
-<script>
-    let activeIndex = 0;
-    const cards = document.querySelectorAll('.carousel .card');
-
-    function updateCards() {
-        cards.forEach((card, index) => {
-            card.classList.remove('prev', 'next', 'active');
-            if (index === activeIndex) {
-                card.classList.add('active');
-            } else if (index === (activeIndex + 1) % cards.length) {
-                card.classList.add('next');
-            } else if (index === (activeIndex - 1 + cards.length) % cards.length) {
-                card.classList.add('prev');
-            }
-        });
-    }
-
-    function showNextCard() {
-        activeIndex = (activeIndex + 1) % cards.length;
-        updateCards();
-    }
-
-    function showPrevCard() {
-        activeIndex = (activeIndex - 1 + cards.length) % cards.length;
-        updateCards();
-    }
-
-    // Défilement automatique toutes les 5 secondes
-    setInterval(showNextCard, 5000);
-
-    updateCards();
-</script>
 </html>
