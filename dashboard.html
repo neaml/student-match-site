@@ -48,6 +48,34 @@
       margin: 0 auto;
       gap: 20px;
     }
+#explore-profiles {
+    /* Ajouter des styles pour la section Exploration */
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+button {
+    margin: 10px;
+}
+
+#my-matches {
+    margin-top: 20px;
+}
+
+.match {
+    display: flex;
+    align-items: center;
+}
+
+.match img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
 
     .exploration-section, .event-group-section {
       background-color: #fff;
@@ -199,8 +227,19 @@
     <!-- Section Exploration des profils -->
     <div class="exploration-section">
       <h2>Explorer les Profils</h2>
-      
-      <div id="profilesContainer"></div> <!-- Conteneur pour les cartes de profils -->
+<div id="explore-profiles">
+    <div class="profile-card">
+        <img src="profil_image.jpg" alt="Profile Image" />
+        <h3>Nom de l'utilisateur</h3>
+        <button id="match-btn">Match ❤️</button>
+        <button id="pass-btn">Passer ❌</button>
+    </div>
+</div>
+
+<div id="my-matches">
+    <h3>Mes matchs</h3>
+    <!-- Les matchs seront affichés ici -->
+</div>
 
     </div>
 
@@ -276,13 +315,113 @@
         // Ajouter la carte de profil dans le conteneur
         document.getElementById('profilesContainer').appendChild(profileCard);
       });
+      db.collection('users').where("userId", "!=" , "VEtDQtcEeXv3vp06JhNY")
+.get()
+.then(querySnapshot => {
+    // Traitement des profils récupérés
+})
     } catch (error) {
       console.error("Erreur lors de la récupération des profils : ", error);
     }
   }
+const matchBtn = document.getElementById("match-btn");
+const passBtn = document.getElementById("pass-btn");
+const myMatchesDiv = document.getElementById("my-matches");
 
-  // Charger les profils dès que la page est chargée
-  loadProfiles();
+let currentProfile = null; // Le profil actuellement affiché
+
+// Lorsque l'utilisateur appuie sur "Match"
+matchBtn.addEventListener("click", () => {
+    if (currentProfile) {
+        // Enregistrer le match dans Firestore
+        const matchData = {
+            userId: currentUser.id,  // L'ID de l'utilisateur courant
+            matchId: currentProfile.id,  // L'ID du profil matché
+            status: "en attente"  // "en attente" jusqu'à ce que l'autre utilisateur match
+        };
+
+        // Ajouter à la collection "matches"
+        db.collection('matches').add(matchData)
+            .then(() => {
+                // Ajouter à la section "Mes matchs"
+                const matchDiv = document.createElement('div');
+                matchDiv.classList.add('match');
+                matchDiv.innerHTML = `
+                    <img src="${currentProfile.image}" alt="${currentProfile.name}" />
+                    <span>${currentProfile.name}</span>
+                    <span>En attente de match</span>
+                `;
+                myMatchesDiv.appendChild(matchDiv);
+            })
+            .catch(error => {
+                console.log("Erreur lors de l'ajout du match:", error);
+            });
+    }
+});
+
+// Lorsque l'utilisateur appuie sur "Passer"
+passBtn.addEventListener("click", () => {
+    // Logique de passer, par exemple, récupérer un autre profil
+});
+
+// Récupérer les profils
+function loadProfiles() {
+    db.collection('users').where("userId", "!=", "VEtDQtcEeXv3vp06JhNY")
+    .get()
+    .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+            const profile = doc.data();
+            currentProfile = profile;
+            // Afficher le profil sur la page
+            document.querySelector("#explore-profiles").innerHTML = `
+                <div class="profile-card">
+                    <img src="${profile.image}" alt="Profile Image" />
+                    <h3>${profile.name}</h3>
+                    <button id="match-btn">Match</button>
+                    <button id="pass-btn">Passer</button>
+                </div>
+            `;
+        });
+    })
+    .catch(error => {
+        console.log("Erreur lors de la récupération des profils:", error);
+    });
+}
+
+loadProfiles(); // Charger les profils
+// Vérifier si les deux utilisateurs ont matché
+db.collection('matches').where("userId", "==", matchId)
+.where("matchId", "==", currentUser.id)
+.get()
+.then(querySnapshot => {
+    if (!querySnapshot.empty) {
+        // Les deux utilisateurs ont matché, on met à jour le statut
+        querySnapshot.forEach(doc => {
+            doc.ref.update({ status: "match confirmé" });
+            // Lors du traitement des matchs confirmés
+db.collection('matches').where("userId", "==", currentUser.id)
+.where("matchId", "==", otherUser.id)
+.get()
+.then(querySnapshot => {
+    querySnapshot.forEach(doc => {
+        const matchData = doc.data();
+        const matchDiv = document.createElement('div');
+        matchDiv.classList.add('match');
+        matchDiv.innerHTML = `
+            <img src="${otherUser.image}" alt="${otherUser.name}" />
+            <span>${otherUser.name}</span>
+            <span>Match confirmé</span>
+            <a href="https://instagram.com/${otherUser.socialMedia}" target="_blank">
+                <img src="instagram-icon.png" alt="Instagram" />
+            </a>
+        `;
+        myMatchesDiv.appendChild(matchDiv);
+    });
+})
+.catch(error => {
+    console.error("Erreur lors de la vérification du match:", error);
+});
+
 </script>
 </body>
 </html>
