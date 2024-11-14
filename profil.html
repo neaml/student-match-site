@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profil et Paramètres</title>
   <link rel="stylesheet" href="styles.css">
-    <style>
+<style>
   /* Global body style */
   body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -13,9 +13,10 @@
     margin: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Alignement en haut de la page */
     height: 100vh;
     color: white;
+    padding-top: 20px; /* Ajout d'un peu d'espace en haut */
   }
 
   /* Main profile container */
@@ -24,16 +25,17 @@
     padding: 20px;
     width: 100%;
     max-width: 500px;
-    margin: 20px;
+    margin: 0 auto; /* Centrer horizontalement */
     border-radius: 10px;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
   }
 
-  /* Title */
+  /* Title style */
   h1 {
     text-align: center;
     color: #800020;
     margin-bottom: 20px;
+    font-size: 1.8em;
   }
 
   /* Form input container */
@@ -119,7 +121,7 @@
     }
 
     h1 {
-      font-size: 1.2em;
+      font-size: 1.5em;
     }
 
     input, button {
@@ -127,6 +129,7 @@
     }
   }
 </style>
+
 
 </head>
 <body>
