@@ -5,6 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profil et Paramètres</title>
   <link rel="stylesheet" href="styles.css">
+    <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #853642;
+      margin: 0;
+    }
+
+    #profile-container {
+      background-color: white;
+      padding: 20px;
+      max-width: 400px;
+      margin: 100px auto;
+      border-radius: 10px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #800020;
+    }
+
+    label {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #333;
+    }
+
+    input {
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 1em;
+      width: 100%;
+    }
+
+    button {
+      background-color: #800020;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #a65362;
+    }
+
+    #passions-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 5px;
+    }
+
+    .bubble {
+      background-color: #f0f0f0;
+      border-radius: 20px;
+      padding: 5px 10px;
+      font-size: 0.9em;
+      cursor: pointer;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .bubble:hover {
+      background-color: #ddd;
+    }
+  </style>
 </head>
 <body>
   <h1>Mon Profil</h1>
