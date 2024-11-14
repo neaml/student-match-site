@@ -12,12 +12,13 @@ header {
     text-align: center;
     padding: 60px 20px;
     background-color: #672934;
-    color: #fefefe;
+    color: #fefefe;  /* Titre en blanc */
 }
 
 header h1 {
     font-size: 3em;
     margin: 10px 0;
+    color: #fff;  /* Remet la couleur blanche pour le titre */
 }
 
 header img.logo {
@@ -178,7 +179,7 @@ section {
 .info-section h3 {
     font-size: 1.8em;
     margin-bottom: 15px;
-    color: #8c2f39;
+    color: #8c2f39; /* Remet la couleur du texte en bordeaux pour la section info */
 }
 
 /* Footer */
