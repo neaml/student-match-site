@@ -114,6 +114,9 @@
       <input type="text" id="searchingFor" placeholder="Ce que je recherche">
     </div>
     <button id="saveChangesBtn">Enregistrer les modifications</button>
+    <div id="successMessage" style="display: none; color: green; text-align: center; margin-top: 10px;">
+  Modifications enregistrées avec succès !
+</div>
     <button id="logoutBtn">Se déconnecter</button>
   </div>
 
@@ -207,6 +210,14 @@
 
       updateDoc(userDocRef, updatedData).then(() => {
         alert("Modifications enregistrées avec succès !");
+           // Afficher le message de succès
+    const successMessage = document.getElementById('successMessage');
+    successMessage.style.display = 'block';
+
+    // Cacher le message après 3 secondes
+    setTimeout(() => {
+      successMessage.style.display = 'none';
+    }, 3000);
       }).catch((error) => {
         console.error("Erreur lors de la mise à jour du profil :", error);
       });
