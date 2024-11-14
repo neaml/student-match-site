@@ -1,70 +1,176 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Profil et Paramètres - Student Match</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;        background-color: #F5F5F5;
-        color: #333;
-    }
-    header {
-        background-color: #800020;
-        color: white;
-        padding: 20px;
-        text-align: center;
-    }
-    section {
-        max-width: 600px;
-        margin: 40px auto;
-        padding: 20px;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
-    label {
-        display: block;
-        margin: 15px 0 5px;
-    }
-    input[type="text"], input[type="email"] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-    button {
-        width: 100%;
-        padding: 10px;
-        background-color: #800020;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil et Paramètres</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Profil et Paramètres</h1>
-    </header>
-<section>
-    <h2>Modifier votre profil</h2>
-    <form>
-        <label for="name">Nom :</label>
-        <input type="text" id="name" value="Marie Dupont">
+  <h1>Mon Profil</h1>
+  
+  <div id="profile-container">
+    <div>
+      <label for="firstName">Prénom:</label>
+      <input type="text" id="firstName" placeholder="Prénom">
+    </div>
+    <div>
+      <label for="lastName">Nom:</label>
+      <input type="text" id="lastName" placeholder="Nom">
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="Email" disabled>
+    </div>
+    <div>
+      <label for="age">Âge:</label>
+      <input type="number" id="age" placeholder="Âge">
+    </div>
+    <div>
+      <label for="orientation">Orientation:</label>
+      <input type="text" id="orientation" placeholder="Orientation">
+    </div>
+    <div>
+      <label>Passions:</label>
+      <div id="passions-container"></div>
+      <input type="text" id="newPassion" placeholder="Ajouter une passion">
+      <button id="addPassionBtn">Ajouter</button>
+    </div>
+    <div>
+      <label for="searchingFor">Recherche:</label>
+      <input type="text" id="searchingFor" placeholder="Ce que je recherche">
+    </div>
+    <button id="saveChangesBtn">Enregistrer les modifications</button>
+    <button id="logoutBtn">Se déconnecter</button>
+  </div>
 
-        <label for="email">Email :</label>
-        <input type="email" id="email" value="marie.dupont@example.com">
+  <!-- Importation des services Firebase nécessaires -->
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+  <script src="firebaseConfig.js"></script>
+  <script src="profile.js"></script>
 
-        <label for="password">Changer de mot de passe :</label>
-        <input type="password" id="password" placeholder="Nouveau mot de passe">
+  <script>
+    // Initialisation de Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        <button type="submit">Enregistrer les modifications</button>
-    </form>
-</section>
+    // Sélection des éléments HTML
+    const firstNameInput = document.getElementById('firstName');
+    const lastNameInput = document.getElementById('lastName');
+    const emailInput = document.getElementById('email');
+    const ageInput = document.getElementById('age');
+    const orientationInput = document.getElementById('orientation');
+    const passionsContainer = document.getElementById('passions-container');
+    const newPassionInput = document.getElementById('newPassion');
+    const addPassionBtn = document.getElementById('addPassionBtn');
+    const searchingForInput = document.getElementById('searchingFor');
+    const saveChangesBtn = document.getElementById('saveChangesBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    let passions = [];
+
+    // Fonction pour afficher les passions en bulles
+    function displayPassions() {
+      passionsContainer.innerHTML = '';
+      passions.forEach((passion, index) => {
+        const bubble = document.createElement('span');
+        bubble.className = 'bubble';
+        bubble.textContent = passion;
+        bubble.onclick = () => removePassion(index);
+        passionsContainer.appendChild(bubble);
+      });
+    }
+
+    // Ajouter une nouvelle passion
+    function addPassion() {
+      const passion = newPassionInput.value.trim();
+      if (passion && !passions.includes(passion)) {
+        passions.push(passion);
+        newPassionInput.value = '';
+        displayPassions();
+      }
+    }
+
+    // Supprimer une passion
+    function removePassion(index) {
+      passions.splice(index, 1);
+      displayPassions();
+    }
+
+    // Fonction pour charger les informations de l'utilisateur connecté
+    function loadUserProfile(userId) {
+      const userDocRef = doc(db, 'users', userId);
+      getDoc(userDocRef).then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
+          firstNameInput.value = userData.firstName || '';
+          lastNameInput.value = userData.lastName || '';
+          emailInput.value = userData.email || '';
+          ageInput.value = userData.age || '';
+          orientationInput.value = userData.orientation || '';
+          passions = userData.passions || [];
+          searchingForInput.value = userData.searchingFor || '';
+          displayPassions();
+        }
+      }).catch((error) => {
+        console.error("Erreur lors du chargement du profil :", error);
+      });
+    }
+
+    // Fonction pour sauvegarder les modifications du profil utilisateur
+    function saveUserProfile(userId) {
+      const userDocRef = doc(db, 'users', userId);
+      const updatedData = {
+        firstName: firstNameInput.value,
+        lastName: lastNameInput.value,
+        age: ageInput.value,
+        orientation: orientationInput.value,
+        passions: passions,
+        searchingFor: searchingForInput.value
+      };
+
+      updateDoc(userDocRef, updatedData).then(() => {
+        alert("Modifications enregistrées avec succès !");
+      }).catch((error) => {
+        console.error("Erreur lors de la mise à jour du profil :", error);
+      });
+    }
+
+    // Détecte l'état de connexion de l'utilisateur
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        emailInput.value = user.email;
+        loadUserProfile(user.uid);
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+
+    // Gère le bouton d'enregistrement des modifications
+    saveChangesBtn.addEventListener('click', () => {
+      const user = auth.currentUser;
+      if (user) {
+        saveUserProfile(user.uid);
+      }
+    });
+
+    // Gère le bouton de déconnexion
+    logoutBtn.addEventListener('click', () => {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      }).catch((error) => {
+        console.error("Erreur lors de la déconnexion :", error);
+      });
+    });
+
+    // Gère l'ajout de nouvelles passions
+    addPassionBtn.addEventListener('click', addPassion);
+    newPassionInput.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') addPassion();
+    });
+  </script>
 </body>
 </html>
-```
