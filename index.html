@@ -72,37 +72,40 @@
             transform: scale(1.08);
         }
 
-        .carousel {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            perspective: 1000px;
-            width: 100%;
-            max-width: 1000px;
-            margin: 60px auto; /* Augmentez le margin ici */
-            padding: 40px 0; /* Espace pour éviter les coupures */
-            overflow: hidden;
-            position: relative;
-        }
+/* Agrandir l'espacement autour des carrousels et des sections */
+.carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 80px auto;  /* Augmenter la marge pour plus d'espace autour */
+    padding: 20px;
+    overflow: hidden;
+    position: relative;
+    height: 350px;  /* Ajuster la hauteur pour que les cartes ne soient pas coupées */
+}
 
-        .carousel .card {
-            position: absolute;
-            width: 280px;
-            height: 240px;
-            padding: 20px;
-            background-color: #f7f8fa;
-            color: #333;
-            border-radius: 15px;
-            box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            transition: transform 1s ease, opacity 1s ease;
-            opacity: 0;
-            transform: scale(0.8) translateZ(-300px);
-        }
+/* Ajustement de la taille des cartes */
+.carousel .card {
+    position: absolute;
+    width: 280px;
+    height: 240px;
+    padding: 20px;
+    background-color: #f7f8fa;
+    color: #333;
+    border-radius: 15px;
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: transform 1s ease, opacity 1s ease;
+    opacity: 0;
+    transform: scale(0.8) translateZ(-300px);
+}
 
         .carousel .card.active {
             opacity: 1;
@@ -152,29 +155,36 @@
             background-color: #a33e50;
         }
 
-        section {
-            text-align: center;
-            padding: 50px 20px;
-            animation: fadeInUp 1.5s ease-in-out;
-        }
+        
+/* Espacement autour des sections */
+section {
+    text-align: center;
+    padding: 80px 20px; /* Augmenter le padding pour donner plus de place */
+    animation: fadeInUp 1.5s ease-in-out;
+}
 
-        .info-section {
-            background: #ffffff;
-            padding: 30px;
-            margin: 20px;
-            border-radius: 12px;
-            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-            color: #5A6F7B;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: inline-block;
-            width: 30%; /* Aligne les sections en ligne */
-            vertical-align: top;
-        }
+/* Espacement entre les sections en bas */
+.info-sections {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
 
-        .info-section:hover {
-            transform: scale(1.03);
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
-        }
+/* Ajuster la taille des sections en bas */
+.info-section {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    color: #5A6F7B;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 30%;
+}
+
+.info-section:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+}
 
         .info-section h3 {
             font-size: 1.8em;
