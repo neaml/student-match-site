@@ -1,1 +1,309 @@
+/* Styles généraux */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    color: #333;
+}
+
+h1 {
+    color: #800020;
+    text-align: center;
+}
+
+p {
+    text-align: center;
+    font-size: 1.1em;
+    color: #555;
+}
+
+button {
+    background-color: #800020;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #a65362;
+}
+
+/* Mise en page commune */
+section {
+    text-align: center;
+    padding: 80px 20px;
+    animation: fadeInUp 1.5s ease-in-out;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+input, select {
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+}
+
+/* Classes pour les bulles (utilisables partout) */
+.bubbleContainer {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+
+.bubble {
+    background-color: lightgray;
+    color: black;
+    border-radius: 20px;
+    padding: 8px 16px;
+    margin: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    align-items: center;
+}
+
+.bubble.selected {
+    background-color: #800020;
+    color: white;
+}
+
+.bubble:hover {
+    transform: scale(1.05);
+}
+
+.emoji {
+    font-size: 1.2em;
+    margin-right: 5px;
+}
+
+/* Aperçu de l'image */
+#imagePreview {
+    display: none;
+    width: 100px;
+    height: 100px;
+    margin-top: 10px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* Mise en page spécifique à la page d'accueil (index.html) */
+body.index-page {
+    background: linear-gradient(to bottom right, #f7f4f4, #e4d4d4);
+    color: #8c2f39;
+}
+
+header {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #672934;
+    color: #fefefe;
+    animation: fadeIn 1.5s ease-in;
+}
+
+header .logo {
+    width: 160px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 3em;
+    margin: 10px 0;
+}
+
+nav {
+    text-align: center;
+    padding: 20px;
+    background-color: #fefefe;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    animation: slideIn 2s ease-in-out;
+}
+
+nav a {
+    margin: 0 20px;
+    color: #a65362;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #8c2f39;
+}
+
+.cta-button {
+    display: inline-block;
+    margin: 30px auto;
+    padding: 15px 35px;
+    background-color: #8c2f39;
+    color: #ffffff;
+    font-size: 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #a65362;
+    transform: scale(1.08);
+}
+
+.carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 80px auto;
+    padding: 20px;
+    overflow: hidden;
+    position: relative;
+    height: 350px;
+}
+
+.carousel .card {
+    position: absolute;
+    width: 280px;
+    height: 240px;
+    padding: 20px;
+    background-color: #f7f8fa;
+    color: #333;
+    border-radius: 15px;
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: transform 1s ease, opacity 1s ease;
+    opacity: 0;
+    transform: scale(0.8) translateZ(-300px);
+}
+
+.carousel .card.active {
+    opacity: 1;
+    transform: scale(1) translateZ(0px);
+    z-index: 2;
+}
+
+.carousel .card.prev {
+    opacity: 0.6;
+    transform: scale(0.9) translateX(-180px) rotateY(20deg);
+    z-index: 1;
+}
+
+.carousel .card.next {
+    opacity: 0.6;
+    transform: scale(0.9) translateX(180px) rotateY(-20deg);
+    z-index: 1;
+}
+
+.card-title {
+    font-size: 1.6em;
+    color: #800020;
+    margin-bottom: 10px;
+}
+
+.carousel-buttons {
+    position: absolute;
+    bottom: -50px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+}
+
+.carousel-buttons button {
+    padding: 12px 18px;
+    background-color: #800020;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.carousel-buttons button:hover {
+    background-color: #a33e50;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #672934;
+    color: #ffffff;
+    font-size: 0.9em;
+}
+
+/* Mise en page spécifique à la page d'inscription (inscription.html) */
+body.inscription-page {
+    background-color: #853642;
+    animation: waveAnimation 10s ease-in-out infinite alternate;
+}
+
+main {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 50px auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.nav {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.nav a {
+    margin: 0 10px;
+    color: #800020;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.loginLink {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes waveAnimation {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 0%; }
+}
 
