@@ -50,7 +50,12 @@
         
       const Photodeprofil = document.getElementById('Photodeprofil').files[0];
       let photoURL = null;
+      // Récupération du formulaire et des champs
+      const registrationForm = document.getElementById('registration-form');
+      const socialMediaInput = document.getElementById('socialMedia');
 
+registrationForm.addEventListener('submit', (event) => {
+    event.preventDefault();
       // Télécharger la photo de profil sur Cloudinary
       if (Photodeprofil) {
         const formData = new FormData();
@@ -78,6 +83,7 @@
         passions: selectedPassions,
         searchingFor: selectedRelationship,
         Photodeprofil: photoURL // URL de la photo stockée
+        socialMedia: socialMediaInput // Ajouter le champ des réseaux sociaux
       });
 
       alert('Inscription réussie et informations enregistrées dans Firebase');
@@ -86,6 +92,24 @@
       alert('Erreur lors de l\'inscription, veuillez réessayer.');
     }
   });
+  function validateSocialMediaInput(socialMedia) {
+    // Simple validation (par exemple, vérifier si l'identifiant est non vide)
+    return socialMedia && socialMedia.trim() !== "";
+}
+
+registrationForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const socialMedia = socialMediaInput.value;
+
+    if (!validateSocialMediaInput(socialMedia)) {
+        alert("Veuillez entrer un identifiant Instagram valide !");
+        return;
+    }
+
+    // Ajouter l'utilisateur à Firestore si la validation est réussie
+    // ...
+});
+
 </script>
 <script>
 // Fonction d'inscription
@@ -337,8 +361,10 @@ async function handleSignUp() {
       <label for="Photodeprofil">Photo de profil :</label>
   <input type="file" id="Photodeprofil" accept="image/*">
 <img id="imagePreview" src="" alt="Aperçu de la photo de profil" style="display: none; width: 100px; height: 100px;">
-
+<label for="socialMedia">Profil Insta :</label>
+    <input type="text" id="socialMedia" name="socialMedia" placeholder="Colle ici le lien de ton profil Insta pour que tes matchs te contactent" />
       <p>
+        
     En continuant, vous acceptez notre <a href="politiquedeconfidentialite.html" target="_blank">politique de confidentialité</a>.
 </p>
 
