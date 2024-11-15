@@ -7,98 +7,136 @@
   <link rel="stylesheet" href="styles.css">
 <style>
   /* Global body style */
-  body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #853642;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Alignement en haut de la page */
-    height: 100vh;
-    color: white;
-    padding-top: 20px; /* Ajout d'un peu d'espace en haut */
-  }
+    /* Styles CSS ici (comme votre code original) */
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #853642;
+      animation: waveAnimation 10s ease-in-out infinite alternate;
+      color: #333;
+    }
 
-  /* Main profile container */
-  #profile-container {
-    background-color: white;
-    padding: 20px;
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto; /* Centrer horizontalement */
-    border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-  }
+    @keyframes waveAnimation {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 0%; }
+    }
 
-  /* Title style */
-  h1 {
-    text-align: center;
-    color: #800020;
-    margin-bottom: 20px;
-    font-size: 1.8em;
-  }
+    main {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 20px;
+      max-width: 600px;
+      margin: 50px auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
 
-  /* Form input container */
-  div {
-    margin-bottom: 15px;
-  }
+    h1 {
+      color: #800020;
+      text-align: center;
+    }
 
-  /* Labels for inputs */
-  label {
-    font-size: 0.9em;
-    color: #333;
-    margin-bottom: 5px;
-    display: block;
-  }
+    p {
+      text-align: center;
+      font-size: 1.1em;
+      color: #555;
+    }
 
-  /* Input styles */
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    font-size: 1em;
-    box-sizing: border-box;
-  }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
 
-  /* Passion bubbles styles */
-  #passions-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 5px;
-  }
+    label {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #555;
+    }
 
-  .bubble {
-    background-color: #800020;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.9em;
-  }
+    input, select {
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 1em;
+    }
 
-  .bubble:hover {
-    background-color: #a65362;
-  }
+    .bubbleContainer {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
 
-  /* Button styles */
-  button {
-    background-color: #800020;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1em;
-    cursor: pointer;
-    margin-top: 20px;
-    width: 100%;
-  }
+    .bubble {
 
-  button:hover {
-    background-color: #a65362;
-  }
+      background-color: lightgray;
+
+      color: black;
+      border-radius: 20px;
+      padding: 8px 16px;
+      margin: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      display: inline-block;
+      align-items: center;
+    }
+.bubble.selected {
+  background-color: #800020;  /* Changer la couleur de fond */
+  color: white;               /* Changer la couleur du texte */
+}
+
+ .bubble:hover {
+  transform: scale(1.05);  /* Effet de zoom léger au survol */
+}
+
+    .emoji {
+      font-size: 1.2em;
+      margin-right: 5px;
+    }
+
+    button {
+      background-color: #800020;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #a65362;
+    }
+
+    .nav {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .nav a {
+      margin: 0 10px;
+      color: #800020;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .loginLink {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+        /* Style pour l'aperçu de l'image */
+    #imagePreview {
+      display: none;
+      width: 100px;
+      height: 100px;
+      margin-top: 10px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
 
   /* Success message */
   #successMessage {
