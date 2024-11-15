@@ -188,32 +188,41 @@
     // Initialisation de Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    console.log('Firebase initialisé :', app);
 
-    // Vérification de l'état de connexion
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        // Si l'utilisateur est connecté, redirection vers le tableau de bord
-        window.location.href = "dashboard.html"; 
-      }
-    });
+   // Vérification de l'état de connexion
+auth.onAuthStateChanged(user => {
+  if (user) {
+    // Si l'utilisateur est connecté, redirection vers le tableau de bord
+    window.location.href = "dashboard.html"; 
+  } else {
+    // Si l'utilisateur n'est pas connecté, il reste sur la page de connexion
+    console.log("Utilisateur non connecté.");
+  }
+});
 
-    // Connexion de l'utilisateur
-    document.getElementById('loginForm').addEventListener('submit', (event) => {
-      event.preventDefault();
 
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+   document.getElementById('loginForm').addEventListener('submit', (event) => {
+  event.preventDefault();
 
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      // Attendre que l'utilisateur soit authentifié avant de rediriger
+      auth.onAuthStateChanged(user => {
+        if (user) {
           // Redirection vers le tableau de bord après la connexion réussie
           window.location.href = "dashboard.html"; 
-        })
-        .catch((error) => {
-          // Affichage de l'erreur
-          document.getElementById('errorMessage').textContent = 'Erreur de connexion : ' + error.message;
-        });
+        }
+      });
+    })
+    .catch((error) => {
+      alert('Erreur de connexion : ' + error.message); // Afficher un message d'erreur
     });
+});
+
   </script>
 
 </body>
