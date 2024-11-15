@@ -48,34 +48,6 @@
       margin: 0 auto;
       gap: 20px;
     }
-#explore-profiles {
-    /* Ajouter des styles pour la section Exploration */
-}
-
-.profile-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-button {
-    margin: 10px;
-}
-
-#my-matches {
-    margin-top: 20px;
-}
-
-.match {
-    display: flex;
-    align-items: center;
-}
-
-.match img {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-}
 
     .exploration-section, .event-group-section {
       background-color: #fff;
@@ -207,6 +179,25 @@ button {
       text-align: center;
       margin-top: 10px;
     }
+
+    @keyframes heartAnimation {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .heart-animation {
+      animation: heartAnimation 1s ease-out;
+    }
   </style>
 </head>
 <body>
@@ -220,30 +211,33 @@ button {
       <a href="tableau_bord.html">Tableau de Bord</a>
     </div>
   </div>
-<!-- Affichage de l'état de connexion de l'utilisateur -->
-    <div id="user-info">
-        <span id="user-name">Utilisateur non connecté</span>
-        <button id="logout-button" style="display:none;">Déconnexion</button>
-    </div>
+
+  <!-- Affichage de l'état de connexion de l'utilisateur -->
+  <div id="user-info">
+    <span id="user-name">Utilisateur non connecté</span>
+    <button id="logout-button" style="display:none;">Déconnexion</button>
+  </div>
+
   <!-- Contenu principal -->
   <div class="main-container">
     
     <!-- Section Exploration des profils -->
     <div class="exploration-section">
       <h2>Explorer les Profils</h2>
-<div id="explore-profiles">
-    <div class="profile-card">
-        <img src="profil_image.jpg" alt="Profile Image" />
-        <h3>Nom de l'utilisateur</h3>
-        <button id="match-btn">Match ❤️</button>
-        <button id="pass-btn">Passer ❌</button>
-    </div>
-</div>
+      <div id="explore-profiles">
+        <div id="profilesContainer"></div>
+        <div class="profile-card">
+          <img src="profil_image.jpg" alt="Profile Image" />
+          <h3>Nom de l'utilisateur</h3>
+          <button id="match-btn">Match ❤️</button>
+          <button id="pass-btn">Passer ❌</button>
+        </div>
+      </div>
 
-<div id="my-matches">
-    <h3>Mes matchs</h3>
-    <!-- Les matchs seront affichés ici -->
-</div>
+      <div id="my-matches">
+        <h3>Mes matchs</h3>
+        <!-- Les matchs seront affichés ici -->
+      </div>
 
     </div>
 
@@ -268,200 +262,68 @@ button {
       </div>
     </div>
   </div>
-  
-<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js"></script>
-  
-  // Configuration Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
-    authDomain: "student-match-but3.firebaseapp.com",
-    projectId: "student-match-but3",
-    storageBucket: "student-match-but3.appspot.com",
-    messagingSenderId: "1096075545413",
-    appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
-    measurementId: "G-XK5N6FLSYJ"
-  };
 
-  // Initialiser Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = firebase.auth();
-   // Fonction pour afficher l'état de connexion de l'utilisateur
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                // Utilisateur connecté
-                document.getElementById('user-name').textContent = user.displayName || user.email;
-                document.getElementById('logout-button').style.display = 'block'; // Affiche le bouton de déconnexion
-                displayMatches(user); // Afficher les matchs de l'utilisateur
-            } else {
-                // Utilisateur non connecté
-                document.getElementById('user-name').textContent = 'Utilisateur non connecté';
-                document.getElementById('logout-button').style.display = 'none'; // Cache le bouton de déconnexion
-                window.location.href = "index.html";  // Redirection vers l'accueil si l'utilisateur n'est pas connecté
-       
-        });
+  <script>
+    // Configuration Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
+      authDomain: "student-match-but3.firebaseapp.com",
+      projectId: "student-match-but3",
+      storageBucket: "student-match-but3.appspot.com",
+      messagingSenderId: "1096075545413",
+      appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
+      measurementId: "G-XK5N6FLSYJ"
+    };
+    
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
-        // Fonction de déconnexion
-        document.getElementById('logout-button').addEventListener('click', () => {
-            auth.signOut();
-        });
-  // Fonction pour charger les profils
-  async function loadProfiles() {
-    try {
-      // Récupérer les documents de la collection 'users'
-      const querySnapshot = await getDocs(collection(db, "users"));
-      if (querySnapshot.empty) {
-        console.log("Aucun profil trouvé.");
-        return;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // Fonction pour afficher l'état de connexion de l'utilisateur
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // Utilisateur connecté
+        document.getElementById('user-name').textContent = user.displayName || user.email;
+        document.getElementById('logout-button').style.display = 'inline-block';
+      } else {
+        // Utilisateur non connecté
+        document.getElementById('user-name').textContent = 'Utilisateur non connecté';
+        document.getElementById('logout-button').style.display = 'none';
       }
+    });
 
-      querySnapshot.forEach((doc) => {
-        const userData = doc.data();
-        
-        console.log("Profil récupéré : ", userData); // Affichage des données dans la console pour vérifier
-
-        // Créer une carte de profil pour chaque utilisateur
-        const profileCard = document.createElement('div');
-        profileCard.classList.add('profile-card');
-
-        // Insérer les données dans la carte
-        profileCard.innerHTML = `
-          <img src="${userData.profilePicture || 'https://via.placeholder.com/150'}" alt="Photo de Profil" />
-          <h3>${userData.firstName} ${userData.lastName}</h3>
-          <p>Âge: ${userData.age}</p>
-          <p>Passions: ${userData.passions.join(', ')}</p>
-          <p>Recherche: ${userData.relationship}</p>
-        `;
-
-        // Ajouter la carte de profil dans le conteneur
-        document.getElementById('profilesContainer').appendChild(profileCard);
+    // Fonction de déconnexion
+    document.getElementById('logout-button').addEventListener('click', () => {
+      signOut(auth).then(() => {
+        console.log("Déconnecté");
+      }).catch((error) => {
+        console.error("Erreur de déconnexion:", error);
       });
-      db.collection('users').where("userId", "!=" , "VEtDQtcEeXv3vp06JhNY")
-.get()
-.then(querySnapshot => {
-    // Traitement des profils récupérés
-})
-    } catch (error) {
-      console.error("Erreur lors de la récupération des profils : ", error);
-    }
-  }
-const matchBtn = document.getElementById("match-btn");
-const passBtn = document.getElementById("pass-btn");
-const myMatchesDiv = document.getElementById("my-matches");
-
-let currentProfile = null; // Le profil actuellement affiché
-
-// Lorsque l'utilisateur appuie sur "Match"
-matchBtn.addEventListener("click", () => {
-    if (currentProfile) {
-        // Enregistrer le match dans Firestore
-        const matchData = {
-            userId: currentUser.id,  // L'ID de l'utilisateur courant
-            matchId: currentProfile.id,  // L'ID du profil matché
-            status: "en attente"  // "en attente" jusqu'à ce que l'autre utilisateur match
-        };
-
-        // Ajouter à la collection "matches"
-        db.collection('matches').add(matchData)
-            .then(() => {
-                // Ajouter à la section "Mes matchs"
-                const matchDiv = document.createElement('div');
-                matchDiv.classList.add('match');
-                matchDiv.innerHTML = `
-                    <img src="${currentProfile.image}" alt="${currentProfile.name}" />
-                    <span>${currentProfile.name}</span>
-                    <span>En attente de match</span>
-                `;
-                myMatchesDiv.appendChild(matchDiv);
-            })
-            .catch(error => {
-                console.log("Erreur lors de l'ajout du match:", error);
-            });
-    }
-});
-   // Fonction pour afficher les matchs de l'utilisateur
-        function displayMatches(user) {
-            const userRef = db.collection('users').doc(user.uid); // Référence à l'utilisateur dans Firestore
-            userRef.get().then(doc => {
-                if (doc.exists) {
-                    const userData = doc.data();
-                    const matches = userData.matches || []; // Récupère la liste des matchs de l'utilisateur, vide si aucun match
-
-                    const matchesList = document.getElementById('matches-list');
-                    matchesList.innerHTML = ''; // Vide la liste des matchs avant de la remplir
-
-// Lorsque l'utilisateur appuie sur "Passer"
-passBtn.addEventListener("click", () => {
-    // Logique de passer, par exemple, récupérer un autre profil
-});
-
-// Récupérer les profils
-function loadProfiles() {
-    db.collection('users').where("userId", "!=", "VEtDQtcEeXv3vp06JhNY")
-    .get()
-    .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-            const profile = doc.data();
-            currentProfile = profile;
-            // Afficher le profil sur la page
-            document.querySelector("#explore-profiles").innerHTML = `
-                <div class="profile-card">
-                    <img src="${profile.image}" alt="Profile Image" />
-                    <h3>${profile.name}</h3>
-                    <button id="match-btn">Match</button>
-                    <button id="pass-btn">Passer</button>
-                </div>
-            `;
-        });
-    })
-    .catch(error => {
-        console.log("Erreur lors de la récupération des profils:", error);
     });
-}
 
-loadProfiles(); // Charger les profils
-// Vérifier si les deux utilisateurs ont matché
-db.collection('matches').where("userId", "==", matchId)
-.where("matchId", "==", currentUser.id)
-.get()
-.then(querySnapshot => {
-    if (!querySnapshot.empty) {
-        // Les deux utilisateurs ont matché, on met à jour le statut
-        querySnapshot.forEach(doc => {
-            doc.ref.update({ status: "match confirmé" });
-            // Lors du traitement des matchs confirmés
-db.collection('matches').where("userId", "==", currentUser.id)
-.where("matchId", "==", otherUser.id)
-.get()
-.then(querySnapshot => {
-    querySnapshot.forEach(doc => {
-        const matchData = doc.data();
-        const matchDiv = document.createElement('div');
-        matchDiv.classList.add('match');
-        matchDiv.innerHTML = `
-            <img src="${otherUser.image}" alt="${otherUser.name}" />
-            <span>${otherUser.name}</span>
-            <span>Match confirmé</span>
-            <a href="https://instagram.com/${otherUser.socialMedia}" target="_blank">
-                <img src="instagram-icon.png" alt="Instagram" />
-            </a>
+    // Afficher les profils à explorer depuis Firestore
+    async function displayProfiles() {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach((doc) => {
+        const profile = doc.data();
+        const profileDiv = document.createElement("div");
+        profileDiv.classList.add("profile-card");
+        profileDiv.innerHTML = `
+          <img src="${profile.photoUrl}" alt="Profile Image">
+          <h3>${profile.firstName} ${profile.lastName}</h3>
+          <p>Âge: ${profile.age}</p>
+          <p>Passions: ${profile.passions}</p>
         `;
-        myMatchesDiv.appendChild(matchDiv);
-    });
-})
-.catch(error => {
-    console.error("Erreur lors de la vérification du match:", error);
-});
+        document.getElementById("profilesContainer").appendChild(profileDiv);
+      });
+    }
 
-</script>
-  <!-- Ajoute ce script dans le fichier HTML où tu veux gérer la connexion -->
-<script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js"></script>
-<script src="js/auth.js"></script> <!-- Chemin vers ton fichier JS -->
-</body>
-
+    // Appeler la fonction d'affichage des profils au chargement
+    window.onload = displayProfiles;
+  </script>
 </body>
 </html>
