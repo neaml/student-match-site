@@ -312,12 +312,17 @@ const firestore = firebase.firestore();
 async function displayProfiles() {
   try {
     // Récupère les documents de la collection "users" dans Firestore
-    const querySnapshot = await getDocs(collection(firestore, "users"));
-    const profilesContainer = document.querySelector("#profilesContainer"); // Conteneur pour les cartes des profils
-    profilesContainer.innerHTML = ""; // Réinitialise le conteneur avant d'ajouter des profils
+    firestore.collection("users").get().then((querySnapshot) => {
+      const profilesContainer = document.querySelector("#profilesContainer"); // Conteneur pour les cartes des profils
+      profilesContainer.innerHTML = ""; // Réinitialise le conteneur avant d'ajouter des profils
 
-    querySnapshot.forEach((doc) => {
-      const profile = doc.data(); // Récupère les données du profil
+      // Parcours tous les documents récupérés
+      querySnapshot.forEach((doc) => {
+        const profile = doc.data(); // Récupère les données du profil
+
+        // Création de la carte pour chaque profil
+        const profileDiv = document.createElement("div");
+        profileDiv.classList.add("profile-card");
 
       // Vérification des champs et valeurs par défaut
       const photoURL = profile.photodeprofil || "default_image.jpg";
