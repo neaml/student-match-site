@@ -289,6 +289,13 @@ section {
 </body>
 <script> 
     
+        // Si l'utilisateur est déjà connecté, rediriger vers le tableau de bord
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                window.location.href = "dashboard.html";  // Redirection vers le tableau de bord
+            }
+        });
+
   let activeIndex = 0;
     const cards = document.querySelectorAll('.carousel .card');
     let autoScrollInterval;
