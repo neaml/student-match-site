@@ -319,36 +319,35 @@ async function displayProfiles() {
       // Parcours tous les documents récupérés
       querySnapshot.forEach((doc) => {
         const profile = doc.data(); // Récupère les données du profil
-
-        // Création de la carte pour chaque profil
-        const profileDiv = document.createElement("div");
-        profileDiv.classList.add("profile-card");
-
-      // Vérification des champs et valeurs par défaut
+// Vérification des champs et valeurs par défaut
       const photoURL = profile.photodeprofil || "default_image.jpg";
       const firstName = profile.firstName || "Prénom inconnu";
       const lastName = profile.lastName || "Nom inconnu";
       const age = profile.age || "Âge non spécifié";
       const passions = profile.passions || "Aucune passion indiquée";
 
-      // Création d'une carte de profil
-      const profileDiv = document.createElement("div");
-      profileDiv.classList.add("profile-card");
+        // Création de la carte pour chaque profil
+        const profileDiv = document.createElement("div");
+        profileDiv.classList.add("profile-card");
 
-      profileDiv.innerHTML = `
-        <img src="${photoURL}" alt="Photo de profil" class="profile-photo" />
-        <h3>${firstName} ${lastName}</h3>
-        <p>Âge: ${age}</p>
-        <p>Passions: ${passions}</p>
-        <div class="action-buttons">
-          <button class="actionButton match-btn">Match ❤️</button>
-          <button class="actionButton pass-btn">Passer ❌</button>
-        </div>
-      `;
+        // Ajout du contenu dynamique avec l'URL de l'image et les informations du profil
+        profileDiv.innerHTML = `
+          <img src="${profile.photodeprofil || 'default_image.jpg'}" alt="Photodeprofil" />
+          <h3>${profile.firstName} ${profile.lastName}</h3>
+          <p>Âge: ${profile.age}</p>
+          <p>Passions: ${profile.passions}</p>
+          <button class="actionButton" id="match-btn">Match ❤️</button>
+          <button class="actionButton" id="pass-btn">Passer ❌</button>
+        `;
 
-      // Ajout de la carte au conteneur
-      profilesContainer.appendChild(profileDiv);
+        // Ajouter la div du profil au conteneur
+        profilesContainer.appendChild(profileDiv);
+      });
     });
+  } catch (error) {
+    console.error("Erreur lors de la récupération des profils :", error);
+  }
+}
   } catch (error) {
     console.error("Erreur lors du chargement des profils :", error);
     const profilesContainer = document.querySelector("#profilesContainer");
