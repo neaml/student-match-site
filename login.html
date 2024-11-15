@@ -152,6 +152,7 @@
   <main>
     <h1>Se Connecter</h1>
 
+
     <form id="loginForm">
       <label for="email">Adresse e-mail :</label>
       <input type="email" id="email" placeholder="Votre e-mail" required>
@@ -165,21 +166,23 @@
     <div class="signupLink">
       <p>Pas encore de compte ? <a href="inscription.html">Inscris-toi ici</a></p>
     </div>
+
+    <!-- Zone d'affichage des erreurs -->
+    <div id="errorMessage" class="error-message"></div>
   </main>
 
-  <!-- Firebase SDK classique -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
   <script>
     const firebaseConfig = {
-  apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
-  authDomain: "student-match-but3.firebaseapp.com",
-  projectId: "student-match-but3",
-  storageBucket: "student-match-but3.firebasestorage.app",
-  messagingSenderId: "1096075545413",
-  appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
-  measurementId: "G-XK5N6FLSYJ"
+      apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
+      authDomain: "student-match-but3.firebaseapp.com",
+      projectId: "student-match-but3",
+      storageBucket: "student-match-but3.firebasestorage.app",
+      messagingSenderId: "1096075545413",
+      appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
+      measurementId: "G-XK5N6FLSYJ"
     };
 
     // Initialisation de Firebase
@@ -207,7 +210,8 @@
           window.location.href = "dashboard.html"; 
         })
         .catch((error) => {
-          alert('Erreur de connexion : ' + error.message); // Afficher un message d'erreur
+          // Affichage de l'erreur
+          document.getElementById('errorMessage').textContent = 'Erreur de connexion : ' + error.message;
         });
     });
   </script>
