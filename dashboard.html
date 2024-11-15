@@ -308,7 +308,6 @@ const firestore = firebase.firestore();
         console.error("Erreur de déconnexion :", error.message);
       });
     });
-<script>
   // Fonction pour afficher les profils à explorer depuis Firestore
   async function displayProfiles() {
     const querySnapshot = await getDocs(collection(firestore, "users")); // Accès à la collection "users"
