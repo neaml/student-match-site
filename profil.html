@@ -6,148 +6,140 @@
   <title>Profil et Paramètres</title>
   <link rel="stylesheet" href="styles.css">
 <style>
-body {
-  margin: 0;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  background: linear-gradient(135deg, #800020, #b03a2e);
-  color: #333;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
+  /* Styles CSS ici */
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #853642;
+      animation: waveAnimation 10s ease-in-out infinite alternate;
+      color: #333;
+    }
 
-main {
-  background-color: #ffffff;
-  border-radius: 15px;
-  padding: 30px;
-  max-width: 600px;
-  width: 90%;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
-  text-align: center;
-}
+    @keyframes waveAnimation {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 0%; }
+    }
 
-h1 {
-  color: #800020;
-  font-size: 2em;
-  margin-bottom: 20px;
-}
+    main {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 20px;
+      max-width: 600px;
+      margin: 50px auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
 
-label {
-  font-size: 1em;
-  color: #555;
-  display: block;
-  margin-bottom: 5px;
-}
+    h1 {
+      color: #800020;
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-input, select, textarea {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  font-size: 1em;
-  transition: border-color 0.3s;
-}
+    p {
+      text-align: center;
+      font-size: 1.1em;
+      color: #555;
+      margin-bottom: 20px;
+    }
 
-input:focus, select:focus, textarea:focus {
-  border-color: #800020;
-  outline: none;
-}
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-button {
-  background-color: #800020;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
+    label {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #555;
+      width: 100%;
+      text-align: left;
+    }
 
-button:hover {
-  background-color: #a65362;
-}
+    input, select {
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 1em;
+      width: 100%;
+    }
 
-#addPassionBtn {
-  width: 100%;
-  margin-top: 10px;
-}
+    .bubbleContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 10px 0;
+    }
 
-#successMessage {
-  color: green;
-  margin-top: 15px;
-  font-weight: bold;
-}
+    .bubble {
+      background-color: lightgray;
+      color: black;
+      border-radius: 20px;
+      padding: 8px 16px;
+      margin: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-block;
+      text-align: center;
+    }
 
-.bubbleContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 10px;
-}
+    .bubble.selected {
+      background-color: #800020;  /* Changer la couleur de fond */
+      color: white;               /* Changer la couleur du texte */
+    }
 
-.bubble {
-  background-color: #f0f0f0;
-  color: #333;
-  border-radius: 20px;
-  padding: 10px 20px;
-  margin: 5px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: transform 0.3s, background-color 0.3s;
-  display: flex;
-  align-items: center;
-}
+    .bubble:hover {
+      transform: scale(1.05);  /* Effet de zoom léger au survol */
+    }
 
-.bubble.selected {
-  background-color: #800020;
-  color: white;
-}
+    .emoji {
+      font-size: 1.2em;
+      margin-right: 5px;
+    }
 
-.bubble:hover {
-  transform: scale(1.1);
-}
+    button {
+      background-color: #800020;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
 
-#imagePreview {
-  display: block;
-  width: 100px;
-  height: 100px;
-  margin: 10px auto;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
+    button:hover {
+      background-color: #a65362;
+    }
 
-/* Navigation links */
-.nav a {
-  margin: 0 10px;
-  color: #800020;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s;
-}
+    .nav {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-.nav a:hover {
-  color: #a65362;
-}
+    .nav a {
+      margin: 0 10px;
+      color: #800020;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-/* Responsive design */
-@media (max-width: 600px) {
-  main {
-    padding: 20px;
-  }
+    .loginLink {
+      text-align: center;
+      margin-top: 20px;
+    }
 
-  h1 {
-    font-size: 1.5em;
-  }
-
-  button {
-    font-size: 0.9em;
-  }
-}
-
+    #imagePreview {
+      display: none;
+      width: 100px;
+      height: 100px;
+      margin-top: 10px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
 </style>
 </head>
 <body>
