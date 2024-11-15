@@ -348,12 +348,7 @@ async function displayProfiles() {
     console.error("Erreur lors de la récupération des profils :", error);
   }
 }
-  } catch (error) {
-    console.error("Erreur lors du chargement des profils :", error);
-    const profilesContainer = document.querySelector("#profilesContainer");
-    profilesContainer.innerHTML = "<p>Impossible de charger les profils.</p>";
-  }
-}
+ 
 
 // Appeler la fonction pour afficher les profils
 displayProfiles();
