@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Se Connecter - Student Match</title>
-    <!-- Lien vers le fichier CSS global -->
+  <!-- Lien vers le fichier CSS global -->
   <link rel="stylesheet" href="styles.css">
+
   <style>
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -86,6 +87,50 @@
       <p>Pas encore de compte ? <a href="inscription.html">Inscris-toi ici</a></p>
     </div>
   </main>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js"></script>
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
+  authDomain: "student-match-but3.firebaseapp.com",
+  projectId: "student-match-but3",
+  storageBucket: "student-match-but3.firebasestorage.app",
+  messagingSenderId: "1096075545413",
+  appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
+  measurementId: "G-XK5N6FLSYJ"
+    };
+
+    // Initialisation de Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Vérification de l'état de connexion
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // Si l'utilisateur est connecté, redirection vers le tableau de bord
+        window.location.href = "dashboard.html"; 
+      }
+    });
+
+    // Connexion de l'utilisateur
+    document.getElementById('loginForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          // Redirection vers le tableau de bord après la connexion réussie
+          window.location.href = "dashboard.html"; 
+        })
+        .catch((error) => {
+          alert('Erreur de connexion : ' + error.message); // Afficher un message d'erreur
+        });
+    });
+  </script>
 
 </body>
 </html>
