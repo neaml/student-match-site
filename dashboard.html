@@ -300,7 +300,8 @@ button {
                 // Utilisateur non connecté
                 document.getElementById('user-name').textContent = 'Utilisateur non connecté';
                 document.getElementById('logout-button').style.display = 'none'; // Cache le bouton de déconnexion
-            }
+                window.location.href = "index.html";  // Redirection vers l'accueil si l'utilisateur n'est pas connecté
+       
         });
 
         // Fonction de déconnexion
