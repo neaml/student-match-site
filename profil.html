@@ -5,78 +5,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profil et Paramètres</title>
   <link rel="stylesheet" href="styles.css">
-  <style>
-body {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  background-color: #853642; /* Couleur de fond */
-  margin: 0;
-}
+<style>
+  /* Global body style */
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #853642;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alignement en haut de la page */
+    height: 100vh;
+    color: white;
+    padding-top: 20px; /* Ajout d'un peu d'espace en haut */
+  }
 
-header {
-  background-color: #641E16; /* Couleur du header */
-  color: white;
-  padding: 10px;
-  text-align: right;
-  font-size: 0.9em;
-}
+  /* Main profile container */
+  #profile-container {
+    background-color: white;
+    padding: 20px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto; /* Centrer horizontalement */
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  }
 
-main {
-  background-color: white;
-  padding: 20px;
-  max-width: 400px;
-  margin: 50px auto;
-  border-radius: 10px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-}
+  /* Title style */
+  h1 {
+    text-align: center;
+    color: #800020;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+  }
 
-h1 {
-  text-align: center;
-  color: #853642; /* Couleur du titre */
-}
+  /* Form input container */
+  div {
+    margin-bottom: 15px;
+  }
 
-.profile-card {
-  text-align: center;
-  margin: 20px 0;
-}
+  /* Labels for inputs */
+  label {
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+  }
 
-.profile-card img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 2px solid #641E16; /* Couleur de la bordure de l'image */
-}
+  /* Input styles */
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+    box-sizing: border-box;
+  }
 
-.profile-card h2 {
-  margin: 10px 0;
-  color: #333;
-}
+  /* Passion bubbles styles */
+  #passions-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
+  }
 
-.profile-card p {
-  margin: 5px 0;
-  color: #555;
-}
+  .bubble {
+    background-color: #800020;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+  }
 
-.actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
+  .bubble:hover {
+    background-color: #a65362;
+  }
 
-.actions button {
-  background-color: #641E16; /* Couleur des boutons */
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1em;
-  cursor: pointer;
-  width: 48%;
-}
+  /* Button styles */
+  button {
+    background-color: #800020;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+  }
 
-.actions button:hover {
-  background-color: #853642; /* Couleur du bouton au survol */
-}
+  button:hover {
+    background-color: #a65362;
+  }
+
+  /* Success message */
+  #successMessage {
+    display: none;
+    color: green;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 1.1em;
+  }
+
+  /* Additional margin for adding passions button */
+  #addPassionBtn {
+    margin-top: 10px;
+  }
+
+  /* Adding some responsive design */
+  @media (max-width: 600px) {
+    #profile-container {
+      padding: 15px;
+    }
+
+    h1 {
+      font-size: 1.5em;
+    }
+
+    input, button {
+      font-size: 0.9em;
+    }
+  }
 </style>
+
+
 </head>
 <body>
   <h1>Mon Profil</h1>
