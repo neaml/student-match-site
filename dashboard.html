@@ -220,7 +220,11 @@ button {
       <a href="tableau_bord.html">Tableau de Bord</a>
     </div>
   </div>
-
+<!-- Affichage de l'état de connexion de l'utilisateur -->
+    <div id="user-info">
+        <span id="user-name">Utilisateur non connecté</span>
+        <button id="logout-button" style="display:none;">Déconnexion</button>
+    </div>
   <!-- Contenu principal -->
   <div class="main-container">
     
@@ -268,7 +272,8 @@ button {
  <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
   import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
+<script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js">
+  
   // Configuration Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
@@ -283,7 +288,25 @@ button {
   // Initialiser Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const auth = firebase.auth();
+   // Fonction pour afficher l'état de connexion de l'utilisateur
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // Utilisateur connecté
+                document.getElementById('user-name').textContent = user.displayName || user.email;
+                document.getElementById('logout-button').style.display = 'block'; // Affiche le bouton de déconnexion
+                displayMatches(user); // Afficher les matchs de l'utilisateur
+            } else {
+                // Utilisateur non connecté
+                document.getElementById('user-name').textContent = 'Utilisateur non connecté';
+                document.getElementById('logout-button').style.display = 'none'; // Cache le bouton de déconnexion
+            }
+        });
 
+        // Fonction de déconnexion
+        document.getElementById('logout-button').addEventListener('click', () => {
+            auth.signOut();
+        });
   // Fonction pour charger les profils
   async function loadProfiles() {
     try {
@@ -358,6 +381,16 @@ matchBtn.addEventListener("click", () => {
             });
     }
 });
+   // Fonction pour afficher les matchs de l'utilisateur
+        function displayMatches(user) {
+            const userRef = db.collection('users').doc(user.uid); // Référence à l'utilisateur dans Firestore
+            userRef.get().then(doc => {
+                if (doc.exists) {
+                    const userData = doc.data();
+                    const matches = userData.matches || []; // Récupère la liste des matchs de l'utilisateur, vide si aucun match
+
+                    const matchesList = document.getElementById('matches-list');
+                    matchesList.innerHTML = ''; // Vide la liste des matchs avant de la remplir
 
 // Lorsque l'utilisateur appuie sur "Passer"
 passBtn.addEventListener("click", () => {
