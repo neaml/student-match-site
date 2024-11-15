@@ -227,7 +227,7 @@
       <div id="explore-profiles">
         <div id="profilesContainer"></div>
         <div class="profile-card">
-          <img src="profil_image.jpg" alt="Profile Image" />
+          <img src="profil_image.jpg" alt="photodeprofil" />
           <h3>Nom de l'utilisateur</h3>
           <button id="match-btn">Match ❤️</button>
           <button id="pass-btn">Passer ❌</button>
@@ -275,14 +275,16 @@
       measurementId: "G-XK5N6FLSYJ"
     };
     
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+   <!-- Firebase SDK classique -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-
+<script>
+    firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const firestore = firebase.firestore();
+<script>
     // Fonction pour afficher l'état de connexion de l'utilisateur
     auth.onAuthStateChanged(user => {
       if (user) {
@@ -304,26 +306,34 @@
         console.error("Erreur de déconnexion:", error);
       });
     });
+<script>
+  // Fonction pour afficher les profils à explorer depuis Firestore
+  async function displayProfiles() {
+    const querySnapshot = await getDocs(collection(firestore, "users")); // Accès à la collection "users"
+    querySnapshot.forEach((doc) => {
+      const profile = doc.data(); // Récupère les données du profil
+      const profileDiv = document.createElement("div");
+      profileDiv.classList.add("profile-card");
+      
+      // Ajout du contenu dynamique avec l'URL de l'image et les informations du profil
+      profileDiv.innerHTML = `
+        <img src="${profile.photoUrl || 'default_image.jpg'}" alt="Photo de profil" />
+        <h3>${profile.firstName} ${profile.lastName}</h3>
+        <p>Âge: ${profile.age}</p>
+        <p>Passions: ${profile.passions}</p>
+        <button class="actionButton" id="match-btn">Match ❤️</button>
+        <button class="actionButton" id="pass-btn">Passer ❌</button>
+      `;
+      
+      // Ajout du profil à la section exploration des profils
+      document.getElementById("profilesContainer").appendChild(profileDiv);
+    });
+  }
 
-    // Afficher les profils à explorer depuis Firestore
-    async function displayProfiles() {
-      const querySnapshot = await getDocs(collection(db, "users"));
-      querySnapshot.forEach((doc) => {
-        const profile = doc.data();
-        const profileDiv = document.createElement("div");
-        profileDiv.classList.add("profile-card");
-        profileDiv.innerHTML = `
-          <img src="${profile.photoUrl}" alt="Profile Image">
-          <h3>${profile.firstName} ${profile.lastName}</h3>
-          <p>Âge: ${profile.age}</p>
-          <p>Passions: ${profile.passions}</p>
-        `;
-        document.getElementById("profilesContainer").appendChild(profileDiv);
-      });
-    }
+  // Appel de la fonction d'affichage des profils au chargement de la page
+  window.onload = displayProfiles;
+</script>
 
-    // Appeler la fonction d'affichage des profils au chargement
-    window.onload = displayProfiles;
   </script>
 </body>
 </html>
