@@ -308,33 +308,52 @@ const firestore = firebase.firestore();
         console.error("Erreur de déconnexion :", error.message);
       });
     });
-  // Fonction pour afficher les profils à explorer depuis Firestore
-  async function displayProfiles() {
-    const querySnapshot = await getDocs(collection(firestore, "users")); // Accès à la collection "users"
+// Fonction pour afficher les profils à explorer depuis Firestore
+async function displayProfiles() {
+  try {
+    // Récupère les documents de la collection "users" dans Firestore
+    const querySnapshot = await getDocs(collection(firestore, "users"));
+    const profilesContainer = document.querySelector("#profilesContainer"); // Conteneur pour les cartes des profils
+    profilesContainer.innerHTML = ""; // Réinitialise le conteneur avant d'ajouter des profils
+
     querySnapshot.forEach((doc) => {
       const profile = doc.data(); // Récupère les données du profil
+
+      // Vérification des champs et valeurs par défaut
+      const photoURL = profile.photodeprofil || "default_image.jpg";
+      const firstName = profile.firstName || "Prénom inconnu";
+      const lastName = profile.lastName || "Nom inconnu";
+      const age = profile.age || "Âge non spécifié";
+      const passions = profile.passions || "Aucune passion indiquée";
+
+      // Création d'une carte de profil
       const profileDiv = document.createElement("div");
       profileDiv.classList.add("profile-card");
-      
-      // Ajout du contenu dynamique avec l'URL de l'image et les informations du profil
+
       profileDiv.innerHTML = `
-        <img src="${profile.photodeprofil || 'default_image.jpg'}" alt="Photodeprofil" />
-        <h3>${profile.firstName} ${profile.lastName}</h3>
-        <p>Âge: ${profile.age}</p>
-        <p>Passions: ${profile.passions}</p>
-        <button class="actionButton" id="match-btn">Match ❤️</button>
-        <button class="actionButton" id="pass-btn">Passer ❌</button>
+        <img src="${photoURL}" alt="Photo de profil" class="profile-photo" />
+        <h3>${firstName} ${lastName}</h3>
+        <p>Âge: ${age}</p>
+        <p>Passions: ${passions}</p>
+        <div class="action-buttons">
+          <button class="actionButton match-btn">Match ❤️</button>
+          <button class="actionButton pass-btn">Passer ❌</button>
+        </div>
       `;
-      
-      // Ajout du profil à la section exploration des profils
-      document.getElementById("profilesContainer").appendChild(profileDiv);
+
+      // Ajout de la carte au conteneur
+      profilesContainer.appendChild(profileDiv);
     });
+  } catch (error) {
+    console.error("Erreur lors du chargement des profils :", error);
+    const profilesContainer = document.querySelector("#profilesContainer");
+    profilesContainer.innerHTML = "<p>Impossible de charger les profils.</p>";
   }
+}
 
-  // Appel de la fonction d'affichage des profils au chargement de la page
-  window.onload = displayProfiles;
+// Appeler la fonction pour afficher les profils
+displayProfiles();
+
 </script>
-
-  </script>
 </body>
 </html>
