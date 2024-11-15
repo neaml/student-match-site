@@ -78,6 +78,14 @@
             socialMedia: socialMediaInput
           });
 
+           // Si un lien Instagram est fourni, on l'enregistre dans Firestore (ou un autre endroit)
+        if (socialMedia) {
+            // Exemple : Enregistrement dans Firestore
+            await firebase.firestore().collection("users").doc(userCredential.user.uid).set({
+                socialMedia: socialMedia
+            }, { merge: true });
+        }
+          
           alert('Inscription réussie et informations enregistrées dans Firebase');
           window.location.href = "dashboard.html";
         } else {
