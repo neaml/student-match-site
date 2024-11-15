@@ -105,12 +105,15 @@
     transition: transform 1s ease, opacity 1s ease;
     opacity: 0;
     transform: scale(0.8) translateZ(-300px);
+    transition: transform 1s ease, opacity 1s ease, box-shadow 0.3s ease-in-out;
+
 }
 
         .carousel .card.active {
             opacity: 1;
             transform: scale(1) translateZ(0px);
             z-index: 2;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
         }
 
         .carousel .card.prev {
@@ -216,7 +219,6 @@ section {
     </style>
 </head>
     <body class="index-page">
-<body>
     <header>
         <img src="logo.png" alt="Logo Student Match" class="logo">
         <h1>Bienvenue sur Student Match</h1>
@@ -284,20 +286,40 @@ section {
 <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js"></script>
-<script src="js/auth.js"></script> <!-- Chemin vers ton fichier JS -->
+<script src="auth.js"></script>
+        <!-- Chemin vers ton fichier JS -->
 </body>
 
 </body>
 <script> 
-    firebase.auth().onAuthStateChanged((user) => {
-  const statusElement = document.getElementById("status-connected");
-  if (user) {
-    statusElement.textContent = "Connecté";
-    statusElement.style.color = "green";
-  } else {
-    statusElement.textContent = "Non connecté";
-    statusElement.style.color = "red";
-  }
+   var firebaseConfig = {
+  apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
+  authDomain: "student-match-but3.firebaseapp.com",
+  projectId: "student-match-but3",
+  storageBucket: "student-match-but3.firebasestorage.app",
+  messagingSenderId: "1096075545413",
+  appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
+  measurementId: "G-XK5N6FLSYJ"
+};
+    // Initialiser Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Initialiser l'authentification Firebase
+var auth = firebase.auth();
+
+// Initialiser Firestore
+var db = firebase.firestore();
+    
+   auth.onAuthStateChanged(user => {
+    const statusElement = document.getElementById("status-connected");
+    if (user) {
+        statusElement.textContent = "Connecté";
+        statusElement.style.color = "green";
+        window.location.href = "dashboard.html"; // Redirection vers le tableau de bord
+    } else {
+        statusElement.textContent = "Non connecté";
+        statusElement.style.color = "red";
+    }
 });
 
         // Si l'utilisateur est déjà connecté, rediriger vers le tableau de bord
@@ -330,18 +352,18 @@ section {
         updateCards();
     }
 
-    // Démarrer le défilement automatique
-    function startAutoScroll() {
-        autoScrollInterval = setInterval(showNextCard, 3000); // Défile toutes les 3 secondes
-    }
+   // Démarrer le défilement automatique
+function startAutoScroll() {
+    autoScrollInterval = setInterval(showNextCard, 3000); // Changer la carte toutes les 3 secondes
+}
 
-    // Arrêter le défilement automatique
-    function stopAutoScroll() {
-        clearInterval(autoScrollInterval);
-    }
+// Arrêter le défilement automatique au survol
+document.querySelector('.carousel').addEventListener('mouseenter', () => {
+    clearInterval(autoScrollInterval);
+});
 
-    // Démarrage automatique au chargement de la page
-    startAutoScroll();
+// Reprendre le défilement automatique lorsque la souris quitte le carrousel
+document.querySelector('.carousel').addEventListener('mouseleave', startAutoScroll);
 
     // Ajouter des écouteurs aux boutons pour stopper le défilement automatique lors du défilement manuel
     document.querySelector('.carousel-buttons button:first-child').addEventListener('click', () => {
