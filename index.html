@@ -221,6 +221,7 @@ section {
         <img src="logo.png" alt="Logo Student Match" class="logo">
         <h1>Bienvenue sur Student Match</h1>
         <p>Rencontrez des étudiants, créez des activités et élargissez votre réseau !</p>
+        <div id="status-connected" style="text-align: right; padding: 10px; font-weight: bold;"></div>
     </header>
 
     <nav>
@@ -288,7 +289,17 @@ section {
 
 </body>
 <script> 
-    
+    firebase.auth().onAuthStateChanged((user) => {
+  const statusElement = document.getElementById("status-connected");
+  if (user) {
+    statusElement.textContent = "Connecté";
+    statusElement.style.color = "green";
+  } else {
+    statusElement.textContent = "Non connecté";
+    statusElement.style.color = "red";
+  }
+});
+
         // Si l'utilisateur est déjà connecté, rediriger vers le tableau de bord
         auth.onAuthStateChanged(user => {
             if (user) {
