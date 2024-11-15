@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+      
+   <!-- Firebase SDK classique -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tableau de Bord - Exploration des Profils</title>
@@ -274,17 +281,11 @@
       appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
       measurementId: "G-XK5N6FLSYJ"
     };
-    
-   <!-- Firebase SDK classique -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
-<script>
-    firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const firestore = firebase.firestore();
-<script>
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const firestore = firebase.firestore();
+
     // Fonction pour afficher l'état de connexion de l'utilisateur
     auth.onAuthStateChanged(user => {
       if (user) {
@@ -317,7 +318,7 @@
       
       // Ajout du contenu dynamique avec l'URL de l'image et les informations du profil
       profileDiv.innerHTML = `
-        <img src="${profile.photoUrl || 'default_image.jpg'}" alt="Photo de profil" />
+        <img src="${profile.photodeprofil || 'default_image.jpg'}" alt="Photodeprofil" />
         <h3>${profile.firstName} ${profile.lastName}</h3>
         <p>Âge: ${profile.age}</p>
         <p>Passions: ${profile.passions}</p>
