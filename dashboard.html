@@ -291,7 +291,7 @@ const firestore = firebase.firestore();
     auth.onAuthStateChanged(user => {
       if (user) {
         // Utilisateur connecté
-        document.getElementById('user-name').textContent = user.displayName || user.email;
+        document.getElementById('user-name').textContent = `Bonjour, ${user.email}`;
         document.getElementById('logout-button').style.display = 'inline-block';
       } else {
         // Utilisateur non connecté
@@ -300,12 +300,12 @@ const firestore = firebase.firestore();
       }
     });
 
-    // Fonction de déconnexion
+    // Gestion de la déconnexion
     document.getElementById('logout-button').addEventListener('click', () => {
-      signOut(auth).then(() => {
-        console.log("Déconnecté");
-      }).catch((error) => {
-        console.error("Erreur de déconnexion:", error);
+      auth.signOut().then(() => {
+        window.location.href = "login.html";
+      }).catch(error => {
+        console.error("Erreur de déconnexion :", error.message);
       });
     });
 <script>
