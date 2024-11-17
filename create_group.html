@@ -105,6 +105,12 @@ const createGroup = async () => {
   } catch (error) {
     console.error("Erreur lors de la création du groupe:", error);
   }
+  // Rediriger vers le tableau de bord après l'ajout
+    window.location.href = "dashboard.html";  // Redirection vers le tableau de bord
+  } catch (error) {
+    console.error("Erreur lors de la création du groupe:", error);
+  }
+};
 };
 </script>
 </body>
