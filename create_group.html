@@ -91,6 +91,21 @@
       <button type="submit">Créer le Groupe</button>
     </form>
   </main>
-
+  <script>
+const createGroup = async () => {
+  const groupName = document.getElementById("group-name").value;
+  const groupDescription = document.getElementById("group-description").value;
+  try {
+    await firebase.firestore().collection("groups").add({
+      name: groupName,
+      description: groupDescription,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    console.log("Groupe créé avec succès!");
+  } catch (error) {
+    console.error("Erreur lors de la création du groupe:", error);
+  }
+};
+</script>
 </body>
 </html>
