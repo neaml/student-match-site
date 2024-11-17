@@ -404,71 +404,46 @@ const loadGroupsRealtime = () => {
 };
 
 
-        
 // Fonction pour récupérer les événements depuis Firestore
 async function fetchEvents() {
   try {
     const eventListElement = document.getElementById('eventList');
     const noEventsElement = document.getElementById('noEvents');
-
+    
     // Réinitialiser l'affichage
     eventListElement.innerHTML = "";
-
+    
     // Récupérer les documents dans la collection "eventList"
     const querySnapshot = await firestore.collection('eventList').get();
-
+    
     if (querySnapshot.empty) {
       // Afficher un message si aucun événement
       noEventsElement.style.display = 'block';
     } else {
       noEventsElement.style.display = 'none';
-
+      
+      // Créer un tableau pour stocker les événements récupérés
+      const events = [];
+      
       querySnapshot.forEach((doc) => {
         const eventData = doc.data();
-
-        // Créer un élément pour chaque événement
-        const eventItem = document.createElement('div');
-        eventItem.className = 'event-item';
-
-        // Ajouter le contenu de l'événement
-        eventItem.innerHTML = `
-          <div>
-            <strong>${eventData.name}</strong> - ${eventData.date || "Date non spécifiée"}
-            <p>${eventData.description || "Pas de description disponible."}</p>
-          </div>
-          <button onclick="viewEventDetails('${doc.id}')">Voir</button>
-        `;
-
-        // Ajouter l'événement à la liste
-        eventListElement.appendChild(eventItem);
+        events.push({
+          id: doc.id,
+          name: eventData.name,
+          date: eventData.date || "Date non spécifiée",
+          description: eventData.description || "Pas de description disponible."
+        });
       });
+      
+      // Afficher les événements
+      displayEvents(events);
     }
   } catch (error) {
     console.error("Erreur lors de la récupération des événements :", error);
   }
 }
 
-// Fonction pour afficher les détails d'un événement
-function viewEventDetails(eventId) {
-  alert(`Voir les détails pour l'événement ID: ${eventId}`);
-  // Ajoutez ici la logique pour afficher les détails ou naviguer vers une autre page
-}
-
-// Appeler la fonction fetchEvents après la connexion de l'utilisateur
-fetchEvents();
-const fetchEvents = async () => {
-  try {
-    const eventList = [];
-    const querySnapshot = await db.collection("eventList").get();
-    querySnapshot.forEach((doc) => {
-      eventList.push({ id: doc.id, ...doc.data() });
-    });
-    displayEvents(eventList); // Appelle la fonction pour afficher les événements
-  } catch (error) {
-    console.error("Erreur lors de la récupération des événements :", error.message);
-  }
-};
-
+// Fonction pour afficher les événements dans le DOM
 function displayEvents(events) {
   const eventListElement = document.getElementById('eventList');
   eventListElement.innerHTML = ''; // Réinitialise la liste
@@ -481,25 +456,46 @@ function displayEvents(events) {
   events.forEach(event => {
     const eventItem = document.createElement('div');
     eventItem.classList.add('event-item');
-    eventItem.textContent = event.name; // Supposons que chaque événement a une propriété `name`
+    
+    // Ajouter le contenu de l'événement
+    eventItem.innerHTML = `
+      <div>
+        <strong>${event.name}</strong> - ${event.date}
+        <p>${event.description}</p>
+      </div>
+      <button onclick="viewEventDetails('${event.id}')">Voir</button>
+    `;
+    
     eventListElement.appendChild(eventItem);
   });
 }
 
-        const loadEventsRealtime = (groupId) => {
-  const eventsRef = firebase.firestore().collection("events").where("groupId", "==", groupId);
+// Fonction pour afficher les détails d'un événement
+function viewEventDetails(eventId) {
+  alert(`Voir les détails pour l'événement ID: ${eventId}`);
+  // Ajoutez ici la logique pour afficher les détails ou naviguer vers une autre page
+}
+
+// Fonction pour charger les événements en temps réel (par exemple, en utilisant un groupId)
+const loadEventsRealtime = (groupId) => {
+  const eventsRef = firestore.collection("events").where("groupId", "==", groupId);
+  
   eventsRef.onSnapshot(snapshot => {
     const eventsContainer = document.getElementById("events-list");
     eventsContainer.innerHTML = "";  // Effacer les anciens événements
+    
     snapshot.forEach(doc => {
       const eventData = doc.data();
       const eventElement = document.createElement("div");
       eventElement.textContent = `Événement: ${eventData.name} - Date: ${eventData.date}`;
-      
       eventsContainer.appendChild(eventElement);
     });
   });
 };
+
+// Appeler la fonction fetchEvents après la connexion de l'utilisateur
+fetchEvents();
+
 
 
         
