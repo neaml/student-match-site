@@ -23,7 +23,7 @@
 
     /* Style de la barre de navigation */
     .navbar {
-      background-color: #8c2f39
+      background-color: #8c2f39;
       color: white;
       padding: 15px;
       display: flex;
@@ -226,27 +226,51 @@
     <button id="logout-button" style="display:none;">Déconnexion</button>
   </div>
 
-  <!-- Contenu principal -->
-  <div class="main-container">
+<!-- Contenu principal -->
+<div class="main-container">
+  
+  <!-- Section Exploration des profils -->
+  <div class="exploration-section">
+    <h2>Explorer les Profils</h2>
     
-    <!-- Section Exploration des profils -->
-    <div class="exploration-section">
-      <h2>Explorer les Profils</h2>
-      <div id="explore-profiles">
-        <div id="profilesContainer"></div>
-        <div class="profile-card">
-          <img src="profil_image.jpg" alt="photodeprofil" />
-          <h3>Nom de l'utilisateur</h3>
-          <button id="match-btn">Match ❤️</button>
-          <button id="pass-btn">Passer ❌</button>
+    <!-- Conteneur des profils à explorer -->
+    <div id="profilesContainer" class="profiles-container">
+      
+      <!-- Carte de profil (un profil à la fois) -->
+      <div class="profile-card">
+        <img id="profilePhoto" class="profile-photo" src="https://via.placeholder.com/150" alt="Photo de profil" />
+        <h3 id="userName" class="user-name">Nom de l'utilisateur</h3>
+        
+        <!-- Boutons Match et Passer -->
+        <div class="action-buttons">
+          <button id="match-btn" class="btn btn-match">Match ❤️</button>
+          <button id="pass-btn" class="btn btn-pass">Passer ❌</button>
         </div>
       </div>
+    </div>
 
-      <div id="my-matches">
-        <h3>Mes matchs</h3>
-        <!-- Les matchs seront affichés ici -->
+    <!-- Section des matchs de l'utilisateur -->
+    <div id="my-matches" class="matches-section">
+      <h3>Mes matchs</h3>
+
+      <!-- Affichage du profil de l'utilisateur actuel -->
+      <div id="userProfile" class="user-profile">
+        <h1 id="userName" class="user-name">Nom de l'utilisateur</h1>
+        <img id="profilePhoto" class="profile-photo" src="https://via.placeholder.com/150" alt="Photo de profil" />
+        <div id="matchStatus" class="match-status">Statut du match</div>
+        <div id="matchAnimation" class="match-animation" style="display: none;">❤️💖 MATCH 💖❤️</div>
+        <div id="instagramLinkContainer"></div>
       </div>
 
+      <!-- Section des boutons pour passer ou matcher -->
+      <div id="actionButtons" class="action-buttons-container">
+        <button id="nextButton" class="btn btn-next">Passer</button>
+        <button id="matchButton" class="btn btn-match">Match</button>
+        <button id="confirmMatchButton" class="btn btn-confirm" style="display: none;">Confirmer Match Mutuel</button>
+      </div>
+    </div>
+  </div>
+</div>
     </div>
 
     <!-- Section Groupes & Événements -->
@@ -288,17 +312,17 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 
     // Fonction pour afficher l'état de connexion de l'utilisateur
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        // Utilisateur connecté
-        document.getElementById('user-name').textContent = `Bonjour, ${user.email}`;
-        document.getElementById('logout-button').style.display = 'inline-block';
-      } else {
-        // Utilisateur non connecté
-        document.getElementById('user-name').textContent = 'Utilisateur non connecté';
-        document.getElementById('logout-button').style.display = 'none';
-      }
-    });
+      auth.onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById('user-name').textContent = `Bonjour, ${user.email}`;
+    document.getElementById('logout-button').style.display = 'inline-block';
+    fetchUsers();  // Ajouter cette ligne pour récupérer les utilisateurs
+  } else {
+    document.getElementById('user-name').textContent = 'Utilisateur non connecté';
+    document.getElementById('logout-button').style.display = 'none';
+  }
+});
+
 
     // Gestion de la déconnexion
     document.getElementById('logout-button').addEventListener('click', () => {
@@ -308,50 +332,169 @@ const firestore = firebase.firestore();
         console.error("Erreur de déconnexion :", error.message);
       });
     });
-// Fonction pour afficher les profils à explorer depuis Firestore
-async function displayProfiles() {
-  try {
-    // Récupère les documents de la collection "users" dans Firestore
-    firestore.collection("users").get().then((querySnapshot) => {
-      const profilesContainer = document.querySelector("#profilesContainer"); // Conteneur pour les cartes des profils
-      profilesContainer.innerHTML = ""; // Réinitialise le conteneur avant d'ajouter des profils
+// Référence à la collection 'users' dans Firestore
+const db = firebase.firestore();
+const usersCollection = db.collection("users");
+const matchesCollection = db.collection("matches");
 
-      // Parcours tous les documents récupérés
+// Tableau pour stocker tous les utilisateurs
+let usersList = [];
+let currentUser = null;
+
+// Récupérer tous les utilisateurs et les afficher
+function fetchUsers() {
+  usersCollection.get()
+    .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        const profile = doc.data(); // Récupère les données du profil
-// Vérification des champs et valeurs par défaut
-      const photoURL = profile.photodeprofil || "default_image.jpg";
-      const firstName = profile.firstName || "Prénom inconnu";
-      const lastName = profile.lastName || "Nom inconnu";
-      const age = profile.age || "Âge non spécifié";
-      const passions = profile.passions || "Aucune passion indiquée";
-
-        // Création de la carte pour chaque profil
-        const profileDiv = document.createElement("div");
-        profileDiv.classList.add("profile-card");
-
-        // Ajout du contenu dynamique avec l'URL de l'image et les informations du profil
-        profileDiv.innerHTML = `
-          <img src="${profile.photodeprofil || 'default_image.jpg'}" alt="Photodeprofil" />
-          <h3>${profile.firstName} ${profile.lastName}</h3>
-          <p>Âge: ${profile.age}</p>
-          <p>Passions: ${profile.passions}</p>
-          <button class="actionButton" id="match-btn">Match ❤️</button>
-          <button class="actionButton" id="pass-btn">Passer ❌</button>
-        `;
-
-        // Ajouter la div du profil au conteneur
-        profilesContainer.appendChild(profileDiv);
+        const userData = doc.data();
+        usersList.push({
+          id: doc.id,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          photoUrl: userData.photodeprofil || "https://via.placeholder.com/150", // URL de placeholder si pas de photo
+          instagram: userData.instagram || "" // Lien Instagram
+        });
       });
+      showRandomUser();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des utilisateurs :", error);
     });
-  } catch (error) {
-    console.error("Erreur lors de la récupération des profils :", error);
-  }
 }
- 
 
-// Appeler la fonction pour afficher les profils
-displayProfiles();
+// Afficher un utilisateur aléatoire
+function showRandomUser() {
+  if (usersList.length === 0) {
+    console.log("Aucun utilisateur disponible");
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * usersList.length);
+  currentUser = usersList[randomIndex];
+
+  // Afficher les informations de l'utilisateur dans l'interface
+  document.getElementById("userName").innerText = `${currentUser.firstName} ${currentUser.lastName}`;
+  const profilePhoto = document.getElementById("profilePhoto");
+  if (profilePhoto) {
+    profilePhoto.src = currentUser.photoUrl;
+  }
+
+  // Vérifier s'il y a un match en attente ou un match mutuel
+  checkMatchStatus();
+}
+
+// Vérifier si l'utilisateur actuel a déjà un match en attente ou mutuel
+function checkMatchStatus() {
+  if (!currentUser) return;
+
+  matchesCollection.where("userId", "==", currentUser.id)
+    .get()
+    .then((querySnapshot) => {
+      let matchStatus = "en attente";
+      let isMutual = false;
+
+      querySnapshot.forEach((doc) => {
+        const matchData = doc.data();
+        if (matchData.status === "mutual") {
+          isMutual = true;
+          matchStatus = "Match mutuel";
+        }
+      });
+
+      document.getElementById("matchStatus").innerText = matchStatus;
+      if (isMutual) {
+        document.getElementById("matchAnimation").style.display = 'block';
+      }
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la vérification du statut des matchs :", error);
+    });
+}
+
+
+
+// Afficher l'animation de match avec des cœurs
+function displayMatchAnimation() {
+  const matchAnimation = document.getElementById("matchAnimation");
+  matchAnimation.style.display = "block"; // Afficher l'animation
+  setTimeout(() => {
+    matchAnimation.style.display = "none"; // Cacher après quelques secondes
+  }, 3000); // Animation visible pendant 3 secondes
+}
+
+// Logique du bouton "Match"
+document.getElementById('match-btn').addEventListener('click', () => {
+  if (!currentUser) {
+    console.log("Aucun utilisateur disponible pour le match.");
+    return;
+  }
+
+  // Créer un document de match dans Firestore pour cet utilisateur
+  const userMatchData = {
+    userId: currentUser.id,
+    firstName: currentUser.firstName,
+    lastName: currentUser.lastName,
+    photoUrl: currentUser.photoUrl,
+    status: "en attente" // Statut initial du match
+  };
+
+  // Ajouter un match dans la collection 'matches'
+  matchesCollection.add(userMatchData)
+    .then((docRef) => {
+      console.log("Match ajouté avec succès : ", docRef.id);
+
+      // Afficher une animation ou une notification pour l'utilisateur
+      document.getElementById("matchStatus").innerText = "Match en attente...";
+      document.getElementById("matchAnimation").style.display = "block"; // Optionnel: Animation de match
+    })
+    .catch((error) => {
+      console.error("Erreur lors de l'ajout du match : ", error);
+    });
+});
+
+
+// Gérer le match mutuel (changer le statut en "mutuel")
+function confirmMutualMatch() {
+  if (!currentUser) {
+    return;
+  }
+
+  matchesCollection.where("userId", "==", currentUser.id)
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        doc.ref.update({ status: "mutuel" }); // Changer le statut du match en "mutuel"
+        console.log("Match mutuel confirmé");
+      });
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la confirmation du match mutuel :", error);
+    });
+}
+
+// Afficher un lien vers Instagram si un match mutuel est trouvé
+function showInstagramLink() {
+  if (currentUser.instagram) {
+  const instagramLink = document.createElement('a');
+  instagramLink.href = `https://www.instagram.com/${currentUser.instagram}`;
+  instagramLink.textContent = "Voir Instagram";
+  document.getElementById('instagramLinkContainer').appendChild(instagramLink);
+}
+}
+
+// Fonction pour passer à un autre utilisateur
+function nextUser() {
+  showRandomUser(); // Afficher un nouvel utilisateur aléatoire
+}
+
+// Initialiser la récupération des utilisateurs
+fetchUsers();
+
+// Event listeners pour les boutons
+document.getElementById("nextButton").addEventListener("click", nextUser);
+document.getElementById("matchButton").addEventListener("click", matchUser);
+document.getElementById("confirmMatchButton").addEventListener("click", confirmMutualMatch);
+
 
 </script>
 </body>
