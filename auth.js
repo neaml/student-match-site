@@ -1,9 +1,24 @@
-// Initialiser Firebase
-firebase.initializeApp(firebaseConfig);
+ // Importer les fonctions nécessaires
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getFirestore, collection, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
-// Utiliser Firebase Auth et Firestore
-var auth = firebase.auth();
-var db = firebase.firestore();
+  // Configuration de votre application Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
+    authDomain: "student-match-but3.firebaseapp.com",
+    projectId: "student-match-but3",
+    storageBucket: "student-match-but3.appspot.com",
+    messagingSenderId: "1096075545413",
+    appId: "1:1096075545413:web:85451af9e19c5c54830c2",
+    measurementId: "G-XK5N6FLSYJ"
+  };
+
+  // Initialiser Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app); // Initialiser Firestore
+  const auth = getAuth(app); // Initialiser l'authentification Firebase
+  
 // Suivre l'état de l'utilisateur (connecté/déconnecté)
 auth.onAuthStateChanged(user => {
   if (user) {
