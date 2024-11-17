@@ -64,14 +64,23 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    .exploration-section {
-      flex: 2;
-    }
+   /* Section principale (deux tiers de la largeur) */
+.main-content {
+  flex: 2; /* Prend 2/3 de la largeur */
+  padding-right: 20px;
+}
 
-    .event-group-section {
-      flex: 1;
-    }
+/* Section latérale (un tiers de la largeur) */
+.side-content {
+  flex: 1; /* Prend 1/3 de la largeur */
+  display: flex;
+  flex-direction: column;
+}
 
+/* Sections à l'intérieur de la partie latérale */
+.groups, .events {
+  margin-bottom: 20px; /* Espacement entre les groupes et événements */
+}
     h2, h3 {
       color: #800000;
       margin-top: 0;
@@ -511,6 +520,13 @@ function fetchUsers() {
           photoUrl: userData.photodeprofil || "https://via.placeholder.com/150", // URL de placeholder si pas de photo
           instagram: userData.instagram || "" // Lien Instagram
         });
+             // Sélectionner l'élément <img> pour l'afficher
+      const profileImage = document.getElementById('profile-image');
+      
+      // Mettre à jour la source de l'image avec l'URL de Cloudinary
+      profileImage.src = profileImageUrl;
+    } else {
+      console.log("Utilisateur non trouvé");
       });
       showRandomUser();
     })
