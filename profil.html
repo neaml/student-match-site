@@ -6,178 +6,97 @@
   <title>Profil et Paramètres</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: #853642;
-      animation: waveAnimation 10s ease-in-out infinite alternate;
-      color: #333;
-    }
+  /* Styles généraux */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Remplit toute la hauteur de l'écran */
+  background-color: #f3f4f6; /* Fond global de la page */
+}
 
-    @keyframes waveAnimation {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 100% 0%; }
-    }
+/* Conteneur principal */
+.profile-container {
+  background-color: #ffffff; /* Fond blanc pour le carré */
+  border-radius: 10px; /* Coins arrondis */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre pour un effet flottant */
+  padding: 20px; /* Espace interne */
+  width: 400px; /* Largeur fixe du carré */
+  text-align: center; /* Centrage du contenu */
+}
 
-    main {
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 15px;
-      padding: 20px;
-      max-width: 600px;
-      margin: 50px auto;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      position: relative;
-    }
+/* En-tête */
+.profile-container h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #333333;
+}
 
-    h1 {
-      color: #800020;
-      text-align: center;
-      margin-bottom: 20px;
-    }
+/* Formulaire */
+form {
+  display: flex;
+  flex-direction: column; /* Aligne les éléments verticalement */
+}
 
-    p {
-      text-align: center;
-      font-size: 1.1em;
-      color: #555;
-      margin-bottom: 20px;
-    }
+form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555555;
+}
 
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+form input {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+}
 
-    label {
-      margin-top: 10px;
-      font-size: 0.9em;
-      color: #555;
-      width: 100%;
-      text-align: left;
-    }
+form button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1em;
+  cursor: pointer;
+}
 
-    input, select {
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-      font-size: 1em;
-      width: 100%;
-    }
+form button:hover {
+  background-color: #0056b3;
+}
 
-    .bubbleContainer {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 10px 0;
-    }
+/* Bulles de passions */
+.bubbles-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Espacement entre les bulles */
+  margin-bottom: 15px;
+}
 
-    .bubble {
-      background-color: lightgray;
-      color: black;
-      border-radius: 20px;
-      padding: 8px 16px;
-      margin: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: inline-block;
-      text-align: center;
-    }
+.bubble {
+  background-color: #f0f0f0;
+  color: #333333;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  cursor: pointer;
+}
 
-    .bubble.selected {
-      background-color: #800020;  /* Changer la couleur de fond */
-      color: white;               /* Changer la couleur du texte */
-    }
-
-    .bubble:hover {
-      transform: scale(1.05);  /* Effet de zoom léger au survol */
-    }
-
-    .emoji {
-      font-size: 1.2em;
-      margin-right: 5px;
-    }
-
-    button {
-      background-color: #800020;
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1em;
-      margin-top: 20px;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #a65362;
-    }
-
-    .nav {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .nav a {
-      margin: 0 10px;
-      color: #800020;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .loginLink {
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    #imagePreview {
-      display: none;
-      width: 100px;
-      height: 100px;
-      margin-top: 10px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
-
-    #profile-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .profile-field {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-
-    .profile-field input, .profile-field textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-      font-size: 1em;
-    }
-
-    #passions-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .bubble {
-      margin: 5px;
-      padding: 8px 16px;
-    }
+.bubble:hover {
+  background-color: #ddd;
+}
 
   </style>
 </head>
 <body>
-  <h1>Mon Profil</h1>
+  
 
   <div id="profile-container">
+    <h1>Mon Profil</h1>
     <div class="profile-field">
       <label for="firstName">Prénom:</label>
       <input type="text" id="firstName" placeholder="Prénom">
@@ -217,6 +136,7 @@
 
     <button id="logoutBtn">Se déconnecter</button>
   </div>
+   </div>
 
   <!-- Importation des services Firebase nécessaires -->
   <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
