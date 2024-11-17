@@ -1,7 +1,9 @@
-// Initialisation de Firebase
-const auth = firebase.auth();
-const db = firebase.firestore();
+// Initialiser Firebase
+firebase.initializeApp(firebaseConfig);
 
+// Utiliser Firebase Auth et Firestore
+var auth = firebase.auth();
+var db = firebase.firestore();
 // Suivre l'état de l'utilisateur (connecté/déconnecté)
 auth.onAuthStateChanged(user => {
   if (user) {
