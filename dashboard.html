@@ -308,6 +308,10 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 const { getDocs, collection } = firebase.firestore;
 
+window.onload = () => {
+  loadGroupsRealtime();  // Charger les groupes en temps réel
+};
+
 
     // Fonction pour afficher l'état de connexion de l'utilisateur
      auth.onAuthStateChanged(user => {
@@ -369,6 +373,29 @@ const fetchGroups = async () => {
     console.error("Erreur lors de la récupération des groupes :", error);
   }
 };
+
+const loadGroupsRealtime = () => {
+  const groupsRef = firebase.firestore().collection("groups");
+  groupsRef.onSnapshot(snapshot => {
+    const groupsContainer = document.getElementById("groups-list");
+    groupsContainer.innerHTML = "";  // Effacer les anciens groupes
+    snapshot.forEach(doc => {
+      const groupData = doc.data();
+      const groupElement = document.createElement("div");
+      groupElement.textContent = `Groupe: ${groupData.name} - ${groupData.description}`;
+      
+      const eventsButton = document.createElement("button");
+      eventsButton.textContent = "Voir événements";
+      eventsButton.addEventListener("click", () => loadEvents(doc.id));
+      groupElement.appendChild(eventsButton);
+
+      groupsContainer.appendChild(groupElement);
+    });
+  });
+};
+
+
+        
 // Fonction pour récupérer les événements depuis Firestore
 async function fetchEvents() {
   try {
@@ -449,6 +476,21 @@ function displayEvents(events) {
     eventListElement.appendChild(eventItem);
   });
 }
+
+        const loadEventsRealtime = (groupId) => {
+  const eventsRef = firebase.firestore().collection("events").where("groupId", "==", groupId);
+  eventsRef.onSnapshot(snapshot => {
+    const eventsContainer = document.getElementById("events-list");
+    eventsContainer.innerHTML = "";  // Effacer les anciens événements
+    snapshot.forEach(doc => {
+      const eventData = doc.data();
+      const eventElement = document.createElement("div");
+      eventElement.textContent = `Événement: ${eventData.name} - Date: ${eventData.date}`;
+      
+      eventsContainer.appendChild(eventElement);
+    });
+  });
+};
 
 
         
