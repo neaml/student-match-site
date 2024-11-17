@@ -420,16 +420,6 @@ function viewEventDetails(eventId) {
 
 // Appeler la fonction fetchEvents après la connexion de l'utilisateur
 fetchEvents();
-
-        const fetchEvents = async () => {
-  const eventList = [];
-  const querySnapshot = await getDocs(collection(db, "eventlist"));
-  querySnapshot.forEach((doc) => {
-    eventList.push({ id: doc.id, ...doc.data() });
-  });
-  console.log(eventList); // Liste des événements
-};
-fetchEvents();
 const fetchEvents = async () => {
   try {
     const eventList = [];
