@@ -245,6 +245,8 @@
         <div class="action-buttons">
           <button id="match-btn" class="btn btn-match">Match ❤️</button>
           <button id="pass-btn" class="btn btn-pass">Passer ❌</button>
+            <button id="confirmMatchButton" class="btn btn-confirm" style="display: none;">Confirmer Match Mutuel</button>
+</div>
         </div>
       </div>
     </div>
@@ -262,12 +264,6 @@
         <div id="instagramLinkContainer"></div>
       </div>
 
-      <!-- Section des boutons pour passer ou matcher -->
-      <div id="actionButtons" class="action-buttons-container">
-        <button id="nextButton" class="btn btn-next">Passer</button>
-        <button id="matchButton" class="btn btn-match">Match</button>
-        <button id="confirmMatchButton" class="btn btn-confirm" style="display: none;">Confirmer Match Mutuel</button>
-      </div>
     </div>
   </div>
 </div>
@@ -310,18 +306,21 @@
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
+const { getDocs, collection } = firebase.firestore;
+
 
     // Fonction pour afficher l'état de connexion de l'utilisateur
-      auth.onAuthStateChanged(user => {
+     auth.onAuthStateChanged(user => {
   if (user) {
-    document.getElementById('user-name').textContent = `Bonjour, ${user.email}`;
+    document.getElementById('user-name').textContent = `Bonjour, ${user.displayName || user.email}`;
     document.getElementById('logout-button').style.display = 'inline-block';
-    fetchUsers();  // Ajouter cette ligne pour récupérer les utilisateurs
+    fetchProfiles(); // Charger les profils
+    fetchGroupsAndEvents(); // Charger les groupes et événements
   } else {
-    document.getElementById('user-name').textContent = 'Utilisateur non connecté';
-    document.getElementById('logout-button').style.display = 'none';
+    window.location.href = 'login.html'; // Redirige vers la page de connexion
   }
 });
+
 
 
     // Gestion de la déconnexion
@@ -336,7 +335,133 @@ const firestore = firebase.firestore();
 const db = firebase.firestore();
 const usersCollection = db.collection("users");
 const matchesCollection = db.collection("matches");
+const groupListCollection = db.collection('groupList');
+const eventListCollection = db.collection('eventList');
 
+fetchGroups();
+        // Affiche les groupes dans la section dédiée
+function displayGroups(groups) {
+  const groupListElement = document.getElementById('groupList');
+  groupListElement.innerHTML = ''; // Réinitialise la liste
+
+  if (groups.length === 0) {
+    groupListElement.innerHTML = '<p class="no-items">Aucun groupe disponible.</p>';
+    return;
+  }
+
+  groups.forEach(group => {
+    const groupItem = document.createElement('div');
+    groupItem.classList.add('group-item');
+    groupItem.textContent = group.name; // Supposons que chaque groupe a une propriété `name`
+    groupListElement.appendChild(groupItem);
+  });
+}
+
+// Modifier `fetchGroups` pour appeler cette fonction
+const fetchGroups = async () => {
+ try { const groupList = [];
+  const querySnapshot = await getDocs(collection(db, "grouplist"));
+  querySnapshot.forEach(doc => {
+    groupList.push({ id: doc.id, ...doc.data() });
+  });
+  displayGroups(groupList);
+       } catch (error) {
+    console.error("Erreur lors de la récupération des groupes :", error);
+  }
+};
+// Fonction pour récupérer les événements depuis Firestore
+async function fetchEvents() {
+  try {
+    const eventListElement = document.getElementById('eventList');
+    const noEventsElement = document.getElementById('noEvents');
+
+    // Réinitialiser l'affichage
+    eventListElement.innerHTML = "";
+
+    // Récupérer les documents dans la collection "eventList"
+    const querySnapshot = await firestore.collection('eventList').get();
+
+    if (querySnapshot.empty) {
+      // Afficher un message si aucun événement
+      noEventsElement.style.display = 'block';
+    } else {
+      noEventsElement.style.display = 'none';
+
+      querySnapshot.forEach((doc) => {
+        const eventData = doc.data();
+
+        // Créer un élément pour chaque événement
+        const eventItem = document.createElement('div');
+        eventItem.className = 'event-item';
+
+        // Ajouter le contenu de l'événement
+        eventItem.innerHTML = `
+          <div>
+            <strong>${eventData.name}</strong> - ${eventData.date || "Date non spécifiée"}
+            <p>${eventData.description || "Pas de description disponible."}</p>
+          </div>
+          <button onclick="viewEventDetails('${doc.id}')">Voir</button>
+        `;
+
+        // Ajouter l'événement à la liste
+        eventListElement.appendChild(eventItem);
+      });
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération des événements :", error);
+  }
+}
+
+// Fonction pour afficher les détails d'un événement
+function viewEventDetails(eventId) {
+  alert(`Voir les détails pour l'événement ID: ${eventId}`);
+  // Ajoutez ici la logique pour afficher les détails ou naviguer vers une autre page
+}
+
+// Appeler la fonction fetchEvents après la connexion de l'utilisateur
+fetchEvents();
+
+        const fetchEvents = async () => {
+  const eventList = [];
+  const querySnapshot = await getDocs(collection(db, "eventlist"));
+  querySnapshot.forEach((doc) => {
+    eventList.push({ id: doc.id, ...doc.data() });
+  });
+  console.log(eventList); // Liste des événements
+};
+fetchEvents();
+const fetchEvents = async () => {
+  try {
+    const eventList = [];
+    const querySnapshot = await db.collection("eventList").get();
+    querySnapshot.forEach((doc) => {
+      eventList.push({ id: doc.id, ...doc.data() });
+    });
+    displayEvents(eventList); // Appelle la fonction pour afficher les événements
+  } catch (error) {
+    console.error("Erreur lors de la récupération des événements :", error.message);
+  }
+};
+
+function displayEvents(events) {
+  const eventListElement = document.getElementById('eventList');
+  eventListElement.innerHTML = ''; // Réinitialise la liste
+
+  if (events.length === 0) {
+    eventListElement.innerHTML = '<p class="no-items">Aucun événement disponible.</p>';
+    return;
+  }
+
+  events.forEach(event => {
+    const eventItem = document.createElement('div');
+    eventItem.classList.add('event-item');
+    eventItem.textContent = event.name; // Supposons que chaque événement a une propriété `name`
+    eventListElement.appendChild(eventItem);
+  });
+}
+
+
+        
 // Tableau pour stocker tous les utilisateurs
 let usersList = [];
 let currentUser = null;
@@ -378,6 +503,17 @@ function showRandomUser() {
   if (profilePhoto) {
     profilePhoto.src = currentUser.photoUrl;
   }
+
+      const fetchUserMatches = async (userId) => {
+  const q = query(collection(db, "matches"), where("userId", "==", userId));
+  const matches = [];
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    matches.push({ id: doc.id, ...doc.data() });
+  });
+  console.log(matches); // Liste des matchs
+};
+fetchUserMatches("id_utilisateur1");
 
   // Vérifier s'il y a un match en attente ou un match mutuel
   checkMatchStatus();
@@ -429,14 +565,20 @@ document.getElementById('match-btn').addEventListener('click', () => {
     return;
   }
 
-  // Créer un document de match dans Firestore pour cet utilisateur
-  const userMatchData = {
-    userId: currentUser.id,
-    firstName: currentUser.firstName,
-    lastName: currentUser.lastName,
-    photoUrl: currentUser.photoUrl,
-    status: "en attente" // Statut initial du match
-  };
+  const createMatch = async (userId, matchedUserId) => {
+  try {
+    const docRef = await addDoc(collection(db, "matches"), {
+      userId,
+      matchedUserId,
+      status: "en attente", // Peut être changé en "accepté" ou "refusé"
+      timestamp: new Date()
+    });
+    console.log("Match créé avec l'ID :", docRef.id);
+  } catch (e) {
+    console.error("Erreur lors de la création du match : ", e);
+  }
+};
+createMatch("id_utilisateur1", "id_utilisateur2");
 
   // Ajouter un match dans la collection 'matches'
   matchesCollection.add(userMatchData)
