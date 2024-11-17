@@ -94,6 +94,25 @@
       <button type="submit">Créer l'Événement</button>
     </form>
   </main>
+<script>
+  const createEvent = async () => {
+  const eventName = document.getElementById("event-name").value;
+  const eventDate = document.getElementById("event-date").value;
+  const groupId = document.getElementById("group-id").value;  // Assurez-vous de récupérer le groupId auquel l'événement appartient
 
+  try {
+    await firebase.firestore().collection("events").add({
+      name: eventName,
+      date: eventDate,
+      groupId: groupId,  // Lien avec le groupe
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    console.log("Événement créé avec succès!");
+  } catch (error) {
+    console.error("Erreur lors de la création de l'événement:", error);
+  }
+};
+
+</script>
 </body>
 </html>
