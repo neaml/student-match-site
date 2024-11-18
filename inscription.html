@@ -85,9 +85,7 @@
         }
           
           alert('Inscription réussie et informations enregistrées dans Firebase');
-          window.location.href = "dashboard.html";
-        } else {
-          alert("Veuillez entrer un identifiant Instagram valide !");
+          window.location.href = "login.html";
         }
       } catch (error) {
         console.error('Erreur lors de l\'inscription : ', error);
@@ -102,8 +100,8 @@
 // Fonction d'inscription
 async function handleSignUp() {
     try {
-        // Si tout est réussi, redirige vers le tableau de bord
-        window.location.href = "dashboard.html";
+        // Si tout est réussi, redirige vers la page de connexion
+        window.location.href = "login.html";
     } catch (error) {
         document.getElementById("generalError").textContent = error.message;
         document.getElementById("generalError").style.display = "block";
