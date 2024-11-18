@@ -394,7 +394,7 @@ function displayGroups(groups) {
   });
 }
 
-const loadGroupsRealtime = () => {
+ loadGroupsRealtime();{
   const groupsRef = firebase.firestore().collection("groups");
   groupsRef.onSnapshot(snapshot => {
     const groupsContainer = document.getElementById("groups-list");
