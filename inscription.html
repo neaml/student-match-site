@@ -32,16 +32,19 @@ const firestore = firebase.firestore();
 // Ajouter un gestionnaire d'événements pour le formulaire
 document.getElementById('signupForm').addEventListener('submit', async function (e) {
   e.preventDefault(); // Empêche le rechargement de la page
-  
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
+  const socialMediaInput = document.getElementById('socialMedia').value;
 
   try {
-    // Créer un nouvel utilisateur avec Firebase Authentication
+    // Création de l'utilisateur dans Firebase Authentication
     const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
     const user = userCredential.user;
 
-    // Récupérer les données des champs du formulaire
+    // Récupérer les données du formulaire
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const age = parseInt(document.getElementById('age').value);
     const selectedOrientation = Array.from(document.querySelectorAll('#orientationContainer .bubble.selected'))
       .map(bubble => bubble.textContent);
     const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected'))
@@ -49,10 +52,10 @@ document.getElementById('signupForm').addEventListener('submit', async function 
     const selectedRelationship = Array.from(document.querySelectorAll('#searchingForContainer .bubble.selected'))
       .map(bubble => bubble.textContent);
 
+    // Téléchargement de la photo de profil (facultatif)
     const photoDeProfil = document.getElementById('Photodeprofil').files[0];
     let photoURL = null;
 
-    // Si une photo de profil est téléchargée, téléchargez-la sur Cloudinary
     if (photoDeProfil) {
       try {
         const formData = new FormData();
@@ -69,61 +72,41 @@ document.getElementById('signupForm').addEventListener('submit', async function 
         photoURL = data.secure_url;
       } catch (error) {
         console.error('Erreur lors du téléchargement de la photo :', error);
+        alert("Erreur lors du téléchargement de l'image.");
       }
     }
 
-        const socialMediaInput = document.getElementById('socialMedia').value;
-        const registrationForm = document.getElementById('signupForm');
-        
-       if (validateSocialMediaInput(socialMediaInput)) {
-  await firestore.collection('users').doc(user.uid).set({
-    firstName: document.getElementById('firstName').value,
-    lastName: document.getElementById('lastName').value,
-    age: parseInt(document.getElementById('age').value),
-    orientation: selectedOrientation,
-    passions: selectedPassions,
-    searchingFor: selectedRelationship,
-    photoDeProfil: photoURL,
-    socialMedia: socialMediaInput
-  });
-  console.log("Données sauvegardées avec succès !");
-} else {
-  console.error("L'entrée du réseau social est invalide.");
-  alert("Veuillez entrer une URL valide pour un réseau social (Facebook, Twitter, Instagram, etc.).");
-}
+    // Sauvegarder les données utilisateur dans Firestore
+    const userData = {
+      firstName,
+      lastName,
+      age,
+      orientation: selectedOrientation,
+      passions: selectedPassions,
+      searchingFor: selectedRelationship,
+      photoDeProfil: photoURL,
+    };
 
-           // Si un lien Instagram est fourni, on l'enregistre dans Firestore (ou un autre endroit)
-        if (socialMediainput) {
-            // Exemple : Enregistrement dans Firestore
-            await firestore.collection('users').doc(user.uid).set({
-                socialMedia: socialMedia
-            }, { merge: true });
-        }
-          
-          alert('Inscription réussie et informations enregistrées dans Firebase');
-          window.location.href = "login.html";
-        }
-      } catch (error) {
-        console.error('Erreur lors de l\'inscription : ', error);
-        alert('Erreur lors de l\'inscription, veuillez réessayer.');
+    // Ajouter le lien socialMedia si valide
+    if (socialMediaInput) {
+      if (validateSocialMediaInput(socialMediaInput)) {
+        userData.socialMedia = socialMediaInput;
+      } else {
+        alert("Le lien Instagram n'est pas valide. Veuillez vérifier.");
+        return; // Interrompt la soumission en cas de validation échouée
       }
-    });
-
-    function validateSocialMediaInput(socialMedia) {
-      return socialMedia && socialMedia.trim() !== "";
     }
 
-// Fonction d'inscription
-async function handleSignUp() {
-    try {
-        // Si tout est réussi, redirige vers la page de connexion
-        window.location.href = "login.html";
-    } catch (error) {
-        document.getElementById("generalError").textContent = error.message;
-        document.getElementById("generalError").style.display = "block";
-    }
-}
+    await firestore.collection('users').doc(user.uid).set(userData);
 
+    // Confirmation et redirection
+    alert('Inscription réussie et informations enregistrées dans Firebase.');
+    window.location.href = "login.html";
+  } catch (error) {
+    console.error('Erreur lors de l\'inscription :', error);
+    alert('Une erreur est survenue lors de l\'inscription, veuillez réessayer.');
+  }
+});
 </script>
 
 
