@@ -9,106 +9,6 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <!-- Lien vers le fichier CSS global -->
   <link rel="stylesheet" href="style.css">
-<script>
-
-  // Configuration de votre application Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
-    authDomain: "student-match-but3.firebaseapp.com",
-    projectId: "student-match-but3",
-    storageBucket: "student-match-but3.appspot.com",
-    messagingSenderId: "1096075545413",
-    appId: "1:1096075545413:web:85451af9e19c5c54830c2",
-    measurementId: "G-XK5N6FLSYJ"
-  };
-
-  /// Initialisation classique pour Firebase 8.x
-firebase.initializeApp(firebaseConfig);
-
-// Récupération de Firebase Auth et Firestore
-const auth = firebase.auth();
-const firestore = firebase.firestore();
-
-// Ajouter un gestionnaire d'événements pour le formulaire
-document.getElementById('signupForm').addEventListener('submit', async function (e) {
-  e.preventDefault(); // Empêche le rechargement de la page
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const socialMediaInput = document.getElementById('socialMedia').value;
-
-  try {
-    // Création de l'utilisateur dans Firebase Authentication
-    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-    const user = userCredential.user;
-
-    // Récupérer les données du formulaire
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
-    const age = parseInt(document.getElementById('age').value);
-    const selectedOrientation = Array.from(document.querySelectorAll('#orientationContainer .bubble.selected'))
-      .map(bubble => bubble.textContent);
-    const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected'))
-      .map(bubble => bubble.textContent);
-    const selectedRelationship = Array.from(document.querySelectorAll('#searchingForContainer .bubble.selected'))
-      .map(bubble => bubble.textContent);
-
-    // Téléchargement de la photo de profil (facultatif)
-    const photoDeProfil = document.getElementById('Photodeprofil').files[0];
-    let photoURL = null;
-
-    if (photoDeProfil) {
-      try {
-        const formData = new FormData();
-        formData.append("file", photoDeProfil);
-        formData.append("upload_preset", "Student Match");
-        formData.append("cloud_name", "dcejsj6me");
-
-        const response = await fetch("https://api.cloudinary.com/v1_1/dcejsj6me/image/upload", {
-          method: "POST",
-          body: formData
-        });
-
-        const data = await response.json();
-        photoURL = data.secure_url;
-      } catch (error) {
-        console.error('Erreur lors du téléchargement de la photo :', error);
-        alert("Erreur lors du téléchargement de l'image.");
-      }
-    }
-
-    // Sauvegarder les données utilisateur dans Firestore
-    const userData = {
-      firstName,
-      lastName,
-      age,
-      orientation: selectedOrientation,
-      passions: selectedPassions,
-      searchingFor: selectedRelationship,
-      photoDeProfil: photoURL,
-    };
-
-    // Ajouter le lien socialMedia si valide
-    if (socialMediaInput) {
-      if (validateSocialMediaInput(socialMediaInput)) {
-        userData.socialMedia = socialMediaInput;
-      } else {
-        alert("Le lien Instagram n'est pas valide. Veuillez vérifier.");
-        return; // Interrompt la soumission en cas de validation échouée
-      }
-    }
-
-    await firestore.collection('users').doc(user.uid).set(userData);
-
-    // Confirmation et redirection
-    alert('Inscription réussie et informations enregistrées dans Firebase.');
-    window.location.href = "login.html";
-  } catch (error) {
-    console.error('Erreur lors de l\'inscription :', error);
-    alert('Une erreur est survenue lors de l\'inscription, veuillez réessayer.');
-  }
-});
-</script>
-
 
   <style>
     /* Styles CSS ici (comme votre code original) */
@@ -326,7 +226,106 @@ document.getElementById('signupForm').addEventListener('submit', async function 
         <div class="bubble"><span class="emoji">❓</span>Autre</div>
 
       </div>
-  
+  <script>
+
+  // Configuration de votre application Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
+    authDomain: "student-match-but3.firebaseapp.com",
+    projectId: "student-match-but3",
+    storageBucket: "student-match-but3.appspot.com",
+    messagingSenderId: "1096075545413",
+    appId: "1:1096075545413:web:85451af9e19c5c54830c2",
+    measurementId: "G-XK5N6FLSYJ"
+  };
+
+  /// Initialisation classique pour Firebase 8.x
+firebase.initializeApp(firebaseConfig);
+
+// Récupération de Firebase Auth et Firestore
+const auth = firebase.auth();
+const firestore = firebase.firestore();
+
+// Ajouter un gestionnaire d'événements pour le formulaire
+document.getElementById('signupForm').addEventListener('submit', async function (e) {
+  e.preventDefault(); // Empêche le rechargement de la page
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const socialMediaInput = document.getElementById('socialMedia').value;
+
+  try {
+    // Création de l'utilisateur dans Firebase Authentication
+    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    // Récupérer les données du formulaire
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const age = parseInt(document.getElementById('age').value);
+    const selectedOrientation = Array.from(document.querySelectorAll('#orientationContainer .bubble.selected'))
+      .map(bubble => bubble.textContent);
+    const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected'))
+      .map(bubble => bubble.textContent);
+    const selectedRelationship = Array.from(document.querySelectorAll('#searchingForContainer .bubble.selected'))
+      .map(bubble => bubble.textContent);
+
+    // Téléchargement de la photo de profil (facultatif)
+    const photoDeProfil = document.getElementById('Photodeprofil').files[0];
+    let photoURL = null;
+
+    if (photoDeProfil) {
+      try {
+        const formData = new FormData();
+        formData.append("file", photoDeProfil);
+        formData.append("upload_preset", "Student Match");
+        formData.append("cloud_name", "dcejsj6me");
+
+        const response = await fetch("https://api.cloudinary.com/v1_1/dcejsj6me/image/upload", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+        photoURL = data.secure_url;
+      } catch (error) {
+        console.error('Erreur lors du téléchargement de la photo :', error);
+        alert("Erreur lors du téléchargement de l'image.");
+      }
+    }
+
+    // Sauvegarder les données utilisateur dans Firestore
+    const userData = {
+      firstName,
+      lastName,
+      age,
+      orientation: selectedOrientation,
+      passions: selectedPassions,
+      searchingFor: selectedRelationship,
+      photoDeProfil: photoURL,
+    };
+
+    // Ajouter le lien socialMedia si valide
+    if (socialMediaInput) {
+      if (validateSocialMediaInput(socialMediaInput)) {
+        userData.socialMedia = socialMediaInput;
+      } else {
+        alert("Le lien Instagram n'est pas valide. Veuillez vérifier.");
+        return; // Interrompt la soumission en cas de validation échouée
+      }
+    }
+
+    await firestore.collection('users').doc(user.uid).set(userData);
+
+    // Confirmation et redirection
+    alert('Inscription réussie et informations enregistrées dans Firebase.');
+    window.location.href = "login.html";
+  } catch (error) {
+    console.error('Erreur lors de l\'inscription :', error);
+    alert('Une erreur est survenue lors de l\'inscription, veuillez réessayer.');
+  }
+});
+</script>
+
 <script>
   // Logique de sélection multiple des bulles
   document.addEventListener("DOMContentLoaded", function () {
