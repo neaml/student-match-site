@@ -9,7 +9,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <!-- Lien vers le fichier CSS global -->
   <link rel="stylesheet" href="style.css">
-<script type="module">
+<script>
 
   // Configuration de votre application Firebase
   const firebaseConfig = {
@@ -62,27 +62,35 @@ const firestore = firebase.firestore();
           });
           const data = await response.json();
           photoURL = data.secure_url;
-        }
-
+        
+        } catch (error) {
+    console.error('Erreur lors du téléchargement de la photo :', error);
+  }
+}
         const socialMediaInput = document.getElementById('socialMedia').value;
         const registrationForm = document.getElementById('signupForm');
         
-        if (validateSocialMediaInput(socialMediaInput)) {
-          await setDoc(doc(db, 'users', user.uid), {
-            firstName: document.getElementById('firstName').value,
-            lastName: document.getElementById('lastName').value,
-            age: parseInt(document.getElementById('age').value),
-            orientation: selectedOrientation,
-            passions: selectedPassions,
-            searchingFor: selectedRelationship,
-            photoDeProfil: photoURL,
-            socialMedia: socialMediaInput
-          });
+       if (validateSocialMediaInput(socialMediaInput)) {
+  await firestore.collection('users').doc(user.uid).set({
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+    age: parseInt(document.getElementById('age').value),
+    orientation: selectedOrientation,
+    passions: selectedPassions,
+    searchingFor: selectedRelationship,
+    photoDeProfil: photoURL,
+    socialMedia: socialMediaInput
+  });
+  console.log("Données sauvegardées avec succès !");
+} else {
+  console.error("L'entrée du réseau social est invalide.");
+  alert("Veuillez entrer une URL valide pour un réseau social (Facebook, Twitter, Instagram, etc.).");
+}
 
            // Si un lien Instagram est fourni, on l'enregistre dans Firestore (ou un autre endroit)
-        if (socialMedia) {
+        if (socialMediainput) {
             // Exemple : Enregistrement dans Firestore
-            await firebase.firestore().collection("users").doc(userCredential.user.uid).set({
+            await firestore.collection('users').doc(user.uid).set({
                 socialMedia: socialMedia
             }, { merge: true });
         }
