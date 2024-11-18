@@ -323,14 +323,14 @@ const { getDocs, collection } = firebase.firestore;
         
 // Fonction pour charger les groupes en temps réel
 function loadGroupsRealtime() {
-  console.log("Chargement des groupes en temps réel...");
+  console.log("Chargement des groupes en temps réel...");}
 window.onload = () => {
   loadGroupsRealtime();  // Charger les groupes en temps réel
 };
         
 // Fonction pour charger les profils
 function fetchProfiles() {
-  console.log("Chargement des profils...");
+  console.log("Chargement des profils...");}
 
     // Fonction pour afficher l'état de connexion de l'utilisateur
      auth.onAuthStateChanged(user => {
@@ -689,8 +689,7 @@ fetchUsers();
 document.getElementById("nextButton").addEventListener("click", nextUser);
 document.getElementById("matchButton").addEventListener("click", matchUser);
 document.getElementById("confirmMatchButton").addEventListener("click", confirmMutualMatch);
-          }
-          }
+        
       
 
 </script>
