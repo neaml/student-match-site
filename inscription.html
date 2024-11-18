@@ -22,11 +22,13 @@
     measurementId: "G-XK5N6FLSYJ"
   };
 
-  // Initialiser Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app); // Initialiser Firestore
-  const auth = getAuth(app); // Initialiser l'authentification Firebase
-  
+  /// Initialisation classique pour Firebase 8.x
+firebase.initializeApp(firebaseConfig);
+
+// Récupération de Firebase Auth et Firestore
+const auth = firebase.auth();
+const firestore = firebase.firestore();
+
   // Ajouter un gestionnaire d'événements pour le formulaire
  document.getElementById('signupForm').addEventListener('submit', async function (e) {
     e.preventDefault(); // Empêche le rechargement de la page
