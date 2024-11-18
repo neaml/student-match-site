@@ -36,7 +36,8 @@ const firestore = firebase.firestore();
     const password = document.getElementById('password').value;
 
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password)
+;
         const user = userCredential.user;
 
         const selectedOrientation = Array.from(document.querySelectorAll('#orientationContainer .bubble.selected'))
