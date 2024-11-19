@@ -292,7 +292,7 @@ section {
 
       <!-- Section pour les groupes -->
       <h3>Groupes créés</h3>
-      <div class="group-list" id="groupList">
+      <div class="group-list" id="groupcontainer">
         <p class="no-items" id="noGroups">Aucun groupe disponible.</p>
       </div>
 
@@ -335,11 +335,12 @@ function fetchProfiles() {
     // Fonction pour afficher l'état de connexion de l'utilisateur
      auth.onAuthStateChanged(user => {
   if (user) {
-    document.getElementById('user-name').textContent = `Bonjour, ${user.displayName || user.firstname}`;
+    document.getElementById('user-name').textContent = `Bonjour, ${user.displayName || user.email}`;
     document.getElementById('logout-button').style.display = 'inline-block';
 
     fetchProfiles(); // Charger les profils
-    fetchGroupsAndEvents(); // Charger les groupes et événements
+    fetchGroups(); // Charger les groupes et événements
+      fetchevents();
   } else {
     window.location.href = 'login.html'; // Redirige vers la page de connexion
   }
@@ -365,16 +366,18 @@ const eventListCollection = db.collection('eventList');
 
 // Modifier `fetchGroups` pour appeler cette fonction
 const fetchGroups = async () => {
- try { const groupList = [];
-  const querySnapshot = await getDocs(collection(db, "grouplist"));
-  querySnapshot.forEach(doc => {
-    groupList.push({ id: doc.id, ...doc.data() });
-  });
-  displayGroups(groupList);
-       } catch (error) {
+  try {
+    const groupList = [];
+    const querySnapshot = await db.collection("grouplist").get();
+    querySnapshot.forEach(doc => {
+      groupList.push({ id: doc.id, ...doc.data() });
+    });
+    displayGroups(groupList);
+  } catch (error) {
     console.error("Erreur lors de la récupération des groupes :", error);
   }
 };
+
 fetchGroups();
         // Affiche les groupes dans la section dédiée
 function displayGroups(groups) {
@@ -524,14 +527,14 @@ function fetchUsers() {
           id: doc.id,
           firstName: userData.firstName,
           lastName: userData.lastName,
-          photoUrl: userData.photodeprofil || "https://via.placeholder.com/150", // URL de placeholder si pas de photo
-          instagram: userData.instagram || "" // Lien Instagram
+          photodeprofil: userData.photodeprofil || "https://via.placeholder.com/150", // URL de placeholder si pas de photo
+          socialmedia: userData.socialmedia || "" // Lien Instagram
         });
              // Sélectionner l'élément <img> pour l'afficher
-      const profileImage = document.getElementById('profile-image');
+      const photodeprofil = document.getElementById('photodeprofil');
       
       // Mettre à jour la source de l'image avec l'URL de Cloudinary
-      profileImage.src = profileImageUrl;
+      photodeprofil.src = photodeprofil;
       });
       showRandomUser();
     })
@@ -552,9 +555,9 @@ function showRandomUser() {
 
   // Afficher les informations de l'utilisateur dans l'interface
   document.getElementById("userName").innerText = `${currentUser.firstName} ${currentUser.lastName}`;
-  const profilePhoto = document.getElementById("profilePhoto");
-  if (profilePhoto) {
-    profilePhoto.src = currentUser.photoUrl;
+  const profilePhoto = document.getElementById("photodeprofil");
+  if (photodeprofil) {
+    photodeprofil.src = currentUser.photoUrl;
   }
 
       const fetchUserMatches = async (userId) => {
@@ -686,9 +689,9 @@ function nextUser() {
 fetchUsers();
 
 // Event listeners pour les boutons
-document.getElementById("nextButton").addEventListener("click", nextUser);
-document.getElementById("matchButton").addEventListener("click", matchUser);
-document.getElementById("confirmMatchButton").addEventListener("click", confirmMutualMatch);
+document.getElementById("pass-btn").addEventListener("click", nextUser);
+document.getElementById("match-btn").addEventListener("click", matchUser);
+
         
       
 
