@@ -648,6 +648,12 @@ function checkMatchStatus() {
   matchesCollection.where("userId", "==", currentUser.id)
     .get()
     .then((querySnapshot) => {
+      if (querySnapshot.empty) {
+        console.log("Aucun match trouvé pour cet utilisateur.");
+        document.getElementById("matchStatus").innerText = "Aucun match en attente.";
+        return;
+      }
+
       let matchStatus = "en attente";
       let isMutual = false;
 
@@ -661,13 +667,15 @@ function checkMatchStatus() {
 
       document.getElementById("matchStatus").innerText = matchStatus;
       if (isMutual) {
-        document.getElementById("matchAnimation").style.display = 'block';
+        document.getElementById("matchAnimation").style.display = "block";
       }
     })
     .catch((error) => {
       console.error("Erreur lors de la vérification du statut des matchs :", error);
+      document.getElementById("matchStatus").innerText = "Erreur lors de la vérification.";
     });
 }
+
 
 
 
