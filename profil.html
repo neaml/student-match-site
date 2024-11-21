@@ -208,7 +208,7 @@ const firestore = firebase.firestore();
   </script>
 <script>
   
-onAuthStateChanged(auth, (user) => {
+firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     console.log("Utilisateur connecté :", user);
   } else {
