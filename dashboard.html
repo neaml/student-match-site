@@ -340,7 +340,7 @@ function fetchProfiles() {
 
     fetchProfiles(); // Charger les profils
     fetchGroups(); // Charger les groupes et événements
-      fetchevents();
+    fetchEvents();
   } else {
     window.location.href = 'login.html'; // Redirige vers la page de connexion
   }
@@ -690,7 +690,7 @@ fetchUsers();
 
 // Event listeners pour les boutons
 document.getElementById("pass-btn").addEventListener("click", nextUser);
-document.getElementById("match-btn").addEventListener("click", matchUser);
+document.getElementById("match-btn").addEventListener("click", createMatch);
 
         
       
