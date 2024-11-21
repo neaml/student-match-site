@@ -251,7 +251,7 @@ section {
       
       <!-- Carte de profil (un profil à la fois) -->
       <div class="profile-card">
-        <img id="profilePhoto" class="profile-photo" src="https://via.placeholder.com/150" alt="Photo de profil" />
+        <img id="photodeprofil" class="photodeprofil" src="https://via.placeholder.com/150" alt="Photo de profil" />
         <h3 id="userName" class="user-name">Nom de l'utilisateur</h3>
         
         <!-- Boutons Match et Passer -->
@@ -302,7 +302,7 @@ section {
       <!-- Section pour les événements -->
       <h3>Événements créés</h3>
       <div class="event-list" id="eventList">
-        <p class="no-items" id="noEvents">Aucun événement disponible.</p>
+        <p class="no-items" id="noEventsElement">Aucun événement disponible.</p>
       </div>
     </div>
   </div>
@@ -439,7 +439,7 @@ function displayGroups(groups) {
   const groupsRef = firebase.firestore().collection("groups");
   groupsRef.onSnapshot(snapshot => {
     const groupsContainer = document.getElementById("groups-list");
-    groupsContainer.innerHTML = "";  // Effacer les anciens groupes
+    groupsList.innerHTML = "";  // Effacer les anciens groupes
     snapshot.forEach(doc => {
       const groupData = doc.data();
       const groupElement = document.createElement("div");
@@ -450,7 +450,7 @@ function displayGroups(groups) {
       eventsButton.addEventListener("click", () => loadEvents(doc.id));
       groupElement.appendChild(eventsButton);
 
-      groupsContainer.appendChild(groupElement);
+      groupsList.appendChild(groupElement);
     });
   });
 };
@@ -575,19 +575,39 @@ function fetchUsers() {
       // Mettre à jour la source de l'image avec l'URL de Cloudinary
       photodeprofil.src = photodeprofil;
       });
-      showRandomUser();
-    })
-    .catch((error) => {
-      console.error("Erreur lors de la récupération des utilisateurs :", error);
-    });
-}
+      let currentIndex = 0;
+let userList = []; // Contiendra les profils des utilisateurs
 
-// Afficher un utilisateur aléatoire
-function showRandomUser() {
-  if (usersList.length === 0) {
-    console.log("Aucun utilisateur disponible");
-    return;
+const showRandomUser = async () => {
+  try {
+    const querySnapshot = await db.collection("users").get(); // Remplacez par votre requête Firestore
+    userList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    if (userList.length > 0) {
+      displayUser(userList[currentIndex]); // Affiche le premier utilisateur
+    } else {
+      console.log("Aucun utilisateur trouvé.");
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs :", error);
   }
+};
+
+const displayUser = (user) => {
+  const userContainer = document.getElementById("userContainer");
+  userContainer.innerHTML = `
+    <div>
+      <h2>${user.name}</h2>
+      <p>${user.email}</p>
+      <p>${user.age}</p>
+    </div>
+  `;
+};
+
+document.getElementById("next-btn").addEventListener("click", () => {
+  currentIndex = (currentIndex + 1) % userList.length; // Passe au profil suivant
+  displayUser(userList[currentIndex]);
+});
 
   const randomIndex = Math.floor(Math.random() * usersList.length);
   currentUser = usersList[randomIndex];
@@ -599,15 +619,22 @@ function showRandomUser() {
     photodeprofil.src = currentUser.photoUrl;
   }
 
-      const fetchUserMatches = async (userId) => {
-  const q = query(collection(db, "matches"), where("userId", "==", userId));
-  const matches = [];
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    matches.push({ id: doc.id, ...doc.data() });
-  });
-  console.log(matches); // Liste des matchs
+      const fetchUserMatches = async () => {
+  try {
+    const querySnapshot = await db
+      .collection("users") // Nom de la collection
+      .where("isActive", "==", true) // Filtrer par le champ isActive
+      .get(); // Obtenir les documents
+
+    // Parcourir les résultats
+    querySnapshot.forEach(doc => {
+      console.log("ID :", doc.id, "Data :", doc.data());
+    });
+  } catch (error) {
+    console.error("Erreur lors de la récupération des données :", error);
+  }
 };
+
 fetchUserMatches("id_utilisateur1");
 
   // Vérifier s'il y a un match en attente ou un match mutuel
