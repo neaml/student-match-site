@@ -282,12 +282,10 @@ section {
     <footer>
         &copy; 2024 Student Match. Tous droits réservés.
     </footer>
-    <!-- Ajoute ce script dans le fichier HTML où tu veux gérer la connexion -->
-<script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js"></script>
-<script src="auth.js"></script>
-        <!-- Chemin vers ton fichier JS -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
 </body>
 
 </body>
@@ -301,14 +299,13 @@ section {
   appId: "1:1096075545413:web:85451af9e19c5c54830c2c",
   measurementId: "G-XK5N6FLSYJ"
 };
-    // Initialiser Firebase
+// Initialiser Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Initialiser l'authentification Firebase
+// Accéder aux services Firebase
 var auth = firebase.auth();
-
-// Initialiser Firestore
 var db = firebase.firestore();
+
     
    auth.onAuthStateChanged(user => {
     const statusElement = document.getElementById("status-connected");
