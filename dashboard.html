@@ -369,7 +369,7 @@ function displayProfiles(profiles) {
     document.getElementById('user-name').textContent = `Bonjour, ${user.displayName || user.email}`;
     document.getElementById('logout-button').style.display = 'inline-block';
         
-const usersCollection = firestore.collection('users'); // Remplacez 'users' par le nom exact de votre collection Firestore
+
 
     // Charger les données nécessaires après connexion
     await fetchProfiles();
