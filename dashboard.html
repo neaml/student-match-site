@@ -15,7 +15,7 @@
   <style>
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: linear-gradient(to bottom right, #f7f4f4, #e4d4d4);
+      background: linear-gradient(to bottom right, #f7f4f4, #e4d4d4);
       color: #8c2f39;
       margin: 0;
       padding: 0;
@@ -259,10 +259,13 @@ section {
           <button id="match-btn" class="btn btn-match">Match ❤️</button>
           <button id="pass-btn" class="btn btn-pass">Passer ❌</button>
             <button id="confirmMatchButton" class="btn btn-confirm" style="display: none;">Confirmer Match Mutuel</button>
+              </div>
 </div>
         </div>
       </div>
     </div>
+      </div> <!-- Ajout de fermeture manquante -->
+
 
     <!-- Section des matchs de l'utilisateur -->
     <div id="my-matches" class="matches-section">
@@ -271,7 +274,7 @@ section {
       <!-- Affichage du profil de l'utilisateur actuel -->
       <div id="userProfile" class="user-profile">
         <h1 id="userName" class="user-name">Nom de l'utilisateur</h1>
-        <img id="profilePhoto" class="profile-photo" src="https://via.placeholder.com/150" alt="Photo de profil" />
+        <img id="photodeprofil" class="photodeprofil" src="https://via.placeholder.com/150" alt="Photo de profil" />
         <div id="matchStatus" class="match-status">Statut du match</div>
         <div id="matchAnimation" class="match-animation" style="display: none;">❤️💖 MATCH 💖❤️</div>
         <div id="instagramLinkContainer"></div>
@@ -292,7 +295,7 @@ section {
 
       <!-- Section pour les groupes -->
       <h3>Groupes créés</h3>
-      <div class="group-list" id="groupcontainer">
+      <div class="group-list" id="groupList">
         <p class="no-items" id="noGroups">Aucun groupe disponible.</p>
       </div>
 
@@ -319,7 +322,6 @@ section {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
-const { getDocs, collection } = firebase.firestore;
         
 // Fonction pour charger les groupes en temps réel
 function loadGroupsRealtime() {
@@ -329,18 +331,50 @@ window.onload = () => {
 };
         
 // Fonction pour charger les profils
-function fetchProfiles() {
-  console.log("Chargement des profils...");}
+
+
+const fetchProfiles = async () => {
+      console.log("Chargement des profils...");
+  try {
+    const querySnapshot = await usersCollection.get();
+    const profiles = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    displayProfiles(profiles);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des profils :", error);
+  }
+};
+
+function displayProfiles(profiles) {
+  const profilesContainer = document.getElementById('profilesContainer');
+  profilesContainer.innerHTML = '';
+
+  profiles.forEach(profile => {
+    const profileCard = document.createElement('div');
+    profileCard.className = 'profile-card';
+    profileCard.innerHTML = `
+      <img src="${profile.photodeprofil || 'https://via.placeholder.com/150'}" alt="Photo de profil">
+      <h3>${profile.displayName || 'Nom non renseigné'}</h3>
+      <h3>${profile.age || 'Age non renseigné'}</h3>
+      <p>${profile.passions || ''}</p>
+       <p>${profile.orientation || ''}</p>
+       <p>${profile.searchingfor || ''}</p>
+    `;
+    profilesContainer.appendChild(profileCard);
+  });
+}
 
     // Fonction pour afficher l'état de connexion de l'utilisateur
-     auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged(async (user) => {
   if (user) {
     document.getElementById('user-name').textContent = `Bonjour, ${user.displayName || user.email}`;
     document.getElementById('logout-button').style.display = 'inline-block';
+        
+const usersCollection = firestore.collection('users'); // Remplacez 'users' par le nom exact de votre collection Firestore
 
-    fetchProfiles(); // Charger les profils
-    fetchGroups(); // Charger les groupes et événements
-    fetchEvents();
+    // Charger les données nécessaires après connexion
+    await fetchProfiles();
+    await fetchGroups();
+    await fetchEvents();
   } else {
     window.location.href = 'login.html'; // Redirige vers la page de connexion
   }
@@ -368,7 +402,7 @@ const eventListCollection = db.collection('eventList');
 const fetchGroups = async () => {
   try {
     const groupList = [];
-    const querySnapshot = await db.collection("grouplist").get();
+    const querySnapshot = await db.collection("groupList").get(); // Firestore v8
     querySnapshot.forEach(doc => {
       groupList.push({ id: doc.id, ...doc.data() });
     });
@@ -378,7 +412,6 @@ const fetchGroups = async () => {
   }
 };
 
-fetchGroups();
         // Affiche les groupes dans la section dédiée
 function displayGroups(groups) {
   const groupListElement = document.getElementById('groupList');
@@ -389,10 +422,15 @@ function displayGroups(groups) {
     return;
   }
 
+  if (!groupListElement) {
+    console.error("Erreur : élément grouplist introuvable dans le DOM");
+    return;
+  }
+  groupListElement.innerHTML = ''; // Réinitialise la liste
   groups.forEach(group => {
     const groupItem = document.createElement('div');
-    groupItem.classList.add('group-item');
-    groupItem.textContent = group.name; // Supposons que chaque groupe a une propriété `name`
+    groupItem.className = 'group-item';
+    groupItem.textContent = group.name; // Affiche le nom du groupe
     groupListElement.appendChild(groupItem);
   });
 }
@@ -516,6 +554,7 @@ fetchEvents();
 // Tableau pour stocker tous les utilisateurs
 let usersList = [];
 let currentUser = null;
+const usersCollection = firestore.collection('users'); // Remplacez 'users' par le nom exact de votre collection Firestore
 
 // Récupérer tous les utilisateurs et les afficher
 function fetchUsers() {
@@ -555,7 +594,7 @@ function showRandomUser() {
 
   // Afficher les informations de l'utilisateur dans l'interface
   document.getElementById("userName").innerText = `${currentUser.firstName} ${currentUser.lastName}`;
-  const profilePhoto = document.getElementById("photodeprofil");
+  const photodeprofil = document.getElementById("photodeprofil");
   if (photodeprofil) {
     photodeprofil.src = currentUser.photoUrl;
   }
@@ -689,8 +728,14 @@ function nextUser() {
 fetchUsers();
 
 // Event listeners pour les boutons
-document.getElementById("pass-btn").addEventListener("click", nextUser);
-document.getElementById("match-btn").addEventListener("click", createMatch);
+document.getElementById("pass-btn").addEventListener("click", nextUser)=> {
+  console.log('Profil liké !');
+  // Logique pour le match
+});
+document.getElementById("match-btn").addEventListener("click", createMatch) => {
+  console.log('Profil passé !');
+  // Logique pour passer
+});
 
         
       
