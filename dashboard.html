@@ -364,35 +364,45 @@ function displayProfiles(profiles) {
 }
 
     // Fonction pour afficher l'état de connexion de l'utilisateur
-    auth.onAuthStateChanged(async (user) => {
+  // Vérifie l'état de connexion de l'utilisateur
+auth.onAuthStateChanged(async (user) => {
   if (user) {
-    document.getElementById('user-name').textContent = `Bonjour, ${user.displayName || user.email}`;
-    document.getElementById('logout-button').style.display = 'inline-block';
-        
+    const userNameElement = document.getElementById('user-name');
+    const logoutButton = document.getElementById('logout-button');
 
+    // Affiche les informations de l'utilisateur connecté
+    userNameElement.textContent = `Bonjour, ${user.displayName || user.email}`;
+    logoutButton.style.display = 'inline-block';
 
-    // Charger les données nécessaires après connexion
-    await fetchProfiles();
-    await fetchGroups();
-    await fetchEvents();
+    // Charger les données après la connexion
+    try {
+      await fetchProfiles(); // Charger les profils
+      await loadGroupsRealtime(); // Charger les groupes
+      await fetchGroups();
+      await fetchEvents();
+    } catch (error) {
+      console.error("Erreur lors du chargement des données :", error);
+    }
   } else {
-    window.location.href = 'login.html'; // Redirige vers la page de connexion
+    // Redirection vers la page de connexion si l'utilisateur n'est pas connecté
+    window.location.href = 'login.html';
   }
 });
 
 
-
-    // Gestion de la déconnexion
     document.getElementById('logout-button').addEventListener('click', () => {
-      auth.signOut().then(() => {
-        window.location.href = "login.html";
-      }).catch(error => {
-        console.error("Erreur de déconnexion :", error.message);
-      });
+  auth.signOut()
+    .then(() => {
+      window.location.href = 'index.html'; // Redirige après déconnexion
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la déconnexion :", error);
     });
+});
+
 // Référence à la collection 'users' dans Firestore
 const db = firebase.firestore();
-const usersCollection = db.collection("users");
+const usersCollection = firestore.collection('users');
 const matchesCollection = db.collection("matches");
 const groupListCollection = db.collection('groupList');
 const eventListCollection = db.collection('eventList');
