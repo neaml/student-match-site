@@ -319,9 +319,9 @@ var db = firebase.firestore();
     }
 });
 
-
-  let activeIndex = 0;
+document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.carousel .card');
+    let activeIndex = 0;
     let autoScrollInterval;
 
     function updateCards() {
@@ -343,20 +343,15 @@ var db = firebase.firestore();
         updateCards();
     }
 
-   // Démarrer le défilement automatique
-function startAutoScroll() {
-    autoScrollInterval = setInterval(showNextCard, 3000); // Changer la carte toutes les 3 secondes
-}
+    function startAutoScroll() {
+        autoScrollInterval = setInterval(showNextCard, 3000); // Défiler toutes les 3 secondes
+    }
 
-// Arrêter le défilement automatique au survol
-document.querySelector('.carousel').addEventListener('mouseenter', () => {
-    clearInterval(autoScrollInterval);
-});
+    function stopAutoScroll() {
+        clearInterval(autoScrollInterval);
+    }
 
-// Reprendre le défilement automatique lorsque la souris quitte le carrousel
-document.querySelector('.carousel').addEventListener('mouseleave', startAutoScroll);
-
-    // Ajouter des écouteurs aux boutons pour stopper le défilement automatique lors du défilement manuel
+    // Écouteurs d'événements pour boutons
     document.querySelector('.carousel-buttons button:first-child').addEventListener('click', () => {
         stopAutoScroll();
         showPrevCard();
@@ -369,6 +364,24 @@ document.querySelector('.carousel').addEventListener('mouseleave', startAutoScro
         startAutoScroll();
     });
 
-    updateCards();
+    // Survol pour arrêter le défilement automatique
+    document.querySelector('.carousel').addEventListener('mouseenter', stopAutoScroll);
+    document.querySelector('.carousel').addEventListener('mouseleave', startAutoScroll);
+
+    updateCards(); // Initialiser les cartes
+    startAutoScroll(); // Démarrer le défilement automatique
+});
+function updateCards() {
+    console.log(`Active Index: ${activeIndex}`);
+    cards.forEach((card, index) => {
+        console.log(`Card ${index}: `, card.classList);
+        card.classList.remove('prev', 'next', 'active');
+        if (index === activeIndex) card.classList.add('active');
+        else if (index === (activeIndex + 1) % cards.length) card.classList.add('next');
+        else if (index === (activeIndex - 1 + cards.length) % cards.length) card.classList.add('prev');
+    });
+}
+
+ 
 </script>
 </html>
