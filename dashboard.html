@@ -160,7 +160,6 @@
       animation: matchAnimation 1.5s ease;
     }
   </style>
-</head>
 <body>
   <!-- Barre de navigation -->
   <div class="navbar">
@@ -233,6 +232,7 @@
 
     let profileIndex = 0;
     let profiles = [];
+    let matchedProfiles = new Set();
 
     // Fonction pour gérer l'état de connexion de l'utilisateur
     auth.onAuthStateChanged((user) => {
@@ -272,6 +272,10 @@
     const loadNextProfile = () => {
       const profilesContainer = document.getElementById('profilesContainer');
       profilesContainer.innerHTML = '';
+
+      while (profileIndex < profiles.length && matchedProfiles.has(profiles[profileIndex].id)) {
+        profileIndex++;
+      }
 
       if (profiles.length > 0 && profileIndex < profiles.length) {
         const profile = profiles[profileIndex];
@@ -357,6 +361,7 @@
         } else {
           querySnapshot.forEach((doc) => {
             const match = doc.data();
+            matchedProfiles.add(match.matchedUserId);
             const matchItem = document.createElement('div');
             matchItem.className = 'match-item match-animation';
             matchItem.innerHTML = `
@@ -374,6 +379,11 @@
     // Gestion des matchs
     const handleMatch = async (userId) => {
       try {
+        // Empêcher de matcher plus d'une fois
+        if (matchedProfiles.has(userId)) {
+          console.log("Vous avez déjà matché avec cet utilisateur.");
+          return;
+        }
         await db.collection('matches').add({
           userId: auth.currentUser.uid,
           matchedUserId: userId,
@@ -381,7 +391,8 @@
           timestamp: new Date()
         });
         console.log("Match créé avec succès");
-        moveToMatches(userId);
+        matchedProfiles.add(userId);
+        loadMatches();
       } catch (error) {
         console.error("Erreur lors de la création du match :", error);
       }
@@ -391,16 +402,7 @@
       console.log(`Utilisateur ${userId} passé.`);
       loadNextProfile(); // Charger un nouveau profil
     };
-
-    // Déplacer un profil vers la section Mes Matchs
-    const moveToMatches = (userId) => {
-      const profilesContainer = document.getElementById('profilesContainer');
-      const profileCard = profilesContainer.querySelector('.profile-card');
-      if (profileCard) {
-        profileCard.classList.add('match-animation');
-        document.getElementById('matchesContainer').appendChild(profileCard);
-      }
-    };
   </script>
 </body>
 </html>
+
