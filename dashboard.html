@@ -323,6 +323,59 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
         
+
+    
+
+    // Fonction pour afficher l'état de connexion de l'utilisateur
+  // Vérifie l'état de connexion de l'utilisateur
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
+    const userNameElement = document.getElementById('user-name');
+    const logoutButton = document.getElementById('logout-button');
+
+    // Affiche les informations de l'utilisateur connecté
+    userNameElement.textContent = `Bonjour, ${user.displayName || user.email}`;
+    logoutButton.style.display = 'inline-block';
+
+    // Charger les données après la connexion
+    try {
+      await fetchProfiles(); // Charger les profils
+      await loadGroupsRealtime(); // Charger les groupes
+      await fetchGroups();
+      await fetchEvents();
+    } catch (error) {
+      console.error("Erreur lors du chargement des données :", error);
+    }
+  } else {
+    // Redirection vers la page de connexion si l'utilisateur n'est pas connecté
+    window.location.href = 'login.html';
+  }
+      console.log("onAuthStateChanged déclenché :", user);
+  if (user) {
+    console.log("Utilisateur connecté :", user);
+  } else {
+    console.log("Aucun utilisateur connecté");
+  }
+});
+
+
+    document.getElementById('logout-button').addEventListener('click', () => {
+  auth.signOut()
+    .then(() => {
+      window.location.href = 'index.html'; // Redirige après déconnexion
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la déconnexion :", error);
+    });
+});
+
+// Référence à la collection 'users' dans Firestore
+const db = firebase.firestore();
+const usersCollection = firestore.collection('users');
+const matchesCollection = db.collection("matches");
+const groupListCollection = db.collection('groupList');
+const eventListCollection = db.collection('eventList');
+        
 // Fonction pour charger les groupes en temps réel
 function loadGroupsRealtime() {
   console.log("Chargement des groupes en temps réel...");}
@@ -351,7 +404,8 @@ function displayProfiles(profiles) {
   profiles.forEach(profile => {
     const profileCard = document.createElement('div');
     profileCard.className = 'profile-card';
-    profileCard.innerHTML = `
+
+profileCard.innerHTML = `
       <img src="${profile.photodeprofil || 'https://via.placeholder.com/150'}" alt="Photo de profil">
       <h3>${profile.displayName || 'Nom non renseigné'}</h3>
       <h3>${profile.age || 'Age non renseigné'}</h3>
@@ -362,51 +416,6 @@ function displayProfiles(profiles) {
     profilesContainer.appendChild(profileCard);
   });
 }
-
-    // Fonction pour afficher l'état de connexion de l'utilisateur
-  // Vérifie l'état de connexion de l'utilisateur
-auth.onAuthStateChanged(async (user) => {
-  if (user) {
-    const userNameElement = document.getElementById('user-name');
-    const logoutButton = document.getElementById('logout-button');
-
-    // Affiche les informations de l'utilisateur connecté
-    userNameElement.textContent = `Bonjour, ${user.displayName || user.email}`;
-    logoutButton.style.display = 'inline-block';
-
-    // Charger les données après la connexion
-    try {
-      await fetchProfiles(); // Charger les profils
-      await loadGroupsRealtime(); // Charger les groupes
-      await fetchGroups();
-      await fetchEvents();
-    } catch (error) {
-      console.error("Erreur lors du chargement des données :", error);
-    }
-  } else {
-    // Redirection vers la page de connexion si l'utilisateur n'est pas connecté
-    window.location.href = 'login.html';
-  }
-});
-
-
-    document.getElementById('logout-button').addEventListener('click', () => {
-  auth.signOut()
-    .then(() => {
-      window.location.href = 'index.html'; // Redirige après déconnexion
-    })
-    .catch((error) => {
-      console.error("Erreur lors de la déconnexion :", error);
-    });
-});
-
-// Référence à la collection 'users' dans Firestore
-const db = firebase.firestore();
-const usersCollection = firestore.collection('users');
-const matchesCollection = db.collection("matches");
-const groupListCollection = db.collection('groupList');
-const eventListCollection = db.collection('eventList');
-
 
 // Modifier `fetchGroups` pour appeler cette fonction
 const fetchGroups = async () => {
@@ -424,31 +433,31 @@ const fetchGroups = async () => {
 
         // Affiche les groupes dans la section dédiée
 function displayGroups(groups) {
-  const groupListElement = document.getElementById('groupList');
-  groupListElement.innerHTML = ''; // Réinitialise la liste
+  const groupList = document.getElementById('groupList');
+  groupList.innerHTML = ''; // Réinitialise la liste
 
   if (groups.length === 0) {
-    groupListElement.innerHTML = '<p class="no-items">Aucun groupe disponible.</p>';
+    groupList.innerHTML = '<p class="no-items">Aucun groupe disponible.</p>';
     return;
   }
 
-  if (!groupListElement) {
+  if (!groupList) {
     console.error("Erreur : élément grouplist introuvable dans le DOM");
     return;
   }
-  groupListElement.innerHTML = ''; // Réinitialise la liste
+  groupList.innerHTML = ''; // Réinitialise la liste
   groups.forEach(group => {
     const groupItem = document.createElement('div');
     groupItem.className = 'group-item';
     groupItem.textContent = group.name; // Affiche le nom du groupe
-    groupListElement.appendChild(groupItem);
+    groupList.appendChild(groupItem);
   });
 }
 
  loadGroupsRealtime();{
   const groupsRef = firebase.firestore().collection("groups");
   groupsRef.onSnapshot(snapshot => {
-    const groupsContainer = document.getElementById("groups-list");
+    const groupsList = document.getElementById("groupsList");
     groupsList.innerHTML = "";  // Effacer les anciens groupes
     snapshot.forEach(doc => {
       const groupData = doc.data();
@@ -469,20 +478,20 @@ function displayGroups(groups) {
 // Fonction pour récupérer les événements depuis Firestore
 async function fetchEvents() {
   try {
-    const eventListElement = document.getElementById('eventList');
-    const noEventsElement = document.getElementById('noEvents');
+    const eventList = document.getElementById('eventList');
+    const noEvents = document.getElementById('noEvents');
     
     // Réinitialiser l'affichage
-    eventListElement.innerHTML = "";
+    eventList.innerHTML = "";
     
     // Récupérer les documents dans la collection "eventList"
     const querySnapshot = await firestore.collection('eventList').get();
     
     if (querySnapshot.empty) {
       // Afficher un message si aucun événement
-      noEventsElement.style.display = 'block';
+      noEvents.style.display = 'block';
     } else {
-      noEventsElement.style.display = 'none';
+      noEvents.style.display = 'none';
       
       // Créer un tableau pour stocker les événements récupérés
       const events = [];
@@ -507,11 +516,11 @@ async function fetchEvents() {
 
 // Fonction pour afficher les événements dans le DOM
 function displayEvents(events) {
-  const eventListElement = document.getElementById('eventList');
-  eventListElement.innerHTML = ''; // Réinitialise la liste
+  const eventList = document.getElementById('eventList');
+  eventList.innerHTML = ''; // Réinitialise la liste
 
   if (events.length === 0) {
-    eventListElement.innerHTML = '<p class="no-items">Aucun événement disponible.</p>';
+    eventList.innerHTML = '<p class="no-items">Aucun événement disponible.</p>';
     return;
   }
 
@@ -528,7 +537,7 @@ function displayEvents(events) {
       <button onclick="viewEventDetails('${event.id}')">Voir</button>
     `;
     
-    eventListElement.appendChild(eventItem);
+    eventList.appendChild(eventItem);
   });
 }
 
