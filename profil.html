@@ -4,41 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profil et Paramètres</title>
-
-  <style>
-    /* Styles CSS ici (comme votre code original) */
+<style>
+    /* Styles CSS */
     body {
       margin: 0;
       font-family: 'Helvetica Neue', Arial, sans-serif;
       background-color: #853642;
-      animation: waveAnimation 10s ease-in-out infinite alternate;
-      color: #333;
-    }
-
-    @keyframes waveAnimation {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 100% 0%; }
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     main {
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: white;
       border-radius: 15px;
       padding: 20px;
+      width: 100%;
       max-width: 600px;
-      margin: 50px auto;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      position: relative;
     }
 
     h1 {
       color: #800020;
       text-align: center;
-    }
-
-    p {
-      text-align: center;
-      font-size: 1.1em;
-      color: #555;
     }
 
     form {
@@ -60,40 +49,6 @@
       font-size: 1em;
     }
 
-    .bubbleContainer {
-      display: flex;
-      flex-wrap: wrap;
-      margin: 10px 0;
-    }
-
-    .bubble {
-
-      background-color: lightgray;
-
-      color: black;
-      border-radius: 20px;
-      padding: 8px 16px;
-      margin: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      display: inline-block;
-      align-items: center;
-    }
-.bubble.selected {
-  background-color: #800020;  /* Changer la couleur de fond */
-  color: white;               /* Changer la couleur du texte */
-}
-
- .bubble:hover {
-  transform: scale(1.05);  /* Effet de zoom léger au survol */
-}
-
-    .emoji {
-      font-size: 1.2em;
-      margin-right: 5px;
-    }
-
     button {
       background-color: #800020;
       color: white;
@@ -110,80 +65,49 @@
       background-color: #a65362;
     }
 
-    .nav {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .nav a {
-      margin: 0 10px;
-      color: #800020;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .loginLink {
-      text-align: center;
-      margin-top: 20px;
-    }
-
-        /* Style pour l'aperçu de l'image */
-    #imagePreview {
+    #successMessage {
       display: none;
-      width: 100px;
-      height: 100px;
+      color: green;
+      text-align: center;
       margin-top: 10px;
-      border-radius: 10px;
-      object-fit: cover;
     }
   </style>
 </head>
 <body>
-  
-
-  <div id="profile-container">
+  <main>
     <h1>Mon Profil</h1>
-    <div class="profile-field">
+    <form>
       <label for="firstName">Prénom:</label>
       <input type="text" id="firstName" placeholder="Prénom">
-    </div>
-    <div class="profile-field">
+      
       <label for="lastName">Nom:</label>
       <input type="text" id="lastName" placeholder="Nom">
-    </div>
-    <div class="profile-field">
+      
       <label for="email">Email:</label>
       <input type="email" id="email" placeholder="Email" disabled>
-    </div>
-    <div class="profile-field">
+      
       <label for="age">Âge:</label>
       <input type="number" id="age" placeholder="Âge">
-    </div>
-    <div class="profile-field">
+      
       <label for="orientation">Orientation:</label>
       <input type="text" id="orientation" placeholder="Orientation">
-    </div>
-    <div class="profile-field">
+      
       <label>Passions:</label>
       <div id="passions-container"></div>
       <input type="text" id="newPassion" placeholder="Ajouter une passion">
-      <button id="addPassionBtn">Ajouter</button>
-    </div>
-    <div class="profile-field">
+      <button id="addPassionBtn" type="button">Ajouter</button>
+      
       <label for="searchingFor">Recherche:</label>
       <input type="text" id="searchingFor" placeholder="Ce que je recherche">
-    </div>
+      
+      <button id="saveChangesBtn" type="button">Enregistrer les modifications</button>
+    </form>
 
-    <button id="saveChangesBtn">Enregistrer les modifications</button>
-
-    <div id="successMessage" style="display: none; color: green; text-align: center; margin-top: 10px;">
-      Modifications enregistrées avec succès !
-    </div>
-
+    <div id="successMessage">Modifications enregistrées avec succès !</div>
     <button id="logoutBtn">Se déconnecter</button>
-  </div>
-   </div>
+  </main>
 
+<script>
   <!-- Importation des services Firebase nécessaires -->
      <!-- Firebase SDK classique -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
