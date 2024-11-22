@@ -160,6 +160,7 @@
       animation: matchAnimation 1.5s ease;
     }
   </style>
+
 <body>
   <!-- Barre de navigation -->
   <div class="navbar">
@@ -362,13 +363,21 @@
           querySnapshot.forEach((doc) => {
             const match = doc.data();
             matchedProfiles.add(match.matchedUserId);
-            const matchItem = document.createElement('div');
-            matchItem.className = 'match-item match-animation';
-            matchItem.innerHTML = `
-              <h3>Match avec: ${match.matchedUserId}</h3>
-              <p>Statut: ${match.status}</p>
-            `;
-            matchesContainer.appendChild(matchItem);
+            const matchedProfile = profiles.find(profile => profile.id === match.matchedUserId);
+            if (matchedProfile) {
+              const matchItem = document.createElement('div');
+              matchItem.className = 'match-item match-animation';
+              matchItem.innerHTML = `
+                <img src="${matchedProfile.photodeprofil || 'https://via.placeholder.com/150'}" alt="Photo de profil">
+                <h3>${matchedProfile.firstName || matchedProfile.lastName || 'Nom non renseigné'}</h3>
+                <p>Âge: ${matchedProfile.age || 'Non renseigné'}</p>
+                <p>Passions: ${matchedProfile.passions || 'Non renseigné'}</p>
+                <p>Orientation: ${matchedProfile.orientation || 'Non renseigné'}</p>
+                <p>Recherche: ${matchedProfile.searchingfor || 'Non renseigné'}</p>
+                <p>Statut: ${match.status}</p>
+              `;
+              matchesContainer.appendChild(matchItem);
+            }
           });
         }
       } catch (error) {
@@ -405,4 +414,3 @@
   </script>
 </body>
 </html>
-
