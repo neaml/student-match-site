@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-      
-   <!-- Firebase SDK classique -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
+   
+  <!-- Firebase SDK classique -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,43 +63,13 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-  .dashboard-container {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  gap: 20px;
-}
-
-.main-content {
-  flex: 2;
-  border-right: 2px solid #ddd; /* Bordure pour séparer les sections */
-  padding-right: 20px;
-}
-
-.side-content {
-  flex: 1;
-  padding-left: 20px;
-}
-
-section {
-  margin-bottom: 20px;
-}
-    h2, h3 {
-      color: #800000;
-      margin-top: 0;
-    }
-
-    /* Styles pour la carte de profil */
     .profile-card {
       background-color: #fafafa;
       border-radius: 10px;
       padding: 15px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
-      position: relative;
-      transition: transform 0.5s ease;
       text-align: center;
-      overflow: hidden; /* Empêche le texte de déborder */
     }
 
     .profile-card img {
@@ -111,29 +80,13 @@ section {
       margin-bottom: 15px;
     }
 
-    .profile-card h3 {
-      margin: 10px 0;
-      font-size: 1.4em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .profile-card p {
-      font-size: 1.1em;
-      color: #555;
-      margin: 5px 0;
-      word-wrap: break-word; /* Gère le texte long */
-    }
-
-    /* Boutons d'actions */
     .actions {
       margin-top: 20px;
       display: flex;
       justify-content: center;
     }
 
-    .actionButton {
+    .action-button {
       background-color: #8c2f39;
       color: white;
       padding: 10px 20px;
@@ -145,91 +98,31 @@ section {
       transition: background-color 0.3s ease;
     }
 
-    .actionButton:hover {
+    .action-button:hover {
       background-color: #a65362;
     }
 
-    /* Animation pour le swipe */
-    .swipe-left {
-      transform: translateX(-1000px);
-    }
-
-    .swipe-right {
-      transform: translateX(1000px);
-    }
-
-    /* Style des boutons généraux */
-    button {
-      background-color: #8c2f39;
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1em;
-      margin-top: 10px;
-      display: block;
-      width: 100%;
-      text-align: center;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #a65362;
-    }
-
-    /* Style pour la section des groupes et des événements */
-    .group-list, .event-list, .match-list {
+    .group-list, .event-list {
       margin-top: 20px;
     }
 
-    .group-item, .event-item, .match-item {
+    .group-item, .event-item {
       background-color: #f9f9f9;
       border: 1px solid #ddd;
       padding: 10px;
       border-radius: 5px;
       margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .no-items {
-      color: #777;
-      font-style: italic;
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    @keyframes heartAnimation {
-      0% {
-        transform: scale(0);
-        opacity: 0;
-      }
-      50% {
-        transform: scale(1.2);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
-    .heart-animation {
-      animation: heartAnimation 1s ease-out;
     }
   </style>
 </head>
 <body>
-
   <!-- Barre de navigation -->
   <div class="navbar">
     <h1>Student Match</h1>
     <div class="menu">
       <a href="index.html">Accueil</a>
       <a href="profil.html">Mon Profil</a>
-      <a href="tableau_bord.html">Tableau de Bord</a>
+      <a href="dashboard.html">Tableau de Bord</a>
     </div>
   </div>
 
@@ -239,70 +132,28 @@ section {
     <button id="logout-button" style="display:none;">Déconnexion</button>
   </div>
 
-<!-- Contenu principal -->
-<div class="main-container">
-  
-  <!-- Section Exploration des profils -->
-  <div class="exploration-section">
-    <h2>Explorer les Profils</h2>
-    
-    <!-- Conteneur des profils à explorer -->
-    <div id="profilesContainer" class="profiles-container">
-      
-      <!-- Carte de profil (un profil à la fois) -->
-      <div class="profile-card">
-        <img id="photodeprofil" class="photodeprofil" src="https://via.placeholder.com/150" alt="Photo de profil" />
-        <h3 id="userName" class="username">Nom de l'utilisateur</h3>
-        
-        <!-- Boutons Match et Passer -->
-        <div class="action-buttons">
-          <button id="match-btn" class="btn btn-match">Match ❤️</button>
-          <button id="pass-btn" class="btn btn-pass">Passer ❌</button>
-            <button id="confirmMatchButton" class="btn btn-confirm" style="display: none;">Confirmer Match Mutuel</button>
-              </div>
-</div>
-        </div>
+  <!-- Contenu principal -->
+  <div class="main-container">
+    <!-- Section Exploration des profils -->
+    <div class="exploration-section">
+      <h2>Explorer les Profils</h2>
+      <div id="profilesContainer" class="profiles-container">
+        <!-- Profils chargés dynamiquement -->
       </div>
-    </div>
-      </div> <!-- Ajout de fermeture manquante -->
-
-
-    <!-- Section des matchs de l'utilisateur -->
-    <div id="mymatches" class="matches-section">
-      <h3>Mes matchs</h3>
-
-      <!-- Affichage du profil de l'utilisateur actuel -->
-      <div id="userProfile" class="user-profile">
-        <h1 id="userName" class="username">Nom de l'utilisateur</h1>
-        <img id="photodeprofil" class="photodeprofil" src="https://via.placeholder.com/150" alt="Photo de profil" />
-        <div id="matchStatus" class="match-status">Statut du match</div>
-        <div id="matchAnimation" class="match-animation" style="display: none;">❤️💖 MATCH 💖❤️</div>
-        <div id="instagramLinkContainer"></div>
-      </div>
-
-    </div>
-  </div>
-</div>
     </div>
 
     <!-- Section Groupes & Événements -->
     <div class="event-group-section">
       <h2>Groupes & Événements</h2>
-      
-      <!-- Boutons de création -->
       <button onclick="location.href='create_group.html'">Créer un Groupe</button>
       <button onclick="location.href='create_event.html'">Créer un Événement</button>
-
-      <!-- Section pour les groupes -->
       <h3>Groupes créés</h3>
       <div class="group-list" id="groupList">
-        <p class="no-items" id="noGroups">Aucun groupe disponible.</p>
+        <p class="no-items">Aucun groupe disponible.</p>
       </div>
-
-      <!-- Section pour les événements -->
       <h3>Événements créés</h3>
       <div class="event-list" id="eventList">
-        <p class="no-items" id="noEventsElement">Aucun événement disponible.</p>
+        <p class="no-items">Aucun événement disponible.</p>
       </div>
     </div>
   </div>
@@ -319,518 +170,129 @@ section {
       measurementId: "G-XK5N6FLSYJ"
     };
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const firestore = firebase.firestore();
-        
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    
-
-    // Fonction pour afficher l'état de connexion de l'utilisateur
-  // Vérifie l'état de connexion de l'utilisateur
-auth.onAuthStateChanged(async (user) => {
-  if (user) {
-    const userNameElement = document.getElementById('user-name');
-    const logoutButton = document.getElementById('logout-button');
-
-    // Affiche les informations de l'utilisateur connecté
-    userNameElement.textContent = `Bonjour, ${user.displayName || user.email}`;
-    logoutButton.style.display = 'inline-block';
-
-    // Charger les données après la connexion
-    try {
-      await fetchProfiles(); // Charger les profils
-      await loadGroupsRealtime(); // Charger les groupes
-      await fetchGroups();
-      await fetchEvents();
-    } catch (error) {
-      console.error("Erreur lors du chargement des données :", error);
-    }
-  } else {
-    // Redirection vers la page de connexion si l'utilisateur n'est pas connecté
-    window.location.href = 'login.html';
-  }
-      console.log("onAuthStateChanged déclenché :", user);
-  if (user) {
-    console.log("Utilisateur connecté :", user);
-  } else {
-    console.log("Aucun utilisateur connecté");
-  }
-});
-
+    // Fonction pour gérer l'état de connexion de l'utilisateur
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        document.getElementById('user-name').textContent = `Bonjour, ${user.firstName || user.lastName || user.email}`;
+        document.getElementById('logout-button').style.display = 'inline-block';
+        loadProfiles();
+        loadGroups();
+        loadEvents();
+      } else {
+        window.location.href = 'login.html';
+      }
+    });
 
     document.getElementById('logout-button').addEventListener('click', () => {
-  auth.signOut()
-    .then(() => {
-      window.location.href = 'index.html'; // Redirige après déconnexion
-    })
-    .catch((error) => {
-      console.error("Erreur lors de la déconnexion :", error);
+      auth.signOut().then(() => {
+        window.location.href = 'index.html';
+      }).catch((error) => {
+        console.error("Erreur lors de la déconnexion :", error);
+      });
     });
-});
 
-// Référence à la collection 'users' dans Firestore
-const db = firebase.firestore();
-const usersCollection = firestore.collection('users');
-const matchesCollection = db.collection("matches");
-const groupListCollection = db.collection('groupList');
-const eventListCollection = db.collection('eventList');
-        
-// Fonction pour charger les groupes en temps réel
-function loadGroupsRealtime() {
-  console.log("Chargement des groupes en temps réel...");}
-window.onload = () => {
-  loadGroupsRealtime();  // Charger les groupes en temps réel
-};
-        
-// Fonction pour charger les profils
+    // Charger les profils depuis Firestore
+    const loadProfiles = async () => {
+      try {
+        const querySnapshot = await db.collection('users').get();
+        const profilesContainer = document.getElementById('profilesContainer');
+        profilesContainer.innerHTML = '';
 
-
-const fetchProfiles = async () => {
-      console.log("Chargement des profils...");
-  try {
-    const querySnapshot = await usersCollection.get();
-    const profiles = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    displayProfiles(profiles);
-  } catch (error) {
-    console.error("Erreur lors de la récupération des profils :", error);
-  }
-};
-
-function displayProfiles(profiles) {
-  const profilesContainer = document.getElementById('profilesContainer');
-  profilesContainer.innerHTML = '';
-
-  profiles.forEach(profile => {
-    const profileCard = document.createElement('div');
-    profileCard.className = 'profile-card';
-
-profileCard.innerHTML = `
-      <img src="${profile.photodeprofil || 'https://via.placeholder.com/150'}" alt="Photo de profil">
-      <h3>${profile.displayName || 'Nom non renseigné'}</h3>
-      <h3>${profile.age || 'Age non renseigné'}</h3>
-      <p>${profile.passions || ''}</p>
-       <p>${profile.orientation || ''}</p>
-       <p>${profile.searchingfor || ''}</p>
-    `;
-    profilesContainer.appendChild(profileCard);
-  });
-}
-
-// Modifier `fetchGroups` pour appeler cette fonction
-const fetchGroups = async () => {
-  try {
-    const groupList = [];
-    const querySnapshot = await db.collection("groupList").get(); // Firestore v8
-    querySnapshot.forEach(doc => {
-      groupList.push({ id: doc.id, ...doc.data() });
-    });
-    displayGroups(groupList);
-  } catch (error) {
-    console.error("Erreur lors de la récupération des groupes :", error);
-  }
-};
-
-        // Affiche les groupes dans la section dédiée
-function displayGroups(groups) {
-  const groupList = document.getElementById('groupList');
-  groupList.innerHTML = ''; // Réinitialise la liste
-
-  if (groups.length === 0) {
-    groupList.innerHTML = '<p class="no-items">Aucun groupe disponible.</p>';
-    return;
-  }
-
-  if (!groupList) {
-    console.error("Erreur : élément grouplist introuvable dans le DOM");
-    return;
-  }
-  groupList.innerHTML = ''; // Réinitialise la liste
-  groups.forEach(group => {
-    const groupItem = document.createElement('div');
-    groupItem.className = 'group-item';
-    groupItem.textContent = group.name; // Affiche le nom du groupe
-    groupList.appendChild(groupItem);
-  });
-}
-
- loadGroupsRealtime();{
-  const groupsRef = firebase.firestore().collection("groups");
-  groupsRef.onSnapshot(snapshot => {
-    const groupsList = document.getElementById("groupsList");
-    groupsList.innerHTML = "";  // Effacer les anciens groupes
-    snapshot.forEach(doc => {
-      const groupData = doc.data();
-      const groupElement = document.createElement("div");
-      groupElement.textContent = `Groupe: ${groupData.name} - ${groupData.description}`;
-      
-      const eventsButton = document.createElement("button");
-      eventsButton.textContent = "Voir événements";
-      eventsButton.addEventListener("click", () => loadEvents(doc.id));
-      groupElement.appendChild(eventsButton);
-
-      groupsList.appendChild(groupElement);
-    });
-  });
-};
-
-
-// Fonction pour récupérer les événements depuis Firestore
-async function fetchEvents() {
-  try {
-    const eventList = document.getElementById('eventList');
-    const noEvents = document.getElementById('noEvents');
-    
-    // Réinitialiser l'affichage
-    eventList.innerHTML = "";
-    
-    // Récupérer les documents dans la collection "eventList"
-    const querySnapshot = await firestore.collection('eventList').get();
-    
-    if (querySnapshot.empty) {
-      // Afficher un message si aucun événement
-      noEvents.style.display = 'block';
-    } else {
-      noEvents.style.display = 'none';
-      
-      // Créer un tableau pour stocker les événements récupérés
-      const events = [];
-      
-      querySnapshot.forEach((doc) => {
-        const eventData = doc.data();
-        events.push({
-          id: doc.id,
-          name: eventData.name,
-          date: eventData.date || "Date non spécifiée",
-          description: eventData.description || "Pas de description disponible."
+        querySnapshot.forEach((doc) => {
+          const profile = doc.data();
+          const profileCard = document.createElement('div');
+          profileCard.className = 'profile-card';
+          profileCard.innerHTML = `
+            <img src="${profile.photodeprofil || 'https://via.placeholder.com/150'}" alt="Photo de profil">
+            <h3>${profile.firstName || profile.lastName || 'Nom non renseigné'}</h3>
+            <p>Âge: ${profile.age || 'Non renseigné'}</p>
+            <p>Passions: ${profile.passions || 'Non renseigné'}</p>
+            <p>Orientation: ${profile.orientation || 'Non renseigné'}</p>
+            <p>Recherche: ${profile.searchingfor || 'Non renseigné'}</p>
+            <div class="actions">
+              <button class="action-button" onclick="handleMatch('${doc.id}')">Match ❤️</button>
+              <button class="action-button" onclick="handlePass('${doc.id}')">Passer ❌</button>
+            </div>
+          `;
+          profilesContainer.appendChild(profileCard);
         });
-      });
-      
-      // Afficher les événements
-      displayEvents(events);
-    }
-  } catch (error) {
-    console.error("Erreur lors de la récupération des événements :", error);
-  }
-}
-
-// Fonction pour afficher les événements dans le DOM
-function displayEvents(events) {
-  const eventList = document.getElementById('eventList');
-  eventList.innerHTML = ''; // Réinitialise la liste
-
-  if (events.length === 0) {
-    eventList.innerHTML = '<p class="no-items">Aucun événement disponible.</p>';
-    return;
-  }
-
-  events.forEach(event => {
-    const eventItem = document.createElement('div');
-    eventItem.classList.add('event-item');
-    
-    // Ajouter le contenu de l'événement
-    eventItem.innerHTML = `
-      <div>
-        <strong>${event.name}</strong> - ${event.date}
-        <p>${event.description}</p>
-      </div>
-      <button onclick="viewEventDetails('${event.id}')">Voir</button>
-    `;
-    
-    eventList.appendChild(eventItem);
-  });
-}
-
-// Fonction pour afficher les détails d'un événement
-function viewEventDetails(eventId) {
-  alert(`Voir les détails pour l'événement ID: ${eventId}`);
-  // Ajoutez ici la logique pour afficher les détails ou naviguer vers une autre page
-}
-
-// Fonction pour charger les événements en temps réel (par exemple, en utilisant un groupId)
-const loadEventsRealtime = (groupId) => {
-  const eventsRef = firestore.collection("events").where("groupId", "==", groupId);
-  
-  eventsRef.onSnapshot(snapshot => {
-    const eventsContainer = document.getElementById("events-list");
-    eventsContainer.innerHTML = "";  // Effacer les anciens événements
-    
-    snapshot.forEach(doc => {
-      const eventData = doc.data();
-      const eventElement = document.createElement("div");
-      eventElement.textContent = `Événement: ${eventData.name} - Date: ${eventData.date}`;
-      eventsContainer.appendChild(eventElement);
-    });
-  });
-};
-
-// Appeler la fonction fetchEvents après la connexion de l'utilisateur
-fetchEvents();
-
-
-
-        
-// Tableau pour stocker tous les utilisateurs
-let usersList = [];
-let currentUser = null;
-
-
-// Récupérer tous les utilisateurs et les afficher
-function fetchUsers() {
-  usersCollection.get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const userData = doc.data();
-        usersList.push({
-          id: doc.id,
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          photodeprofil: userData.photodeprofil || "https://via.placeholder.com/150", // URL de placeholder si pas de photo
-          socialmedia: userData.socialmedia || "" // Lien Instagram
-        });
-             // Sélectionner l'élément <img> pour l'afficher
-      const photodeprofil = document.getElementById('photodeprofil');
-      
-      // Mettre à jour la source de l'image avec l'URL de Cloudinary
-      photodeprofil.src = photodeprofil;
-      });
-      let currentIndex = 0;
-let userList = []; // Contiendra les profils des utilisateurs
-
-const showRandomUser = async () => {
-  try {
-    const querySnapshot = await db.collection("users").get(); // Remplacez par votre requête Firestore
-    userList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-    if (userList.length > 0) {
-      displayUser(userList[currentIndex]); // Affiche le premier utilisateur
-    } else {
-      console.log("Aucun utilisateur trouvé.");
-    }
-  } catch (error) {
-    console.error("Erreur lors de la récupération des utilisateurs :", error);
-  }
-};
-
-const displayUser = (user) => {
-  const userContainer = document.getElementById("userContainer");
-  userContainer.innerHTML = `
-    <div>
-      <h2>${user.name}</h2>
-      <p>${user.email}</p>
-      <p>${user.age}</p>
-    </div>
-  `;
-};
-
-document.getElementById("next-btn").addEventListener("click", () => {
-  currentIndex = (currentIndex + 1) % userList.length; // Passe au profil suivant
-  displayUser(userList[currentIndex]);
-});
-
-  const randomIndex = Math.floor(Math.random() * usersList.length);
-  currentUser = usersList[randomIndex];
-
-  // Afficher les informations de l'utilisateur dans l'interface
-  document.getElementById("userName").innerText = `${currentUser.firstName} ${currentUser.lastName}`;
-  const photodeprofil = document.getElementById("photodeprofil");
-  if (photodeprofil) {
-    photodeprofil.src = currentUser.photoUrl;
-  }
-
-      const fetchUserMatches = async () => {
-  try {
-    const querySnapshot = await db
-      .collection("users") // Nom de la collection
-      .where("isActive", "==", true) // Filtrer par le champ isActive
-      .get(); // Obtenir les documents
-
-    // Parcourir les résultats
-    querySnapshot.forEach(doc => {
-      console.log("ID :", doc.id, "Data :", doc.data());
-    });
-  } catch (error) {
-    console.error("Erreur lors de la récupération des données :", error);
-  }
-};
-
-fetchUserMatches("id_utilisateur1");
-      
-
-  // Vérifier s'il y a un match en attente ou un match mutuel
-  checkMatchStatus();
-}
-
-document.getElementById('match-btn').addEventListener('click', () => {
-  if (!currentUser) {
-    console.log("Aucun utilisateur disponible pour le match.");
-    return;
-  }
-
-  // Ajouter ici la logique pour gérer le bouton de match
-  console.log("Match demandé !");
-});
-
-
-  // Créer un match avec statut "en attente"
-  const createMatch = async (userId, matchedUserId) => {
-    try {
-      const docRef = await addDoc(collection(db, "matches"), {
-        userId,
-        matchedUserId,
-        status: "en attente", // Le match est en attente initialement
-        timestamp: new Date()
-      });
-      console.log("Match créé avec l'ID :", docRef.id);
-
-      // Ajouter la carte de profil à la section "Mes matchs"
-      addMatchToMyMatches(docRef.id, matchedUserId);
-    } catch (e) {
-      console.error("Erreur lors de la création du match : ", e);
-    }
-  };
-
-  createMatch("id_utilisateur1", "id_utilisateur2");
-});
-const addMatchToMyMatches = async (matchId, matchedUserId) => {
-  try {
-    // Récupérer les données du matché
-    const matchedUserDoc = await db.collection("users").doc(matchedUserId).get();
-    const matchedUser = matchedUserDoc.data();
-
-    // Créer un élément HTML pour afficher le profil du matché dans "Mes matchs"
-    const matchCard = document.createElement('div');
-    matchCard.classList.add('match-card');
-    matchCard.setAttribute('data-match-id', matchId);
-
-    matchCard.innerHTML = `
-      <img src="${matchedUser.photodeprofil}" alt="${matchedUser.firstName} ${matchedUser.lastName}" />
-      <h3>${matchedUser.firstName} ${matchedUser.lastName}</h3>
-      <p>Status: En attente</p>
-    `;
-
-    // Ajouter cette carte à la section "Mes matchs"
-    document.getElementById("myMatches").appendChild(matchCard);
-  } catch (error) {
-    console.error("Erreur lors de l'ajout du match aux 'Mes matchs' :", error);
-  }
-};
-
-
-// Vérifier si l'utilisateur actuel a déjà un match en attente ou mutuel
-function checkMatchStatus() {
-  if (!currentUser) return;
-
-  matchesCollection.where("userId", "==", currentUser.id)
-    .get()
-    .then((querySnapshot) => {
-      if (querySnapshot.empty) {
-        console.log("Aucun match trouvé pour cet utilisateur.");
-        document.getElementById("matchStatus").innerText = "Aucun match en attente.";
-        return;
+      } catch (error) {
+        console.error("Erreur lors de la récupération des profils :", error);
       }
+    };
 
-      let matchStatus = "en attente";
-      let isMutual = false;
+    // Charger les groupes depuis Firestore
+    const loadGroups = async () => {
+      try {
+        const querySnapshot = await db.collection('groupList').get();
+        const groupList = document.getElementById('groupList');
+        groupList.innerHTML = '';
 
-      querySnapshot.forEach((doc) => {
-        const matchData = doc.data();
-        if (matchData.status === "mutual") {
-          isMutual = true;
-          matchStatus = "Match mutuel";
+        if (querySnapshot.empty) {
+          groupList.innerHTML = '<p class="no-items">Aucun groupe disponible.</p>';
+        } else {
+          querySnapshot.forEach((doc) => {
+            const group = doc.data();
+            const groupItem = document.createElement('div');
+            groupItem.className = 'group-item';
+            groupItem.textContent = group.name;
+            groupList.appendChild(groupItem);
+          });
         }
-      });
-
-      document.getElementById("matchStatus").innerText = matchStatus;
-      if (isMutual) {
-        document.getElementById("matchAnimation").style.display = "block";
+      } catch (error) {
+        console.error("Erreur lors de la récupération des groupes :", error);
       }
-    })
-    .catch((error) => {
-      console.error("Erreur lors de la vérification du statut des matchs :", error);
-      document.getElementById("matchStatus").innerText = "Erreur lors de la vérification.";
-    });
-}
+    };
 
+    // Charger les événements depuis Firestore
+    const loadEvents = async () => {
+      try {
+        const querySnapshot = await db.collection('eventList').get();
+        const eventList = document.getElementById('eventList');
+        eventList.innerHTML = '';
 
+        if (querySnapshot.empty) {
+          eventList.innerHTML = '<p class="no-items">Aucun événement disponible.</p>';
+        } else {
+          querySnapshot.forEach((doc) => {
+            const event = doc.data();
+            const eventItem = document.createElement('div');
+            eventItem.className = 'event-item';
+            eventItem.innerHTML = `
+              <strong>${event.name}</strong> - ${event.date || 'Date non spécifiée'}
+              <p>${event.description || 'Pas de description disponible.'}</p>
+            `;
+            eventList.appendChild(eventItem);
+          });
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des événements :", error);
+      }
+    };
 
+    // Gestion des matchs
+    const handleMatch = async (userId) => {
+      try {
+        await db.collection('matches').add({
+          userId: auth.currentUser.uid,
+          matchedUserId: userId,
+          status: 'en attente',
+          timestamp: new Date()
+        });
+        console.log("Match créé avec succès");
+      } catch (error) {
+        console.error("Erreur lors de la création du match :", error);
+      }
+    };
 
-// Afficher l'animation de match avec des cœurs
-function displayMatchAnimation() {
-  const matchAnimation = document.getElementById("matchAnimation");
-  matchAnimation.style.display = "block"; // Afficher l'animation
-  setTimeout(() => {
-    matchAnimation.style.display = "none"; // Cacher après quelques secondes
-  }, 3000); // Animation visible pendant 3 secondes
-}
-
-// Logique du bouton "Match"
-document.getElementById('match-btn').addEventListener('click', () => {
-  if (!currentUser) {
-    console.log("Aucun utilisateur disponible pour le match.");
-    return;
-  }
-
-  
-
-// Gérer le match mutuel (changer le statut en "mutuel")
-// Fonction pour mettre à jour le statut du match en "mutuel"
-const confirmMutualMatch = (matchId) => {
-  // Mettre à jour le statut du match dans Firestore
-  matchesCollection.doc(matchId).update({ status: "mutuel" })
-    .then(() => {
-      // Mettre à jour l'affichage dans "Mes matchs"
-      updateMatchStatusInUI(matchId, "mutuel");
-    })
-    .catch((error) => {
-      console.error("Erreur lors de la confirmation du match mutuel :", error);
-    });
-};
-
-// Fonction pour mettre à jour l'affichage du statut dans "Mes matchs"
-const updateMatchStatusInUI = (matchId, status) => {
-  const matchCard = document.querySelector(`.match-card[data-match-id='${matchId}']`);
-  if (matchCard) {
-    const statusElement = matchCard.querySelector("p");
-    statusElement.textContent = `Status: ${status}`;
-    
-    // Si le match est mutuel, on peut afficher l'animation ou un autre message
-    if (status === "mutuel") {
-      matchCard.querySelector("img").classList.add("highlight"); // Ajout d'un effet visuel si tu veux
-    }
-  }
-};
-
-// Afficher un lien vers Instagram si un match mutuel est trouvé
-function showInstagramLink() {
-  if (currentUser.instagram) {
-  const instagramLink = document.createElement('a');
-  instagramLink.href = `https://www.instagram.com/${currentUser.instagram}`;
-  instagramLink.textContent = "Voir Instagram";
-  document.getElementById('instagramLinkContainer').appendChild(instagramLink);
-}
-}
-
-// Fonction pour passer à un autre utilisateur
-function nextUser() {
-  showRandomUser(); // Afficher un nouvel utilisateur aléatoire
-}
-
-// Initialiser la récupération des utilisateurs
-fetchUsers();
-
-// Event listeners pour les boutons
-document.getElementById("pass-btn").addEventListener("click", nextUser);
-  console.log('Profil liké !');
-  // Logique pour le match
-document.getElementById("match-btn").addEventListener("click", createMatch);
-  console.log('Profil passé !');
-  // Logique pour passer
-
-
-        
-      
-
-</script>
+    const handlePass = (userId) => {
+      console.log(`Utilisateur ${userId} passé.`);
+      loadProfiles(); // Charger un nouveau profil
+    };
+  </script>
 </body>
 </html>
