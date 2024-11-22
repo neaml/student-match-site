@@ -252,7 +252,7 @@ section {
       <!-- Carte de profil (un profil à la fois) -->
       <div class="profile-card">
         <img id="photodeprofil" class="photodeprofil" src="https://via.placeholder.com/150" alt="Photo de profil" />
-        <h3 id="userName" class="user-name">Nom de l'utilisateur</h3>
+        <h3 id="userName" class="username">Nom de l'utilisateur</h3>
         
         <!-- Boutons Match et Passer -->
         <div class="action-buttons">
@@ -268,12 +268,12 @@ section {
 
 
     <!-- Section des matchs de l'utilisateur -->
-    <div id="my-matches" class="matches-section">
+    <div id="mymatches" class="matches-section">
       <h3>Mes matchs</h3>
 
       <!-- Affichage du profil de l'utilisateur actuel -->
       <div id="userProfile" class="user-profile">
-        <h1 id="userName" class="user-name">Nom de l'utilisateur</h1>
+        <h1 id="userName" class="username">Nom de l'utilisateur</h1>
         <img id="photodeprofil" class="photodeprofil" src="https://via.placeholder.com/150" alt="Photo de profil" />
         <div id="matchStatus" class="match-status">Statut du match</div>
         <div id="matchAnimation" class="match-animation" style="display: none;">❤️💖 MATCH 💖❤️</div>
@@ -655,10 +655,62 @@ document.getElementById("next-btn").addEventListener("click", () => {
 };
 
 fetchUserMatches("id_utilisateur1");
+      
 
   // Vérifier s'il y a un match en attente ou un match mutuel
   checkMatchStatus();
 }
+
+document.getElementById('match-btn').addEventListener('click', () => {
+  if (!currentUser) {
+    console.log("Aucun utilisateur disponible pour le match.");
+    return;
+  }
+
+  // Créer un match avec statut "en attente"
+  const createMatch = async (userId, matchedUserId) => {
+    try {
+      const docRef = await addDoc(collection(db, "matches"), {
+        userId,
+        matchedUserId,
+        status: "en attente", // Le match est en attente initialement
+        timestamp: new Date()
+      });
+      console.log("Match créé avec l'ID :", docRef.id);
+
+      // Ajouter la carte de profil à la section "Mes matchs"
+      addMatchToMyMatches(docRef.id, matchedUserId);
+    } catch (e) {
+      console.error("Erreur lors de la création du match : ", e);
+    }
+  };
+
+  createMatch("id_utilisateur1", "id_utilisateur2");
+});
+const addMatchToMyMatches = async (matchId, matchedUserId) => {
+  try {
+    // Récupérer les données du matché
+    const matchedUserDoc = await db.collection("users").doc(matchedUserId).get();
+    const matchedUser = matchedUserDoc.data();
+
+    // Créer un élément HTML pour afficher le profil du matché dans "Mes matchs"
+    const matchCard = document.createElement('div');
+    matchCard.classList.add('match-card');
+    matchCard.setAttribute('data-match-id', matchId);
+
+    matchCard.innerHTML = `
+      <img src="${matchedUser.photodeprofil}" alt="${matchedUser.firstName} ${matchedUser.lastName}" />
+      <h3>${matchedUser.firstName} ${matchedUser.lastName}</h3>
+      <p>Status: En attente</p>
+    `;
+
+    // Ajouter cette carte à la section "Mes matchs"
+    document.getElementById("myMatches").appendChild(matchCard);
+  } catch (error) {
+    console.error("Erreur lors de l'ajout du match aux 'Mes matchs' :", error);
+  }
+};
+
 
 // Vérifier si l'utilisateur actuel a déjà un match en attente ou mutuel
 function checkMatchStatus() {
@@ -714,54 +766,35 @@ document.getElementById('match-btn').addEventListener('click', () => {
     return;
   }
 
-  const createMatch = async (userId, matchedUserId) => {
-  try {
-    const docRef = await addDoc(collection(db, "matches"), {
-      userId,
-      matchedUserId,
-      status: "en attente", // Peut être changé en "accepté" ou "refusé"
-      timestamp: new Date()
-    });
-    console.log("Match créé avec l'ID :", docRef.id);
-  } catch (e) {
-    console.error("Erreur lors de la création du match : ", e);
-  }
-};
-createMatch("id_utilisateur1", "id_utilisateur2");
-
-  // Ajouter un match dans la collection 'matches'
-  matchesCollection.add(userMatchData)
-    .then((docRef) => {
-      console.log("Match ajouté avec succès : ", docRef.id);
-
-      // Afficher une animation ou une notification pour l'utilisateur
-      document.getElementById("matchStatus").innerText = "Match en attente...";
-      document.getElementById("matchAnimation").style.display = "block"; // Optionnel: Animation de match
-    })
-    .catch((error) => {
-      console.error("Erreur lors de l'ajout du match : ", error);
-    });
-});
-
+  
 
 // Gérer le match mutuel (changer le statut en "mutuel")
-function confirmMutualMatch() {
-  if (!currentUser) {
-    return;
-  }
-
-  matchesCollection.where("userId", "==", currentUser.id)
-    .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        doc.ref.update({ status: "mutuel" }); // Changer le statut du match en "mutuel"
-        console.log("Match mutuel confirmé");
-      });
+// Fonction pour mettre à jour le statut du match en "mutuel"
+const confirmMutualMatch = (matchId) => {
+  // Mettre à jour le statut du match dans Firestore
+  matchesCollection.doc(matchId).update({ status: "mutuel" })
+    .then(() => {
+      // Mettre à jour l'affichage dans "Mes matchs"
+      updateMatchStatusInUI(matchId, "mutuel");
     })
     .catch((error) => {
       console.error("Erreur lors de la confirmation du match mutuel :", error);
     });
-}
+};
+
+// Fonction pour mettre à jour l'affichage du statut dans "Mes matchs"
+const updateMatchStatusInUI = (matchId, status) => {
+  const matchCard = document.querySelector(`.match-card[data-match-id='${matchId}']`);
+  if (matchCard) {
+    const statusElement = matchCard.querySelector("p");
+    statusElement.textContent = `Status: ${status}`;
+    
+    // Si le match est mutuel, on peut afficher l'animation ou un autre message
+    if (status === "mutuel") {
+      matchCard.querySelector("img").classList.add("highlight"); // Ajout d'un effet visuel si tu veux
+    }
+  }
+};
 
 // Afficher un lien vers Instagram si un match mutuel est trouvé
 function showInstagramLink() {
