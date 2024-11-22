@@ -167,21 +167,22 @@
   const groupId = document.getElementById("group-id").value;  // Assurez-vous de récupérer le groupId auquel l'événement appartient
 
   try {
-    await firebase.firestore().collection("events").add({
-      name: eventName,
-      date: eventDate,
-      groupId: groupId,  // Lien avec le groupe
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-    console.log("Événement créé avec succès!");
-  } catch (error) {
-    console.error("Erreur lors de la création de l'événement:", error);
-  }
-    // Rediriger vers le tableau de bord après l'ajout
-    window.location.href = "dashboard.html";  // Redirection vers le tableau de bord
-  } catch (error) {
-    console.error("Erreur lors de la création de l'événement:", error);
-  }
+  await firebase.firestore().collection("events").add({
+    name: eventName,
+    date: eventDate,
+    groupId: groupId,  // Lien avec le groupe
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+  });
+  console.log("Événement créé avec succès!");
+} catch (error) {
+  console.error("Erreur lors de la création de l'événement:", error);
+}
+// Rediriger vers le tableau de bord après l'ajout
+window.location.href = "dashboard.html";  // Redirection vers le tableau de bord
+} catch (error) {  // <-- Ce `catch` supplémentaire n'a pas de sens ici.
+  console.error("Erreur lors de la création de l'événement:", error);
+}
+
 };
 
 </script>
