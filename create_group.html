@@ -162,21 +162,18 @@ const createGroup = async () => {
   const groupName = document.getElementById("group-name").value;
   const groupDescription = document.getElementById("group-description").value;
   try {
-    await firebase.firestore().collection("groups").add({
-      name: groupName,
-      description: groupDescription,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-    console.log("Groupe créé avec succès!");
-  } catch (error) {
-    console.error("Erreur lors de la création du groupe:", error);
-  }
+  await firebase.firestore().collection("groups").add({
+    name: groupName,
+    description: groupDescription,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+  });
+  console.log("Groupe créé avec succès!");
+
   // Rediriger vers le tableau de bord après l'ajout
-    window.location.href = "dashboard.html";  // Redirection vers le tableau de bord
-  } catch (error) {
-    console.error("Erreur lors de la création du groupe:", error);
-  }
-};
+  window.location.href = "dashboard.html";  // Redirection vers le tableau de bord
+} catch (error) {
+  console.error("Erreur lors de la création du groupe:", error);
+}
 };
 </script>
 </body>
