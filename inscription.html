@@ -306,7 +306,6 @@ document.getElementById('signupForm').addEventListener('submit', async function 
 
     // Ajouter le lien socialMedia si valide
     if (socialMediaInput) {
-      if (validateSocialMediaInput(socialMediaInput)) {
         userData.socialMedia = socialMediaInput;
       } else {
         alert("Le lien Instagram n'est pas valide. Veuillez vérifier.");
