@@ -79,27 +79,27 @@
     <form>
       <label for="firstName">Prénom:</label>
       <input type="text" id="firstName" placeholder="Prénom">
-      
+     
       <label for="lastName">Nom:</label>
       <input type="text" id="lastName" placeholder="Nom">
-      
+     
       <label for="email">Email:</label>
       <input type="email" id="email" placeholder="Email" disabled>
-      
+     
       <label for="age">Âge:</label>
       <input type="number" id="age" placeholder="Âge">
-      
+     
       <label for="orientation">Orientation:</label>
       <input type="text" id="orientation" placeholder="Orientation">
-      
+     
       <label>Passions:</label>
       <div id="passions-container"></div>
       <input type="text" id="newPassion" placeholder="Ajouter une passion">
       <button id="addPassionBtn" type="button">Ajouter</button>
-      
+     
       <label for="searchingFor">Recherche:</label>
       <input type="text" id="searchingFor" placeholder="Ce que je recherche">
-      
+     
       <button id="saveChangesBtn" type="button">Enregistrer les modifications</button>
     </form>
 
@@ -131,7 +131,7 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
   </script>
 <script>
-  
+ 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     console.log("Utilisateur connecté :", user);
@@ -184,9 +184,9 @@ firebase.auth().onAuthStateChanged((user) => {
 
     // Fonction pour charger les informations de l'utilisateur connecté
     function loadUserProfile(userId) {
-      const userDocRef = doc(db, 'users', userId);
-      getDoc(userDocRef).then(docSnap => {
-        if (docSnap.exists()) {
+      const userDocRef = firestore.collection('users').doc(userId);
+      userDocRef.get().then(docSnap => {
+        if (docSnap.exists) {
           const userData = docSnap.data();
           firstNameInput.value = userData.firstName;
           lastNameInput.value = userData.lastName;
@@ -203,8 +203,8 @@ firebase.auth().onAuthStateChanged((user) => {
     // Enregistrer les modifications de profil
     saveChangesBtn.addEventListener('click', () => {
       const userId = auth.currentUser.uid;
-      const userRef = doc(db, 'users', userId);
-      setDoc(userRef, {
+      const userRef = firestore.collection('users').doc(userId);
+      userRef.set({
         firstName: firstNameInput.value,
         lastName: lastNameInput.value,
         email: emailInput.value,
@@ -222,7 +222,7 @@ firebase.auth().onAuthStateChanged((user) => {
 
     // Déconnexion de l'utilisateur
     logoutBtn.addEventListener('click', () => {
-      signOut(auth).then(() => {
+      auth.signOut().then(() => {
         window.location.href = 'login.html';
       });
     });
@@ -231,7 +231,7 @@ firebase.auth().onAuthStateChanged((user) => {
     addPassionBtn.addEventListener('click', addPassion);
 
     // Charger le profil de l'utilisateur lors du chargement de la page
-    onAuthStateChanged(auth, user => {
+    auth.onAuthStateChanged(user => {
       if (user) {
         loadUserProfile(user.uid);
       } else {
