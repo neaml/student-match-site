@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Créer un Groupe - Student Match</title>
   <link rel="stylesheet" href="style.css">
-  
+
   <style>
     /* Styles CSS ici (comme votre code original) */
     body {
@@ -157,24 +157,46 @@
       <button type="submit">Créer le Groupe</button>
     </form>
   </main>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
   <script>
-const createGroup = async () => {
-  const groupName = document.getElementById("group-name").value;
-  const groupDescription = document.getElementById("group-description").value;
-  try {
-  await firebase.firestore().collection("groups").add({
-    name: groupName,
-    description: groupDescription,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-  });
-  console.log("Groupe créé avec succès!");
+    // Configuration Firebase
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
 
-  // Rediriger vers le tableau de bord après l'ajout
-  window.location.href = "dashboard.html";  // Redirection vers le tableau de bord
-} catch (error) {
-  console.error("Erreur lors de la création du groupe:", error);
-}
-};
-</script>
+    // Initialiser Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Fonction pour gérer la création de groupe
+    document.getElementById("createGroupForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const groupName = document.getElementById("groupName").value;
+      const groupDescription = document.getElementById("groupDescription").value;
+      const groupCategory = document.getElementById("groupCategory").value;
+
+      try {
+        await db.collection("grouplist").add({
+          name: groupName,
+          description: groupDescription,
+          category: groupCategory,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        console.log("Groupe créé avec succès!");
+
+        // Rediriger vers le tableau de bord après l'ajout
+        window.location.href = "dashboard.html";
+      } catch (error) {
+        console.error("Erreur lors de la création du groupe:", error);
+      }
+    });
+  </script>
 </body>
 </html>
