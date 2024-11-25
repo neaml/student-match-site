@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-   
+
   <!-- Firebase SDK classique -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -238,7 +238,7 @@
     // Fonction pour gérer l'état de connexion de l'utilisateur
     auth.onAuthStateChanged((user) => {
       if (user) {
-        document.getElementById('user-name').textContent = `Bonjour, ${user.firstName || user.lastName || user.email}`;
+        document.getElementById('user-name').textContent = `Bonjour, ${user.displayName || user.email}`;
         document.getElementById('logout-button').style.display = 'inline-block';
         loadProfiles();
         loadGroups();
@@ -261,7 +261,7 @@
     const loadProfiles = async () => {
       try {
         const querySnapshot = await db.collection('users').get();
-        profiles = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        profiles = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).filter(profile => profile.id !== auth.currentUser.uid);
         profileIndex = 0;
         loadNextProfile();
       } catch (error) {
@@ -283,7 +283,7 @@
         const profileCard = document.createElement('div');
         profileCard.className = 'profile-card';
         profileCard.innerHTML = `
-          <img src="${profile.photodeprofil || 'https://via.placeholder.com/150'}" alt="Photo de profil">
+          <img src="${profile.photodeprofil ? profile.photodeprofil : 'https://via.placeholder.com/150'}" alt="Photo de profil">
           <h3>${profile.firstName || profile.lastName || 'Nom non renseigné'}</h3>
           <p>Âge: ${profile.age || 'Non renseigné'}</p>
           <p>Passions: ${profile.passions || 'Non renseigné'}</p>
@@ -315,7 +315,10 @@
             const group = doc.data();
             const groupItem = document.createElement('div');
             groupItem.className = 'group-item';
-            groupItem.textContent = group.name;
+            groupItem.innerHTML = `
+              <strong>${group.name}</strong>
+              <button class="action-button" onclick="joinItem('groupList', '${doc.id}')">Rejoindre</button>
+            `;
             groupList.appendChild(groupItem);
           });
         }
@@ -341,12 +344,39 @@
             eventItem.innerHTML = `
               <strong>${event.name}</strong> - ${event.date || 'Date non spécifiée'}
               <p>${event.description || 'Pas de description disponible.'}</p>
+              <button class="action-button" onclick="joinItem('eventList', '${doc.id}')">Rejoindre</button>
             `;
             eventList.appendChild(eventItem);
           });
         }
       } catch (error) {
         console.error("Erreur lors de la récupération des événements :", error);
+      }
+    };
+
+    // Rejoindre un groupe ou un événement
+    const joinItem = async (collectionName, itemId) => {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      try {
+        const docRef = db.collection(collectionName).doc(itemId);
+        const doc = await docRef.get();
+
+        if (doc.exists) {
+          const data = doc.data();
+          if (!data.participants.includes(user.displayName || user.email)) {
+            await docRef.update({
+              participants: firebase.firestore.FieldValue.arrayUnion(user.displayName || user.email),
+            });
+            console.log(`Rejoint ${collectionName} :`, data.name);
+            collectionName === "groupList" ? loadGroups() : loadEvents();
+          } else {
+            console.log("Vous avez déjà rejoint cet élément.");
+          }
+        }
+      } catch (error) {
+        console.error("Erreur lors de l'ajout au groupe/événement :", error);
       }
     };
 
@@ -368,13 +398,12 @@
               const matchItem = document.createElement('div');
               matchItem.className = 'match-item match-animation';
               matchItem.innerHTML = `
-                <img src="${matchedProfile.photodeprofil || 'https://via.placeholder.com/150'}" alt="Photo de profil">
+                <img src="${matchedProfile.photodeprofil ? matchedProfile.photodeprofil : 'https://via.placeholder.com/150'}" alt="Photo de profil">
                 <h3>${matchedProfile.firstName || matchedProfile.lastName || 'Nom non renseigné'}</h3>
                 <p>Âge: ${matchedProfile.age || 'Non renseigné'}</p>
-                <p>Passions: ${matchedProfile.passions || 'Non renseigné'}</p>
-                <p>Orientation: ${matchedProfile.orientation || 'Non renseigné'}</p>
-                <p>Recherche: ${matchedProfile.searchingfor || 'Non renseigné'}</p>
-                <p>Statut: ${match.status}</p>
+                <p>Instagram: <a href="https://instagram.com/${matchedProfile.instagram}" target="_blank">${matchedProfile.instagram}</a></p>
+                <div class="hearts">💖💖💖</div>
+                <p>Match mutuel !</p>
               `;
               matchesContainer.appendChild(matchItem);
             }
