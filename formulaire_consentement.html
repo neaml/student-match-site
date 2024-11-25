@@ -1,1 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> FORMULAIRE DE CONSENTEMENT À L'UTILISATION DES DONNÉES
+PERSONNELLES - Student Match</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+    /* Global Styles */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f7f4f4;
+    color: #8c2f39;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
 
+header {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #672934;
+    color: #fefefe;  /* Titre en blanc */
+}
+
+header h1 {
+    font-size: 3em;
+    margin: 10px 0;
+    color: #fff;  /* Remet la couleur blanche pour le titre */
+}
+
+header img.logo {
+    width: 160px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Navigation */
+nav {
+    text-align: center;
+    padding: 20px;
+    background-color: #fefefe;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+    margin: 0 20px;
+    color: #a65362;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #8c2f39;
+}
+
+/* CTA Button */
+.cta-button {
+    display: inline-block;
+    margin: 30px auto;
+    padding: 15px 35px;
+    background-color: #8c2f39;
+    color: #ffffff;
+    font-size: 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #a65362;
+    transform: scale(1.08);
+}
+
+/* Carousel */
+.carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 80px auto;
+    padding: 20px;
+    overflow: hidden;
+    position: relative;
+    height: 350px;
+}
+
+.carousel .card {
+    position: absolute;
+    width: 280px;
+    height: 240px;
+    padding: 20px;
+    background-color: #f7f8fa;
+    color: #333;
+    border-radius: 15px;
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: transform 1s ease, opacity 1s ease;
+    opacity: 0;
+    transform: scale(0.8) translateZ(-300px);
+}
+
+.carousel .card.active {
+    opacity: 1;
+    transform: scale(1) translateZ(0px);
+    z-index: 2;
+}
+
+.carousel .card.prev {
+    opacity: 0.6;
+    transform: scale(0.9) translateX(-180px) rotateY(20deg);
+    z-index: 1;
+}
+
+.carousel .card.next {
+    opacity: 0.6;
+    transform: scale(0.9) translateX(180px) rotateY(-20deg);
+    z-index: 1;
+}
+
+.card-title {
+    font-size: 1.6em;
+    color: #800020;
+    margin-bottom: 10px;
+}
+
+.carousel-buttons {
+    position: absolute;
+    bottom: -50px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+}
+
+.carousel-buttons button {
+    padding: 12px 18px;
+    background-color: #800020;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.carousel-buttons button:hover {
+    background-color: #a33e50;
+}
+
+/* Info Section */
+section {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.info-sections {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+.info-section {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    color: #5A6F7B;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 30%;
+}
+
+.info-section:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.info-section h3 {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    color: #8c2f39; /* Remet la couleur du texte en bordeaux pour la section info */
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #672934;
+    color: #ffffff;
+    font-size: 0.9em;
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+}
+
+label {
+    font-size: 1em;
+    margin: 10px 0;
+    color: #555;
+}
+
+input, select {
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+    margin-bottom: 20px;
+}
+
+/* Bubble */
+.bubbleContainer {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+
+.bubble {
+    background-color: lightgray;
+    color: black;
+    border-radius: 20px;
+    padding: 8px 16px;
+    margin: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.bubble.selected {
+    background-color: #800020;
+    color: white;
+}
+
+.bubble:hover {
+    transform: scale(1.05);
+}
+
+.emoji {
+    font-size: 1.2em;
+    margin-right: 5px;
+}
+
+/* Buttons */
+button {
+    background-color: #800020;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #a65362;
+}
+
+/* Image Preview */
+#imagePreview {
+    display: none;
+    width: 100px;
+    height: 100px;
+    margin-top: 10px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* Keyframes for Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes waveAnimation {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 0%; }
+}
+    </style>
+</head>
+<body>
+    <!-- Header du site -->
+    <header class="header">
+        <div class="logo">
+            <h1>Student Match</h1>
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="inscription.html">Inscription/ Connexion</a></li>
+                <li><a href="profil.html">Mon Profil</a></li>
+                <li><a href="aide.html">Aide & Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <section class="policy-section">
+            <div class="container">
+                <h2>FORMULAIRE DE CONSENTEMENT À L'UTILISATION DES DONNÉES
+PERSONNELLES </h2>
+                <!-- Contenu de la politique -->
+                <div class="content">
+                    Dans le cadre de votre inscription sur la plateforme Student Match, certaines de vos
+données personnelles sont collectées et traitées pour assurer le bon fonctionnement
+du service et améliorer votre expérience utilisateur.
+Données collectées sans consentement explicite (nécessaires au service) :
+- Nom et prénom
+- Âge
+- Passions
+Données collectées avec consentement explicite :
+- Sexe
+- Orientation sexuelle
+- Préférences de rencontre (amicale, amoureuse, professionnelle)
+En cochant les cases ci-dessous, vous acceptez :
+⬜ La collecte et l’utilisation de mes données sensibles (sexe et orientation sexuelle)
+dans le cadre des fonctionnalités de Student Match.
+⬜ La collecte de mes préférences de rencontre pour proposer des
+correspondances adaptées.
+Vos données seront utilisées exclusivement pour :
+- Proposer des correspondances personnalisées
+- Améliorer les services de Student Match
+- Organiser des événements liés à vos centres d’intérêt.
+Vos données seront conservées pendant 1 an après votre dernière activité sur la
+plateforme. Vous pouvez demander leur suppression à tout moment.
+Conformément au RGPD, vous disposez d’un droit d’accès, de rectification, de
+suppression et de portabilité de vos données. Vous pouvez également retirer votre
+consentement à tout moment en nous contactant à contact@studentmatch.fr
+⬜ Je consens à la collecte et au traitement de mes données personnelles selon les
+termes précisés ci-dessus.
+Date : ______________
+Signature (ou validation numérique) : _______________________
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Student Match - Tous droits réservés</p>
+    </footer>
+</body>
+</html>
