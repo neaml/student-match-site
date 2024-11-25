@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+   <!-- Firebase SDK classique -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Créer un Événement - Student Match</title>
@@ -160,8 +164,7 @@
       <button type="submit">Créer l'Événement</button>
     </form>
   </main>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
+
   <script>
     // Configuration Firebase
     const firebaseConfig = {
@@ -174,9 +177,10 @@
   measurementId: "G-XK5N6FLSYJ"
     };
 
-    // Initialiser Firebase
-    const app = firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const db = firebase.firestore();
+
 
     // Fonction pour gérer la création d'événement
     document.getElementById("createEventForm").addEventListener("submit", async (e) => {
