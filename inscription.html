@@ -246,15 +246,18 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
     
-    // Activation du bouton d'inscription si la case est cochée
-    window.addEventListener('load', function() {
+   / Activation du bouton d'inscription si la case est cochée
+    document.addEventListener('DOMContentLoaded', function() {
       const consentCheckbox = document.getElementById('consentCheckbox');
-      if (consentCheckbox) {
+      const signupButton = document.getElementById('signupButton');
+      if (consentCheckbox && signupButton) {
+        signupButton.disabled = true;
         consentCheckbox.addEventListener('change', function() {
-          document.getElementById('signupButton').disabled = !this.checked;
+          signupButton.disabled = !this.checked;
         });
       }
     });
+
 
 
 // Ajouter un gestionnaire d'événements pour le formulaire
@@ -315,16 +318,10 @@ document.getElementById('signupForm').addEventListener('submit', async function 
       photoDeProfil: photoURL,
     };
 
-    // Ajouter le lien socialMedia si valide
-    if (socialMediaInput) {
-      if (validateSocialMediaInput(socialMediaInput)) {
-        userData.socialMedia = socialMediaInput;
-      } else {
-        alert("Le lien Instagram n'est pas valide. Veuillez vérifier.");
-        return; // Interrompt la soumission en cas de validation échouée
-      }
-    }
-
+    // Ajouter le lien socialMedia sans validation
+if (socialMediaInput) {
+  userData.socialMedia = socialMediaInput;
+}
     await firestore.collection('users').doc(user.uid).set(userData);
 
      // Confirmation et redirection
