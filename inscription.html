@@ -4,14 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Match - Inscription</title>
-   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <!-- Lien vers le fichier CSS global -->
-  <link rel="stylesheet" href="style.css">
 
   <style>
-    /* Styles CSS ici (comme votre code original) */
     body {
       margin: 0;
       font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -72,31 +69,24 @@
     }
 
     .bubble {
-
       background-color: lightgray;
-
       color: black;
       border-radius: 20px;
       padding: 8px 16px;
       margin: 5px;
       cursor: pointer;
       transition: all 0.3s ease;
-
       display: inline-block;
       align-items: center;
     }
-.bubble.selected {
-  background-color: #800020;  /* Changer la couleur de fond */
-  color: white;               /* Changer la couleur du texte */
-}
 
- .bubble:hover {
-  transform: scale(1.05);  /* Effet de zoom léger au survol */
-}
+    .bubble.selected {
+      background-color: #800020;
+      color: white;
+    }
 
-    .emoji {
-      font-size: 1.2em;
-      margin-right: 5px;
+    .bubble:hover {
+      transform: scale(1.05);
     }
 
     button {
@@ -132,7 +122,6 @@
       margin-top: 20px;
     }
 
-        /* Style pour l'aperçu de l'image */
     #imagePreview {
       display: none;
       width: 100px;
@@ -143,9 +132,7 @@
     }
   </style>
 </head>
-  <body class="inscription-page">
 <body>
-
   <main>
     <h1>Bienvenue sur Student Match</h1>
     <p>Rejoins une communauté d'étudiants et découvre des personnes qui partagent tes passions !</p>
@@ -174,7 +161,6 @@
 
       <label for="orientation">Orientation sexuelle (optionnel):</label>
       <div id="orientationContainer" class="bubbleContainer">
-
         <div class="bubble"><span class="emoji">👩‍❤️‍👨</span>Hétérosexuel(le)</div>
         <div class="bubble"><span class="emoji">🏳️‍🌈</span>Homosexuel(le)</div>
         <div class="bubble"><span class="emoji">🟣</span>Bisexuel(le)</div>
@@ -191,8 +177,6 @@
         <div class="bubble"><span class="emoji">💚</span>Aromantique</div>
         <div class="bubble"><span class="emoji">❓</span>En questionnement</div>
         <div class="bubble"><span class="emoji">❓</span>Autre</div>
-
-
       </div>
 
       <label for="passions">Passions :</label>
@@ -203,7 +187,7 @@
         <div class="bubble"><span class="emoji">📚</span>Lecture</div>
         <div class="bubble"><span class="emoji">🧖</span>Bien-être, Spa</div>
         <div class="bubble"><span class="emoji">👫</span>Sorties entre Amis</div>
-        <div class="bubble"><span class="emoji">🎸</span>Concert & Festivals</div>
+        <div class="bubble"><span class="emoji">🎉</span>Concert & Festivals</div>
         <div class="bubble"><span class="emoji">🎉</span>Fêtes</div>
         <div class="bubble"><span class="emoji">🎮</span>Jeux vidéo</div>
         <div class="bubble"><span class="emoji">📸</span>Réseaux sociaux</div>
@@ -213,40 +197,61 @@
         <div class="bubble"><span class="emoji">🍳</span>Cuisine</div>
         <div class="bubble"><span class="emoji">👗</span>Mode & Sneakers</div>
         <div class="bubble"><span class="emoji">💄</span>Cosmétiques</div>
-        <div class="bubble"><span class="emoji">🎨</span>Arts</div>
+        <div class="bubble"><span class="emoji">🌟</span>Arts</div>
       </div>
 
       <label for="searchingFor">Je recherche :</label>
-    <div id="searchingForContainer" class="bubbleContainer">
+      <div id="searchingForContainer" class="bubbleContainer">
         <div class="bubble"><span class="emoji">❤️</span>Une relation sérieuse</div>
         <div class="bubble"><span class="emoji">👫</span>Des Amis</div>
         <div class="bubble"><span class="emoji">💍</span>Une relation longue durée</div>
         <div class="bubble"><span class="emoji">🥂</span>Une relation d'un soir</div>
-        <div class="bubble"><span class="emoji">🤷‍♂️🤷‍♀️</span>J'ai pas encore décidé</div>
+        <div class="bubble"><span class="emoji">🤷‍♂️‍♀️</span>J'ai pas encore décidé</div>
         <div class="bubble"><span class="emoji">❓</span>Autre</div>
-
       </div>
+
+      <label for="Photodeprofil">Photo de profil :</label>
+      <input type="file" id="Photodeprofil" accept="image/*" onchange="previewImage(event)">
+      <img id="imagePreview" src="" alt="Aperçu de la photo de profil" style="display: none; width: 100px; height: 100px;">
+
+      <label for="socialMedia">Profil Insta :</label>
+      <input type="text" id="socialMedia" name="socialMedia" placeholder="Colle ici le lien de ton profil Insta pour que tes matchs te contactent" />
+
+      <label>
+        <input type="checkbox" id="consentCheckbox" required>
+        En cochant, je consens à la collecte et au traitement de mes données personnelles selon les termes précisés <a href="formulaire_consentement.html" target="_blank">ici</a>.
+      </label>
+
+      <p>En continuant, vous acceptez notre <a href="politiquedeconfidentialite.html" target="_blank">politique de confidentialité</a>.</p>
+
+      <button type="submit" id="signupButton">S'inscrire</button>
+    </form>
+
+    <div class="loginLink">
+      <p>Déjà un compte ? <a href="login.html">Connecte-toi ici</a></p>
+    </div>
+  </main>
+
   <script>
+    // Configuration de votre application Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
+      authDomain: "student-match-but3.firebaseapp.com",
+      projectId: "student-match-but3",
+      storageBucket: "student-match-but3.appspot.com",
+      messagingSenderId: "1096075545413",
+      appId: "1:1096075545413:web:85451af9e19c5c54830c2",
+      measurementId: "G-XK5N6FLSYJ"
+    };
 
-  // Configuration de votre application Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyDHWYEBdGMxoPTUGdV4wLqoTHmNFPrwMaE",
-    authDomain: "student-match-but3.firebaseapp.com",
-    projectId: "student-match-but3",
-    storageBucket: "student-match-but3.appspot.com",
-    messagingSenderId: "1096075545413",
-    appId: "1:1096075545413:web:85451af9e19c5c54830c2",
-    measurementId: "G-XK5N6FLSYJ"
-  };
+    // Initialisation classique pour Firebase 8.x
+    firebase.initializeApp(firebaseConfig);
 
-  /// Initialisation classique pour Firebase 8.x
-firebase.initializeApp(firebaseConfig);
+    // Récupération de Firebase Auth et Firestore
+    const auth = firebase.auth();
+    const firestore = firebase.firestore();
 
-// Récupération de Firebase Auth et Firestore
-const auth = firebase.auth();
-const firestore = firebase.firestore();
-    
-   // Activation du bouton d'inscription si la case est cochée
+    // Activer le bouton d'inscription si la case est cochée
     document.addEventListener('DOMContentLoaded', function() {
       const consentCheckbox = document.getElementById('consentCheckbox');
       const signupButton = document.getElementById('signupButton');
@@ -258,83 +263,100 @@ const firestore = firebase.firestore();
       }
     });
 
+    // Ajouter un gestionnaire d'événements pour le formulaire
+    document.getElementById('signupForm').addEventListener('submit', async function (e) {
+      e.preventDefault(); // Empêche le rechargement de la page
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const socialMediaInput = document.getElementById('socialMedia').value;
 
-
-// Ajouter un gestionnaire d'événements pour le formulaire
-document.getElementById('signupForm').addEventListener('submit', async function (e) {
-  e.preventDefault(); // Empêche le rechargement de la page
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const socialMediaInput = document.getElementById('socialMedia').value;
-
-  try {
-    // Récupérer les données du formulaire
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
-    const age = parseInt(document.getElementById('age').value);
-    const selectedOrientation = Array.from(document.querySelectorAll('#orientationContainer .bubble.selected'))
-      .map(bubble => bubble.textContent);
-    const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected'))
-      .map(bubble => bubble.textContent);
-    const selectedRelationship = Array.from(document.querySelectorAll('#searchingForContainer .bubble.selected'))
-      .map(bubble => bubble.textContent);
-
-    // Téléchargement de la photo de profil (facultatif)
-    const photoDeProfil = document.getElementById('Photodeprofil').files[0];
-    let photoURL = null;
-
-    if (photoDeProfil) {
       try {
-        const formData = new FormData();
-        formData.append("file", photoDeProfil);
-        formData.append("upload_preset", "Student Match");
-        formData.append("cloud_name", "dcejsj6me");
+        // Récupérer les données du formulaire
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const age = parseInt(document.getElementById('age').value);
+        const selectedOrientation = Array.from(document.querySelectorAll('#orientationContainer .bubble.selected'))
+          .map(bubble => bubble.textContent);
+        const selectedPassions = Array.from(document.querySelectorAll('#passionsContainer .bubble.selected'))
+          .map(bubble => bubble.textContent);
+        const selectedRelationship = Array.from(document.querySelectorAll('#searchingForContainer .bubble.selected'))
+          .map(bubble => bubble.textContent);
 
-        const response = await fetch("https://api.cloudinary.com/v1_1/dcejsj6me/image/upload", {
-          method: "POST",
-          body: formData
-        });
+        // Téléchargement de la photo de profil (facultatif)
+        const photoDeProfil = document.getElementById('Photodeprofil').files[0];
+        let photoURL = null;
 
-        const data = await response.json();
-        photoURL = data.secure_url;
-      } catch (error) {
-        console.error('Erreur lors du téléchargement de la photo :', error);
-        alert("Erreur lors du téléchargement de l'image.");
-      }
-    }
+        if (photoDeProfil) {
+          try {
+            const formData = new FormData();
+            formData.append("file", photoDeProfil);
+            formData.append("upload_preset", "Student Match");
+            formData.append("cloud_name", "dcejsj6me");
 
-    // Sauvegarder les données utilisateur dans Firestore
-    const userData = {
-      firstName,
-      lastName,
-      age,
-      orientation: selectedOrientation,
-      passions: selectedPassions,
-      searchingFor: selectedRelationship,
-      photoDeProfil: photoURL,
-    };
+            const response = await fetch("https://api.cloudinary.com/v1_1/dcejsj6me/image/upload", {
+              method: "POST",
+              body: formData
+            });
 
-    // Ajouter le lien socialMedia sans validation
-if (socialMediaInput) {
-  userData.socialMedia = socialMediaInput;
-}
-let user;
-try {
-  // Sauvegarder les données utilisateur dans Firestore temporairement
-  await firestore.collection('users_temp').doc(email).set(userData);
+            const data = await response.json();
+            photoURL = data.secure_url;
+          } catch (error) {
+            console.error('Erreur lors du téléchargement de la photo :', error);
+            alert("Erreur lors du téléchargement de l'image.");
+          }
+        }
 
-  // Créer l'utilisateur dans Firebase Authentication
-  const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-  user = userCredential.user;
+        // Sauvegarder les données utilisateur dans Firestore
+        const userData = {
+          firstName,
+          lastName,
+          age,
+          orientation: selectedOrientation,
+          passions: selectedPassions,
+          searchingFor: selectedRelationship,
+          photoDeProfil: photoURL,
+        };
 
-  // Sauvegarder les données utilisateur dans la collection finale
-  await firestore.collection('users').doc(user.uid).set(userData);
+        // Ajouter le lien socialMedia sans validation
+        if (socialMediaInput) {
+          userData.socialMedia = socialMediaInput;
+        }
 
-  // Supprimer les données temporaires
-  await firestore.collection('users_temp').doc(email).delete();
-     // Confirmation et redirection
-        alert('Inscription réussie et informations enregistrées dans Firebase.');
-        window.location.href = "login.html";
+        let user;
+        try {
+          // Sauvegarder les données utilisateur dans Firestore temporairement
+          await firestore.collection('users_temp').doc(email).set(userData);
+
+          // Créer l'utilisateur dans Firebase Authentication
+          const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+          user = userCredential.user;
+
+          // Sauvegarder les données utilisateur dans la collection finale
+          await firestore.collection('users').doc(user.uid).set(userData);
+
+          // Supprimer les données temporaires
+          await firestore.collection('users_temp').doc(email).delete();
+
+          // Confirmation et redirection
+          alert('Inscription réussie et informations enregistrées dans Firebase.');
+          window.location.href = "login.html";
+        } catch (error) {
+          console.error('Erreur lors de l\'inscription :', error);
+          switch (error.code) {
+            case 'auth/email-already-in-use':
+              alert('Cette adresse e-mail est déjà utilisée.');
+              break;
+            case 'auth/invalid-email':
+              alert('L\'adresse e-mail est invalide.');
+              break;
+            case 'auth/weak-password':
+              alert('Le mot de passe est trop faible.');
+              break;
+            default:
+              alert('Une erreur est survenue lors de l\'inscription, veuillez réessayer.');
+              break;
+          }
+        }
       } catch (error) {
         console.error('Erreur lors de l\'inscription :', error);
         switch (error.code) {
@@ -353,48 +375,18 @@ try {
         }
       }
     });
-</script>
 
-<script>
-  // Logique de sélection multiple des bulles
-  document.addEventListener("DOMContentLoaded", function () {
+    // Logique de sélection multiple des bulles
+    document.addEventListener("DOMContentLoaded", function () {
       const bubbles = document.querySelectorAll(".bubble");
-
       bubbles.forEach(bubble => {
-          bubble.addEventListener("click", function () {
-              // Ajoute ou retire la classe 'selected' de la bulle cliquée pour permettre la sélection multiple
-              this.classList.toggle("selected");
-          });
+        bubble.addEventListener("click", function () {
+          this.classList.toggle("selected");
+        });
       });
-  });
-</script>
+    });
 
-        <!-- Champ pour le téléchargement de la photo de profil -->
-      <label for="Photodeprofil">Photo de profil :</label>
-  <input type="file" id="Photodeprofil" accept="image/*">
-<img id="imagePreview" src="" alt="Aperçu de la photo de profil" style="display: none; width: 100px; height: 100px;">
-<label for="socialMedia">Profil Insta :</label>
-    <input type="text" id="socialMedia" name="socialMedia" placeholder="Colle ici le lien de ton profil Insta pour que tes matchs te contactent" />
-    <label>
-  <input type="checkbox" id="consentCheckbox" required>
-  En cochant, je consens à la collecte et au traitement de mes données personnelles selon les termes précisés <a href="formulaire_consentement.html" target="_blank">ici</a>.
-</label>
-      <p>
-        
-    En continuant, vous acceptez notre <a href="politiquedeconfidentialite.html" target="_blank">politique de confidentialité</a>.
-</p>
-
-
-     <button onclick=>S'inscrire</button>
-    </form>
-</script>
-
-    <div class="loginLink">
-      <p>Déjà un compte ? <a href="login.html">Connecte-toi ici</a></p>
-    </div>
-  </main>
-
-  <script>
+    // Aperçu de l'image
     function previewImage(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
