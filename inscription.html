@@ -268,10 +268,6 @@ document.getElementById('signupForm').addEventListener('submit', async function 
   const socialMediaInput = document.getElementById('socialMedia').value;
 
   try {
-    // Création de l'utilisateur dans Firebase Authentication
-    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-    const user = userCredential.user;
-
     // Récupérer les données du formulaire
     const firstName = document.getElementById('firstName').value;
     const lastName = document.getElementById('lastName').value;
@@ -322,8 +318,20 @@ document.getElementById('signupForm').addEventListener('submit', async function 
 if (socialMediaInput) {
   userData.socialMedia = socialMediaInput;
 }
-    await firestore.collection('users').doc(user.uid).set(userData);
+let user;
+try {
+  // Sauvegarder les données utilisateur dans Firestore temporairement
+  await firestore.collection('users_temp').doc(email).set(userData);
 
+  // Créer l'utilisateur dans Firebase Authentication
+  const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+  user = userCredential.user;
+
+  // Sauvegarder les données utilisateur dans la collection finale
+  await firestore.collection('users').doc(user.uid).set(userData);
+
+  // Supprimer les données temporaires
+  await firestore.collection('users_temp').doc(email).delete();
      // Confirmation et redirection
         alert('Inscription réussie et informations enregistrées dans Firebase.');
         window.location.href = "login.html";
