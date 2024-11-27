@@ -277,16 +277,13 @@
       while (profileIndex < profiles.length && matchedProfiles.has(profiles[profileIndex].id)) {
         profileIndex++;
       }
-// Fonction pour supprimer le numéro de version de l'URL
-const getCleanImageUrl = (url) => {
-  return url.replace(/\/v\d+\//, '/');
-};
+
       if (profiles.length > 0 && profileIndex < profiles.length) {
         const profile = profiles[profileIndex];
         const profileCard = document.createElement('div');
         profileCard.className = 'profile-card';
         profileCard.innerHTML = `
-        <img src="${profile.photodeprofil ? getCleanImageUrl(profile.photodeprofil).replace('/upload/', '/upload/f_auto/') : 'https://via.placeholder.com/150'}" alt="Photo de profil">
+          <img src="${profile.photodeprofil || 'https://via.placeholder.com/150'}" alt="Photo de profil">
           <h3>${profile.firstName || profile.lastName || 'Nom non renseigné'}</h3>
           <p>Âge: ${profile.age || 'Non renseigné'}</p>
           <p>Passions: ${profile.passions || 'Non renseigné'}</p>
@@ -319,14 +316,66 @@ const getCleanImageUrl = (url) => {
             const groupItem = document.createElement('div');
             groupItem.className = 'group-item';
             groupItem.innerHTML = `
-              <strong>${group.name}</strong>
-              <button class="action-button" onclick="joinItem('groupList', '${doc.id}')">Rejoindre</button>
+              <strong>${group.name}</strong> - ${group.description || 'Pas de description disponible'}
+              <p>Participants : ${group.participants ? group.participants.join(', ') : 'Aucun participant pour l’instant'}</p>
+              <button class="action-button" onclick="joinGroup('${doc.id}')">Rejoindre</button>
             `;
             groupList.appendChild(groupItem);
           });
         }
       } catch (error) {
         console.error("Erreur lors de la récupération des groupes :", error);
+      }
+    };
+
+    // Rejoindre un groupe
+    const joinGroup = async (groupId) => {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      try {
+        const groupRef = db.collection('groupList').doc(groupId);
+        const groupDoc = await groupRef.get();
+
+        if (groupDoc.exists) {
+          const groupData = groupDoc.data();
+          const userName = user.displayName || user.email;
+
+          // Ajouter l'utilisateur à la liste des participants
+          if (!groupData.participants.includes(userName)) {
+            await groupRef.update({
+              participants: firebase.firestore.FieldValue.arrayUnion(userName),
+            });
+
+            console.log(`${userName} a rejoint le groupe : ${groupData.name}`);
+            loadGroups(); // Mettre à jour l'affichage des groupes
+          } else {
+            console.log("Vous êtes déjà membre de ce groupe.");
+          }
+        }
+      } catch (error) {
+        console.error("Erreur lors de l'ajout au groupe :", error);
+      }
+    };
+
+    // Exemple de création de groupe avec le créateur ajouté automatiquement
+    const createGroup = async (groupName, groupDescription) => {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      try {
+        const userName = user.displayName || user.email;
+
+        await db.collection('groupList').add({
+          name: groupName,
+          description: groupDescription,
+          participants: [userName], // Ajouter le créateur comme participant initial
+        });
+
+        console.log(`Groupe "${groupName}" créé avec succès.`);
+        loadGroups(); // Rafraîchir l'affichage des groupes
+      } catch (error) {
+        console.error("Erreur lors de la création du groupe :", error);
       }
     };
 
