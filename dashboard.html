@@ -284,6 +284,7 @@
         profileCard.className = 'profile-card';
         profileCard.innerHTML = `
           <img src="${profile.photodeprofil || 'https://via.placeholder.com/150'}" alt="Photo de profil">
+          console.log("Profil photo URL :",profile.photodeprofil);
           <h3>${profile.firstName || profile.lastName || 'Nom non renseigné'}</h3>
           <p>Âge: ${profile.age || 'Non renseigné'}</p>
           <p>Passions: ${profile.passions || 'Non renseigné'}</p>
