@@ -327,7 +327,6 @@
           userData.socialMedia = socialMediaInput;
         }
 
-        let user;
         try {
   
           await firestore.collection('users').doc(user.uid).set(userData);
