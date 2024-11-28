@@ -306,7 +306,7 @@
         console.log("Profil photo URL :", profile.photodeprofil);
 
         profileCard.innerHTML = `
-          <img src="${profile.photodeprofil || 'https://via.placeholder.com/150'}" alt="Photo de profil">
+          <img src="${profile.photodeprofil || 'https://via.placeholder.com/200'}" alt="Photo de profil">
           <h3>${profile.firstName || profile.lastName || 'Nom non renseigné'}</h3>
           <p>${profile.age ? `${profile.age} ans` : 'Âge non renseigné'}</p>
           <div class="passions-container">
