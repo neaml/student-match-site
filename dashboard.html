@@ -197,11 +197,11 @@
       <button class="action-button" onclick="location.href='create_group.html'">Créer un Groupe</button>
       <button class="action-button" onclick="location.href='create_event.html'">Créer un Événement</button>
       <h3>Groupes créés</h3>
-      <div class="group-list" id="groupList">
+      <div class="grouplist" id="groupList">
         <p class="no-items">Aucun groupe disponible.</p>
       </div>
       <h3>Événements créés</h3>
-      <div class="event-list" id="eventList">
+      <div class="eventlist" id="eventList">
         <p class="no-items">Aucun événement disponible.</p>
       </div>
     </div>
@@ -302,134 +302,180 @@
       profileIndex++;
     };
 
-    // Charger les groupes depuis Firestore
-    const loadGroups = async () => {
-      try {
-        const querySnapshot = await db.collection('groupList').get();
-        const groupList = document.getElementById('groupList');
-        groupList.innerHTML = '';
-
-        if (querySnapshot.empty) {
-          groupList.innerHTML = '<p class="no-items">Aucun groupe disponible.</p>';
-        } else {
-          querySnapshot.forEach((doc) => {
-            const group = doc.data();
-            const groupItem = document.createElement('div');
-            groupItem.className = 'group-item';
-            groupItem.innerHTML = `
-              <strong>${group.name}</strong> - ${group.description || 'Pas de description disponible'}
-              <p>Participants : ${group.participants ? group.participants.join(', ') : 'Aucun participant pour l’instant'}</p>
-              <button class="action-button" onclick="joinGroup('${doc.id}')">Rejoindre</button>
-            `;
-            groupList.appendChild(groupItem);
-          });
-        }
-      } catch (error) {
-        console.error("Erreur lors de la récupération des groupes :", error);
-      }
+    // Fonction pour récupérer et afficher les groupes
+    const loadGroups = () => {
+      db.collection("grouplist").orderBy("createdAt", "desc").get()
+        .then((querySnapshot) => {
+          const groupsList = document.getElementById("groupsList");
+          groupsList.innerHTML = '';
+          if (querySnapshot.empty) {
+            groupsList.innerHTML = "<p>Aucun groupe disponible pour le moment.</p>";
+          } else {
+            querySnapshot.forEach((doc) => {
+              const group = doc.data();
+              const groupDiv = document.createElement("div");
+              groupDiv.classList.add("group-item");
+              groupDiv.innerHTML = `
+                <h2>${group.name || 'Nom non spécifié'}</h2>
+                <p>${group.description || 'Pas de description disponible.'}</p>
+                <p>Catégorie: ${group.category || 'Catégorie non spécifiée'}</p>
+                <p>Participants: ${Array.isArray(group.participants) ? group.participants.join(', ') : 'Aucun participant pour l'instant'}</p>
+                <p>Créé le: ${group.createdAt ? group.createdAt.toDate().toLocaleDateString("fr-FR") : 'Date non spécifiée'}</p>
+                <button onclick="joinGroup('${doc.id}')">Rejoindre le groupe</button>
+              `;
+              groupsList.appendChild(groupDiv);
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Erreur lors de la récupération des groupes:", error);
+          document.getElementById("groupsList").innerHTML = "<p>Erreur lors du chargement des groupes. Veuillez réessayer plus tard.</p>";
+        });
     };
 
-    // Rejoindre un groupe
+    // Fonction pour rejoindre un groupe
     const joinGroup = async (groupId) => {
       const user = auth.currentUser;
-      if (!user) return;
-
+      if (!user) {
+        console.log("Utilisateur non connecté");
+        return;
+      }
       try {
-        const groupRef = db.collection('groupList').doc(groupId);
+        const groupRef = db.collection("grouplist").doc(groupId);
         const groupDoc = await groupRef.get();
 
         if (groupDoc.exists) {
-          const groupData = groupDoc.data();
-          const userName = user.displayName || user.email;
+          let participants = groupDoc.data().participants;
 
-          // Ajouter l'utilisateur à la liste des participants
-          if (!groupData.participants.includes(userName)) {
+          // Assurez-vous que `participants` est un tableau
+          if (!Array.isArray(participants)) {
+            participants = [];
+          }
+
+          // Ajouter l'utilisateur s'il n'est pas déjà dans la liste
+          if (!participants.includes(user.email)) {
             await groupRef.update({
-              participants: firebase.firestore.FieldValue.arrayUnion(userName),
+              participants: firebase.firestore.FieldValue.arrayUnion(user.email)
             });
-
-            console.log(`${userName} a rejoint le groupe : ${groupData.name}`);
-            loadGroups(); // Mettre à jour l'affichage des groupes
+            console.log("Rejoint le groupe avec succès");
+            loadGroups();
           } else {
-            console.log("Vous êtes déjà membre de ce groupe.");
+            console.log("Vous avez déjà rejoint ce groupe");
           }
         }
       } catch (error) {
-        console.error("Erreur lors de l'ajout au groupe :", error);
+        console.error("Erreur lors de la jonction au groupe:", error);
       }
     };
 
-    // Exemple de création de groupe avec le créateur ajouté automatiquement
-    const createGroup = async (groupName, groupDescription) => {
-      const user = auth.currentUser;
-      if (!user) return;
-
-      try {
-        const userName = user.displayName || user.email;
-
-        await db.collection('groupList').add({
-          name: groupName,
-          description: groupDescription,
-          participants: [userName], // Ajouter le créateur comme participant initial
+    // Fonction pour récupérer et afficher les événements
+    const loadEvents = () => {
+      db.collection("eventlist").orderBy("createdAt", "desc").get()
+        .then((querySnapshot) => {
+          const eventsList = document.getElementById("eventsList");
+          eventsList.innerHTML = '';
+          if (querySnapshot.empty) {
+            eventsList.innerHTML = "<p>Aucun événement disponible pour le moment.</p>";
+          } else {
+            querySnapshot.forEach((doc) => {
+              const event = doc.data();
+              const eventDiv = document.createElement("div");
+              eventDiv.classList.add("event-item");
+              eventDiv.innerHTML = `
+                <h2>${event.name || 'Nom non spécifié'}</h2>
+                <p>${event.description || 'Pas de description disponible.'}</p>
+                <p>Date: ${event.date || 'Date non spécifiée'}</p>
+                <p>Lieu: ${event.location || 'Lieu non spécifié'}</p>
+                <p>Participants: ${Array.isArray(event.participants) ? event.participants.join(', ') : 'Aucun participant pour l'instant'}</p>
+                <button onclick="joinEvent('${doc.id}')">Rejoindre l'événement</button>
+              `;
+              eventsList.appendChild(eventDiv);
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Erreur lors de la récupération des événements:", error);
+          document.getElementById("eventsList").innerHTML = "<p>Erreur lors du chargement des événements. Veuillez réessayer plus tard.</p>";
         });
-
-        console.log(`Groupe "${groupName}" créé avec succès.`);
-        loadGroups(); // Rafraîchir l'affichage des groupes
-      } catch (error) {
-        console.error("Erreur lors de la création du groupe :", error);
-      }
     };
 
-    // Charger les événements depuis Firestore
-    const loadEvents = async () => {
-      try {
-        const querySnapshot = await db.collection('eventList').get();
-        const eventList = document.getElementById('eventList');
-        eventList.innerHTML = '';
-
-        if (querySnapshot.empty) {
-          eventList.innerHTML = '<p class="no-items">Aucun événement disponible.</p>';
-        } else {
-          querySnapshot.forEach((doc) => {
-            const event = doc.data();
-            const eventItem = document.createElement('div');
-            eventItem.className = 'event-item';
-            eventItem.innerHTML = `
-              <strong>${event.name}</strong> - ${event.date || 'Date non spécifiée'}
-              <p>${event.description || 'Pas de description disponible.'}</p>
-              <button class="action-button" onclick="joinItem('eventList', '${doc.id}')">Rejoindre</button>
-            `;
-            eventList.appendChild(eventItem);
-          });
-        }
-      } catch (error) {
-        console.error("Erreur lors de la récupération des événements :", error);
-      }
-    };
-
-    // Rejoindre un groupe ou un événement
-    const joinItem = async (collectionName, itemId) => {
+    // Fonction pour rejoindre un événement
+    const joinEvent = async (eventId) => {
       const user = auth.currentUser;
-      if (!user) return;
-
+      if (!user) {
+        console.log("Utilisateur non connecté");
+        return;
+      }
       try {
-        const docRef = db.collection(collectionName).doc(itemId);
-        const doc = await docRef.get();
+        const eventRef = db.collection("eventlist").doc(eventId);
+        const eventDoc = await eventRef.get();
 
-        if (doc.exists) {
-          const data = doc.data();
-          if (!data.participants.includes(user.displayName || user.email)) {
-            await docRef.update({
-              participants: firebase.firestore.FieldValue.arrayUnion(user.displayName || user.email),
+        if (eventDoc.exists) {
+          let participants = eventDoc.data().participants;
+
+          // Assurez-vous que `participants` est un tableau
+          if (!Array.isArray(participants)) {
+            participants = [];
+          }
+
+          // Ajouter l'utilisateur s'il n'est pas déjà dans la liste
+          if (!participants.includes(user.email)) {
+            await eventRef.update({
+              participants: firebase.firestore.FieldValue.arrayUnion(user.email)
             });
-            console.log(`Rejoint ${collectionName} :`, data.name);
-            collectionName === "groupList" ? loadGroups() : loadEvents();
+            console.log("Rejoint l'événement avec succès");
+            loadEvents();
           } else {
-            console.log("Vous avez déjà rejoint cet élément.");
+            console.log("Vous avez déjà rejoint cet événement");
           }
         }
       } catch (error) {
-        console.error("Erreur lors de l'ajout au groupe/événement :", error);
+        console.error("Erreur lors de la jonction à l'événement:", error);
+      }
+    };
+
+    // Fonction pour créer un groupe avec le créateur ajouté automatiquement comme participant
+    const createGroup = async (groupName, groupDescription, groupCategory) => {
+      const user = auth.currentUser;
+      if (!user) {
+        console.log("Utilisateur non connecté");
+        return;
+      }
+      try {
+        await db.collection("grouplist").add({
+          name: groupName || 'Nom non spécifié',
+          description: groupDescription || 'Pas de description disponible.',
+          category: groupCategory || 'Catégorie non spécifiée',
+          participants: [user.email],
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log("Groupe créé avec succès");
+        loadGroups();
+      } catch (error) {
+        console.error("Erreur lors de la création du groupe:", error);
+      }
+    };
+
+    // Fonction pour créer un événement avec le créateur ajouté automatiquement comme participant
+    const createEvent = async (eventName, eventDescription, eventDate, eventLocation) => {
+      const user = auth.currentUser;
+      if (!user) {
+        console.log("Utilisateur non connecté");
+        return;
+      }
+      try {
+        await db.collection("eventlist").add({
+          name: eventName || 'Nom non spécifié',
+          description: eventDescription || 'Pas de description disponible.',
+          date: eventDate || 'Date non spécifiée',
+          location: eventLocation || 'Lieu non spécifié',
+          participants: [user.email],
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log("Événement créé avec succès");
+        loadEvents();
+      } catch (error) {
+        console.error("Erreur lors de la création de l'événement:", error);
       }
     };
 
@@ -454,9 +500,9 @@
                 <img src="${matchedProfile.photodeprofil ? matchedProfile.photodeprofil : 'https://via.placeholder.com/150'}" alt="Photo de profil">
                 <h3>${matchedProfile.firstName || matchedProfile.lastName || 'Nom non renseigné'}</h3>
                 <p>Âge: ${matchedProfile.age || 'Non renseigné'}</p>
-                <p>Instagram: <a href="https://instagram.com/${matchedProfile.instagram}" target="_blank">${matchedProfile.instagram}</a></p>
+                <p>Instagram: <a href="${otherUser.socialMedia}" target="_blank">${otherUser.socialMedia || 'Non fourni'}</a></p>
                 <div class="hearts">💖💖💖</div>
-                <p>Match mutuel !</p>
+                <p>Match mutuel ! Bravo, maintenant tu peux faire le premier pas et contacter ton match via son profil instagram 😉</p>
               `;
               matchesContainer.appendChild(matchItem);
             }
