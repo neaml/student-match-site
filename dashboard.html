@@ -663,6 +663,10 @@
             <div class="match-details">
               <h3>${matchedProfile.firstName || matchedProfile.lastName || 'Nom non renseigné'}</h3>
               <p>${matchedProfile.age ? `${matchedProfile.age} ans` : 'Âge non renseigné'}</p>
+              <div class="passions-container">
+                ${matchedProfile.passions && Array.isArray(matchedProfile.passions) ? matchedProfile.passions.map(passion => `<span class="passion-bubble">${passion}</span>`).join('') : '<span class="passion-bubble">Passions non renseignées</span>'}
+              </div>
+              <p>${matchedProfile.orientation || 'Orientation non renseignée'}</p>
               <div class="match-status ${statusClass}">${statusText}</div>
               <p>${matchMessage}</p>
               ${showActions ? `
@@ -670,6 +674,9 @@
                   <button class="accept-button" onclick="handleAcceptMatch('${match.id}', '${match.matchedUserId}')">✅ Accepter</button>
                   <button class="reject-button" onclick="handleRejectMatch('${match.id}')">❌ Refuser</button>
                 </div>
+              ` : ''}
+              ${match.status === 'mutual' ? `
+                <p><a href="https://instagram.com/${matchedProfile.instagram}" target="_blank">Voir Instagram</a></p>
               ` : ''}
             </div>
           `;
@@ -758,7 +765,7 @@
           status: 'mutual'
         });
 
-        // Créer un document de match mutual pour l'initiateur si nécessaire
+        // Vérifier si un match mutuel existe déjà, sinon en créer un
         const mutualMatchSnapshot = await db.collection('matches')
           .where('userId', '==', auth.currentUser.uid)
           .where('matchedUserId', '==', initiatorId)
