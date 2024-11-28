@@ -319,7 +319,7 @@
                 <h2>${group.name || 'Nom non spécifié'}</h2>
                 <p>${group.description || 'Pas de description disponible.'}</p>
                 <p>Catégorie: ${group.category || 'Catégorie non spécifiée'}</p>
-                <p>Participants: ${Array.isArray(group.participants) ? group.participants.join(', ') : 'Aucun participant pour l'instant'}</p>
+                <p>Participants: ${Array.isArray(group.participants) ? group.participants.join(', ') : 'Aucun participant actuellement'}</p>
                 <p>Créé le: ${group.createdAt ? group.createdAt.toDate().toLocaleDateString("fr-FR") : 'Date non spécifiée'}</p>
                 <button onclick="joinGroup('${doc.id}')">Rejoindre le groupe</button>
               `;
@@ -386,7 +386,7 @@
                 <p>${event.description || 'Pas de description disponible.'}</p>
                 <p>Date: ${event.date || 'Date non spécifiée'}</p>
                 <p>Lieu: ${event.location || 'Lieu non spécifié'}</p>
-                <p>Participants: ${Array.isArray(event.participants) ? event.participants.join(', ') : 'Aucun participant pour l'instant'}</p>
+                <p>Participants: ${Array.isArray(event.participants) ? event.participants.join(', ') : 'Aucun participant actuellement'}</p>
                 <button onclick="joinEvent('${doc.id}')">Rejoindre l'événement</button>
               `;
               eventsList.appendChild(eventDiv);
