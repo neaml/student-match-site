@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-
   <!-- Firebase SDK classique -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -146,7 +145,8 @@
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      margin-top: 20px;
+      margin: 20px auto;
+      max-width: 1200px;
     }
 
     .match-item {
@@ -155,7 +155,38 @@
       padding: 15px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .match-item img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .match-details {
+      flex: 1;
+    }
+
+    .match-status {
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .status-pending {
+      background-color: #FFA500;
+      color: white;
+    }
+
+    .status-mutual {
+      background-color: #8c2f39;
+      color: white;
     }
 
     @keyframes matchAnimation {
@@ -176,8 +207,13 @@
     .match-animation {
       animation: matchAnimation 1.5s ease;
     }
-  </style>
 
+    .no-items {
+      text-align: center;
+      color: #777;
+      font-style: italic;
+    }
+  </style>
 </head>
 <body>
   <!-- Barre de navigation -->
@@ -230,7 +266,7 @@
   <div class="match-section">
     <h2>Mes Matchs</h2>
     <div id="matchesContainer" class="matches-container">
-      <p class="no-items">Aucun match en attente.</p>
+      <p class="no-items">Aucun match en attente ou mutuel.</p>
     </div>
   </div>
 
@@ -519,85 +555,100 @@
       }
     };
 
-    // Fonction pour créer un événement avec le créateur ajouté automatiquement comme participant
-    const createEvent = async (eventName, eventDescription, eventDate, eventLocation) => {
-      const user = auth.currentUser;
-      if (!user) {
-        console.log("Utilisateur non connecté");
-        return;
-      }
-      try {
-        await db.collection("eventlist").add({
-          name: eventName || 'Nom non spécifié',
-          description: eventDescription || 'Pas de description disponible.',
-          date: eventDate || 'Date non spécifiée',
-          location: eventLocation || 'Lieu non spécifié',
-          participants: [user.uid], // Utiliser l'UID au lieu de l'e-mail
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        console.log("Événement créé avec succès");
-        // loadEvents(); // Pas nécessaire car onSnapshot prend en charge
-      } catch (error) {
-        console.error("Erreur lors de la création de l'événement:", error);
-      }
-    };
-
     // Charger les matchs depuis Firestore
     const loadMatches = async () => {
       try {
-        const querySnapshot = await db.collection('matches').where('userId', '==', auth.currentUser.uid).get();
+        const userId = auth.currentUser.uid;
         const matchesContainer = document.getElementById('matchesContainer');
         matchesContainer.innerHTML = '';
 
-        if (querySnapshot.empty) {
-          matchesContainer.innerHTML = '<p class="no-items">Aucun match en attente.</p>';
-        } else {
-          const matchedUserIds = [];
-          querySnapshot.forEach((doc) => {
-            const match = doc.data();
-            matchedUserIds.push(match.matchedUserId);
+        // Récupérer tous les matchs où l'utilisateur est l'initiateur
+        const initiatedMatchesSnapshot = await db.collection('matches')
+          .where('userId', '==', userId)
+          .get();
+
+        // Récupérer tous les matchs où l'utilisateur est le récepteur
+        const receivedMatchesSnapshot = await db.collection('matches')
+          .where('matchedUserId', '==', userId)
+          .get();
+
+        const allMatches = [];
+
+        // Traiter les matchs initiés par l'utilisateur
+        initiatedMatchesSnapshot.forEach(doc => {
+          const match = doc.data();
+          allMatches.push({
+            id: doc.id,
+            matchedUserId: match.matchedUserId,
+            status: match.status
           });
+        });
 
-          // Remove duplicates
-          const uniqueMatchedUserIds = [...new Set(matchedUserIds)];
+        // Traiter les matchs reçus par l'utilisateur
+        receivedMatchesSnapshot.forEach(doc => {
+          const match = doc.data();
+          allMatches.push({
+            id: doc.id,
+            matchedUserId: match.userId,
+            status: match.status
+          });
+        });
 
-          // Firestore 'in' queries support up to 10 elements. If more, handle accordingly.
-          const batches = [];
-          const batchSize = 10;
-          for (let i = 0; i < uniqueMatchedUserIds.length; i += batchSize) {
-            const batch = uniqueMatchedUserIds.slice(i, i + batchSize);
-            batches.push(batch);
-          }
-
-          for (const batch of batches) {
-            const matchedProfilesSnapshot = await db.collection('users').where(firebase.firestore.FieldPath.documentId(), 'in', batch).get();
-
-            if (matchedProfilesSnapshot.empty) {
-              continue;
-            }
-
-            matchedProfilesSnapshot.forEach((doc) => {
-              const matchedProfile = doc.data();
-              matchedProfiles.add(doc.id);
-              const matchItem = document.createElement('div');
-              matchItem.className = 'match-item match-animation';
-              matchItem.innerHTML = `
-                <img src="${matchedProfile.photodeprofil ? matchedProfile.photodeprofil : 'https://via.placeholder.com/300'}" alt="Photo de profil">
-                <h3>${matchedProfile.firstName || matchedProfile.lastName || 'Nom non renseigné'}</h3>
-                <p>${matchedProfile.age ? `${matchedProfile.age} ans` : 'Âge non renseigné'}</p>
-                <p>Instagram: <a href="${matchedProfile.socialMedia || '#'}" target="_blank">${matchedProfile.socialMedia ? 'Voir Instagram' : 'Non fourni'}</a></p>
-                <div class="hearts">💖💖💖</div>
-                <p>Match mutuel ! Bravo, maintenant tu peux faire le premier pas et contacter ton match via son profil Instagram 😉</p>
-              `;
-              matchesContainer.appendChild(matchItem);
-            });
-          }
-
-          // Si aucun profil correspondant n'est trouvé
-          if (matchesContainer.innerHTML === '') {
-            matchesContainer.innerHTML = '<p class="no-items">Aucun match en attente.</p>';
-          }
+        if (allMatches.length === 0) {
+          matchesContainer.innerHTML = '<p class="no-items">Aucun match en attente ou mutuel.</p>';
+          return;
         }
+
+        // Supprimer les doublons si les matchs sont mutuels
+        const uniqueMatches = [];
+        const seenUserIds = new Set();
+
+        allMatches.forEach(match => {
+          if (!seenUserIds.has(match.matchedUserId)) {
+            uniqueMatches.push(match);
+            seenUserIds.add(match.matchedUserId);
+          }
+        });
+
+        for (const match of uniqueMatches) {
+          const matchedUserDoc = await db.collection('users').doc(match.matchedUserId).get();
+          if (!matchedUserDoc.exists) continue; // Ignore si l'utilisateur n'existe pas
+          const matchedProfile = matchedUserDoc.data();
+
+          // Déterminer le statut du match
+          let statusText = '';
+          let statusClass = '';
+
+          if (match.status === 'mutual') {
+            statusText = 'Match Mutuel';
+            statusClass = 'status-mutual';
+          } else if (match.status === 'pending') {
+            statusText = 'En Attente';
+            statusClass = 'status-pending';
+          }
+
+          const matchItem = document.createElement('div');
+          matchItem.className = 'match-item';
+          if (match.status === 'mutual') {
+            matchItem.classList.add('match-animation');
+          }
+
+          matchItem.innerHTML = `
+            <img src="${matchedProfile.photodeprofil || 'https://via.placeholder.com/300'}" alt="Photo de profil">
+            <div class="match-details">
+              <h3>${matchedProfile.firstName || matchedProfile.lastName || 'Nom non renseigné'}</h3>
+              <p>${matchedProfile.age ? `${matchedProfile.age} ans` : 'Âge non renseigné'}</p>
+              <div class="match-status ${statusClass}">${statusText}</div>
+              ${match.status === 'mutual' ? `
+                <p>Match mutuel ! Bravo, maintenant vous pouvez contacter votre match.</p>
+              ` : `
+                <p>Vous avez initié le match. Attendez que l'autre utilisateur confirme.</p>
+              `}
+            </div>
+          `;
+          matchesContainer.appendChild(matchItem);
+        }
+
       } catch (error) {
         console.error("Erreur lors de la récupération des matchs :", error);
         const matchesContainer = document.getElementById('matchesContainer');
@@ -610,12 +661,14 @@
     };
 
     // Gestion des matchs
-    const handleMatch = async (userId) => {
+    const handleMatch = async (matchedUserId) => {
+      const userId = auth.currentUser.uid;
+
       try {
-        // Vérifier si un match existe déjà
+        // Vérifier si un match existe déjà de l'utilisateur vers matchedUserId
         const existingMatchSnapshot = await db.collection('matches')
-          .where('userId', '==', auth.currentUser.uid)
-          .where('matchedUserId', '==', userId)
+          .where('userId', '==', userId)
+          .where('matchedUserId', '==', matchedUserId)
           .get();
 
         if (!existingMatchSnapshot.empty) {
@@ -624,18 +677,49 @@
           return;
         }
 
-        // Ajouter le match
-        await db.collection('matches').add({
-          userId: auth.currentUser.uid,
-          matchedUserId: userId,
-          status: 'en attente',
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        console.log("Match créé avec succès");
-        matchedProfiles.add(userId);
+        // Vérifier si l'autre utilisateur a déjà matché avec vous
+        const reverseMatchSnapshot = await db.collection('matches')
+          .where('userId', '==', matchedUserId)
+          .where('matchedUserId', '==', userId)
+          .where('status', '==', 'pending')
+          .get();
+
+        if (!reverseMatchSnapshot.empty) {
+          // Il existe déjà un match en attente de l'autre utilisateur, donc c'est mutuel
+          const reverseMatchDoc = reverseMatchSnapshot.docs[0];
+          await reverseMatchDoc.ref.update({
+            status: 'mutual'
+          });
+
+          // Créer un nouveau document de match avec statut 'mutual'
+          await db.collection('matches').add({
+            userId: userId,
+            matchedUserId: matchedUserId,
+            status: 'mutual',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+
+          console.log("Match mutuel établi !");
+          alert("Félicitations ! Vous avez un match mutuel.");
+        } else {
+          // Aucun match existant de l'autre utilisateur, donc créer un match en attente
+          await db.collection('matches').add({
+            userId: userId,
+            matchedUserId: matchedUserId,
+            status: 'pending',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+
+          console.log("Match en attente créé avec succès");
+          alert("Match en attente. Attendez que l'autre utilisateur confirme.");
+        }
+
+        // Rafraîchir les matches affichés
         loadMatches();
+        loadNextProfile();
       } catch (error) {
         console.error("Erreur lors de la création du match :", error);
+        alert("Une erreur est survenue lors de la création du match. Veuillez réessayer.");
       }
     };
 
