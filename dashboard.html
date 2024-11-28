@@ -306,7 +306,7 @@
         console.log("Profil photo URL :", profile.photodeprofil);
 
         profileCard.innerHTML = `
-          <img src="${profile.photodeprofil || 'https://via.placeholder.com/200'}" alt="Photo de profil">
+          <img src="${profile.photodeprofil || 'https://via.placeholder.com/300'}" alt="Photo de profil">
           <h3>${profile.firstName || profile.lastName || 'Nom non renseigné'}</h3>
           <p>${profile.age ? `${profile.age} ans` : 'Âge non renseigné'}</p>
           <div class="passions-container">
@@ -582,7 +582,7 @@
               const matchItem = document.createElement('div');
               matchItem.className = 'match-item match-animation';
               matchItem.innerHTML = `
-                <img src="${matchedProfile.photodeprofil ? matchedProfile.photodeprofil : 'https://via.placeholder.com/150'}" alt="Photo de profil">
+                <img src="${matchedProfile.photodeprofil ? matchedProfile.photodeprofil : 'https://via.placeholder.com/300'}" alt="Photo de profil">
                 <h3>${matchedProfile.firstName || matchedProfile.lastName || 'Nom non renseigné'}</h3>
                 <p>${matchedProfile.age ? `${matchedProfile.age} ans` : 'Âge non renseigné'}</p>
                 <p>Instagram: <a href="${matchedProfile.socialMedia || '#'}" target="_blank">${matchedProfile.socialMedia ? 'Voir Instagram' : 'Non fourni'}</a></p>
