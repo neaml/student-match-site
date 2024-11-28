@@ -196,7 +196,7 @@
       const eventLocation = document.getElementById("eventLocation").value;
 
       try {
-        await db.collection("events").add({
+        await db.collection("eventlist").add({
           name: eventName,
           description: eventDescription,
           date: eventDate,
