@@ -624,7 +624,16 @@
           return;
         }
 
+        // Utiliser un Map pour éviter les doublons pour les matchs mutuels
+        const displayedMatches = new Map();
+
         for (const match of allMatches) {
+          // Si c'est un match mutuel et déjà affiché, passer
+          if (match.status === 'mutual' && displayedMatches.has(match.matchedUserId)) {
+            continue;
+          }
+
+          // Récupérer le profil de l'utilisateur correspondant
           const matchedUserDoc = await db.collection('users').doc(match.matchedUserId).get();
           if (!matchedUserDoc.exists) continue; // Ignore si l'utilisateur n'existe pas
           const matchedProfile = matchedUserDoc.data();
@@ -656,6 +665,7 @@
           matchItem.className = 'match-item';
           if (match.status === 'mutual') {
             matchItem.classList.add('match-animation');
+            displayedMatches.set(match.matchedUserId, true); // Marquer comme affiché
           }
 
           matchItem.innerHTML = `
@@ -675,7 +685,7 @@
                   <button class="reject-button" onclick="handleRejectMatch('${match.id}')">❌ Refuser</button>
                 </div>
               ` : ''}
-              ${match.status === 'mutual' ? `
+              ${match.status === 'mutual' && matchedProfile.instagram ? `
                 <p><a href="https://instagram.com/${matchedProfile.instagram}" target="_blank">Voir Instagram</a></p>
               ` : ''}
             </div>
@@ -725,14 +735,6 @@
             status: 'mutual'
           });
 
-          // Créer un nouveau document de match avec statut 'mutual'
-          await db.collection('matches').add({
-            userId: userId,
-            matchedUserId: matchedUserId,
-            status: 'mutual',
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-          });
-
           console.log("Match mutuel établi !");
           alert("Félicitations ! Vous avez un match mutuel.");
         } else {
@@ -764,22 +766,6 @@
         await db.collection('matches').doc(matchId).update({
           status: 'mutual'
         });
-
-        // Vérifier si un match mutuel existe déjà, sinon en créer un
-        const mutualMatchSnapshot = await db.collection('matches')
-          .where('userId', '==', auth.currentUser.uid)
-          .where('matchedUserId', '==', initiatorId)
-          .where('status', '==', 'mutual')
-          .get();
-
-        if (mutualMatchSnapshot.empty) {
-          await db.collection('matches').add({
-            userId: auth.currentUser.uid,
-            matchedUserId: initiatorId,
-            status: 'mutual',
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-          });
-        }
 
         console.log("Match mutuel établi !");
         alert("Félicitations ! Vous avez un match mutuel.");
