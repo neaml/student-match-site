@@ -396,40 +396,68 @@
       }
     };
 
-    // Fonction pour récupérer et afficher les événements
+    // Fonction pour récupérer et afficher les événements en temps réel
     const loadEvents = () => {
-      db.collection("eventlist").orderBy("createdAt", "desc").get()
-        .then((querySnapshot) => {
-          const eventsList = document.getElementById("eventList");
-          eventsList.innerHTML = '';
-          if (querySnapshot.empty) {
-            eventsList.innerHTML = "<p>Aucun événement disponible pour le moment.</p>";
-          } else {
-            querySnapshot.forEach((doc) => {
-              const event = doc.data();
-              const eventDiv = document.createElement("div");
-              eventDiv.classList.add("event-item");
-              eventDiv.innerHTML = `
-                <h2>${event.name || 'Nom non spécifié'}</h2>
-                <p>${event.description || 'Pas de description disponible.'}</p>
-                <p>Date: ${event.date || 'Date non spécifiée'}</p>
-                <p>Lieu: ${event.location || 'Lieu non spécifié'}</p>
-                <p>Participants: ${Array.isArray(event.participants) ? event.participants.join(', ') : 'Aucun participant actuellement'}</p>
-                <button class="action-button" onclick="joinEvent('${doc.id}')">Rejoindre l'événement</button>
-              `;
-              eventsList.appendChild(eventDiv);
-            });
+      db.collection("eventlist").orderBy("createdAt", "desc").onSnapshot(async (querySnapshot) => {
+        const eventsList = document.getElementById("eventList");
+        eventsList.innerHTML = '';
+        if (querySnapshot.empty) {
+          eventsList.innerHTML = "<p>Aucun événement disponible pour le moment.</p>";
+        } else {
+          for (const doc of querySnapshot.docs) {
+            const event = doc.data();
+            const eventDiv = document.createElement("div");
+            eventDiv.classList.add("event-item");
+
+            // Récupérer les noms des participants
+            let participantsNames = 'Aucun participant actuellement';
+            if (Array.isArray(event.participants) && event.participants.length > 0) {
+              try {
+                const usersSnapshot = await db.collection('users').where(firebase.firestore.FieldPath.documentId(), 'in', event.participants.slice(0, 10)).get(); // Limite à 10 participants
+                if (!usersSnapshot.empty) {
+                  participantsNames = usersSnapshot.docs.map(userDoc => `${userDoc.data().firstName || ''} ${userDoc.data().lastName || ''}`.trim()).join(', ');
+                }
+              } catch (error) {
+                console.error("Erreur lors de la récupération des noms des participants:", error);
+              }
+            }
+
+            eventDiv.innerHTML = `
+              <h2>${event.name || 'Nom non spécifié'}</h2>
+              <p>${event.description || 'Pas de description disponible.'}</p>
+              <p>Date: ${event.date || 'Date non spécifiée'}</p>
+              <p>Lieu: ${event.location || 'Lieu non spécifié'}</p>
+              <p>Participants: ${participantsNames}</p>
+              <button class="action-button" onclick="joinEvent('${doc.id}')">Rejoindre l'événement</button>
+            `;
+            eventsList.appendChild(eventDiv);
           }
-        })
-        .catch((error) => {
-          console.error("Erreur lors de la récupération des événements:", error);
-          const eventsList = document.getElementById("eventList");
-          if (eventsList) {
-            eventsList.innerHTML = "<p>Erreur lors du chargement des événements. Veuillez réessayer plus tard.</p>";
-          } else {
-            console.error('Element avec l\'ID "eventList" introuvable.');
-          }
-        });
+        }
+      }, (error) => {
+        console.error("Erreur lors de la récupération des événements:", error);
+        const eventsList = document.getElementById("eventList");
+        if (eventsList) {
+          eventsList.innerHTML = "<p>Erreur lors du chargement des événements. Veuillez réessayer plus tard.</p>";
+        } else {
+          console.error('Element avec l\'ID "eventList" introuvable.');
+        }
+      });
+    };
+
+    // Fonction pour obtenir le nom et le prénom d'un utilisateur à partir de son UID
+    const getUserNameByUID = async (uid) => {
+      try {
+        const userDoc = await db.collection('users').doc(uid).get();
+        if (userDoc.exists) {
+          const userData = userDoc.data();
+          return `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || 'Nom non spécifié';
+        } else {
+          return 'Nom non spécifié';
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération du nom de l'utilisateur:", error);
+        return 'Nom non spécifié';
+      }
     };
 
     // Fonction pour rejoindre un événement
@@ -452,14 +480,15 @@
           }
 
           // Ajouter l'utilisateur s'il n'est pas déjà dans la liste
-          if (!participants.includes(user.email)) {
+          if (!participants.includes(user.uid)) { // Utiliser l'UID au lieu de l'e-mail
             await eventRef.update({
-              participants: firebase.firestore.FieldValue.arrayUnion(user.email)
+              participants: firebase.firestore.FieldValue.arrayUnion(user.uid)
             });
             console.log("Rejoint l'événement avec succès");
-            loadEvents();
+            // loadEvents(); // Pas nécessaire car onSnapshot prend en charge
           } else {
             console.log("Vous avez déjà rejoint cet événement");
+            alert("Vous avez déjà rejoint cet événement.");
           }
         }
       } catch (error) {
@@ -502,11 +531,11 @@
           description: eventDescription || 'Pas de description disponible.',
           date: eventDate || 'Date non spécifiée',
           location: eventLocation || 'Lieu non spécifié',
-          participants: [user.email],
+          participants: [user.uid], // Utiliser l'UID au lieu de l'e-mail
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         console.log("Événement créé avec succès");
-        loadEvents();
+        // loadEvents(); // Pas nécessaire car onSnapshot prend en charge
       } catch (error) {
         console.error("Erreur lors de la création de l'événement:", error);
       }
