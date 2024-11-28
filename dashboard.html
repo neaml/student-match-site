@@ -189,6 +189,29 @@
       color: white;
     }
 
+    .match-actions {
+      margin-top: 10px;
+    }
+
+    .match-actions button {
+      margin-right: 10px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+
+    .accept-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .reject-button {
+      background-color: #f44336;
+      color: white;
+    }
+
     @keyframes matchAnimation {
       0% {
         transform: scale(0.5);
@@ -580,7 +603,8 @@
           allMatches.push({
             id: doc.id,
             matchedUserId: match.matchedUserId,
-            status: match.status
+            status: match.status,
+            initiated: true
           });
         });
 
@@ -590,7 +614,8 @@
           allMatches.push({
             id: doc.id,
             matchedUserId: match.userId,
-            status: match.status
+            status: match.status,
+            initiated: false
           });
         });
 
@@ -599,18 +624,7 @@
           return;
         }
 
-        // Supprimer les doublons si les matchs sont mutuels
-        const uniqueMatches = [];
-        const seenUserIds = new Set();
-
-        allMatches.forEach(match => {
-          if (!seenUserIds.has(match.matchedUserId)) {
-            uniqueMatches.push(match);
-            seenUserIds.add(match.matchedUserId);
-          }
-        });
-
-        for (const match of uniqueMatches) {
+        for (const match of allMatches) {
           const matchedUserDoc = await db.collection('users').doc(match.matchedUserId).get();
           if (!matchedUserDoc.exists) continue; // Ignore si l'utilisateur n'existe pas
           const matchedProfile = matchedUserDoc.data();
@@ -618,13 +632,24 @@
           // Déterminer le statut du match
           let statusText = '';
           let statusClass = '';
+          let matchMessage = '';
+          let showActions = false;
 
           if (match.status === 'mutual') {
             statusText = 'Match Mutuel';
             statusClass = 'status-mutual';
+            matchMessage = 'Match mutuel ! Bravo, maintenant vous pouvez contacter votre match.';
           } else if (match.status === 'pending') {
-            statusText = 'En Attente';
-            statusClass = 'status-pending';
+            if (match.initiated) {
+              statusText = 'En Attente';
+              statusClass = 'status-pending';
+              matchMessage = `Vous avez initié le match avec ${matchedProfile.firstName || 'l\'utilisateur'}. Attendez sa confirmation.`;
+            } else {
+              statusText = 'En Attente';
+              statusClass = 'status-pending';
+              matchMessage = `Vous avez reçu une demande de match de ${matchedProfile.firstName || 'l\'utilisateur'}.`;
+              showActions = true; // Afficher les boutons accepter/refuser
+            }
           }
 
           const matchItem = document.createElement('div');
@@ -639,11 +664,13 @@
               <h3>${matchedProfile.firstName || matchedProfile.lastName || 'Nom non renseigné'}</h3>
               <p>${matchedProfile.age ? `${matchedProfile.age} ans` : 'Âge non renseigné'}</p>
               <div class="match-status ${statusClass}">${statusText}</div>
-              ${match.status === 'mutual' ? `
-                <p>Match mutuel ! Bravo, maintenant vous pouvez contacter votre match.</p>
-              ` : `
-                <p>Vous avez initié le match. Attendez que l'autre utilisateur confirme.</p>
-              `}
+              <p>${matchMessage}</p>
+              ${showActions ? `
+                <div class="match-actions">
+                  <button class="accept-button" onclick="handleAcceptMatch('${match.id}', '${match.matchedUserId}')">✅ Accepter</button>
+                  <button class="reject-button" onclick="handleRejectMatch('${match.id}')">❌ Refuser</button>
+                </div>
+              ` : ''}
             </div>
           `;
           matchesContainer.appendChild(matchItem);
@@ -720,6 +747,58 @@
       } catch (error) {
         console.error("Erreur lors de la création du match :", error);
         alert("Une erreur est survenue lors de la création du match. Veuillez réessayer.");
+      }
+    };
+
+    // Fonction pour accepter un match
+    const handleAcceptMatch = async (matchId, initiatorId) => {
+      try {
+        // Mettre à jour le match reçu à 'mutual'
+        await db.collection('matches').doc(matchId).update({
+          status: 'mutual'
+        });
+
+        // Créer un document de match mutual pour l'initiateur si nécessaire
+        const mutualMatchSnapshot = await db.collection('matches')
+          .where('userId', '==', auth.currentUser.uid)
+          .where('matchedUserId', '==', initiatorId)
+          .where('status', '==', 'mutual')
+          .get();
+
+        if (mutualMatchSnapshot.empty) {
+          await db.collection('matches').add({
+            userId: auth.currentUser.uid,
+            matchedUserId: initiatorId,
+            status: 'mutual',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+
+        console.log("Match mutuel établi !");
+        alert("Félicitations ! Vous avez un match mutuel.");
+
+        // Rafraîchir les matches affichés
+        loadMatches();
+      } catch (error) {
+        console.error("Erreur lors de l'acceptation du match :", error);
+        alert("Une erreur est survenue lors de l'acceptation du match. Veuillez réessayer.");
+      }
+    };
+
+    // Fonction pour refuser un match
+    const handleRejectMatch = async (matchId) => {
+      try {
+        // Supprimer le document de match
+        await db.collection('matches').doc(matchId).delete();
+
+        console.log("Match refusé et supprimé.");
+        alert("Vous avez refusé le match.");
+
+        // Rafraîchir les matches affichés
+        loadMatches();
+      } catch (error) {
+        console.error("Erreur lors du refus du match :", error);
+        alert("Une erreur est survenue lors du refus du match. Veuillez réessayer.");
       }
     };
 
