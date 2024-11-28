@@ -89,6 +89,23 @@
       margin-bottom: 15px;
     }
 
+    /* Nouvelle classe pour les bulles de passions */
+    .passions-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .passion-bubble {
+      background-color: #8c2f39;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.9em;
+    }
+
     .actions {
       margin-top: 20px;
       display: flex;
@@ -290,10 +307,12 @@
         profileCard.innerHTML = `
           <img src="${profile.photodeprofil || 'https://via.placeholder.com/150'}" alt="Photo de profil">
           <h3>${profile.firstName || profile.lastName || 'Nom non renseigné'}</h3>
-          <p>Âge: ${profile.age || 'Non renseigné'}</p>
-          <p>Passions: ${profile.passions || 'Non renseigné'}</p>
-          <p>Orientation: ${profile.orientation || 'Non renseigné'}</p>
-          <p>Recherche: ${profile.searchingfor || 'Non renseigné'}</p>
+          <p>${profile.age ? `${profile.age} ans` : 'Âge non renseigné'}</p>
+          <div class="passions-container">
+            ${profile.passions && Array.isArray(profile.passions) ? profile.passions.map(passion => `<span class="passion-bubble">${passion}</span>`).join('') : '<span class="passion-bubble">Passions non renseignées</span>'}
+          </div>
+          <p>${profile.orientation || 'Orientation non renseignée'}</p>
+          <p>${profile.searchingfor || 'Recherche non renseignée'}</p>
           <div class="actions">
             <button class="action-button" onclick="handleMatch('${profile.id}')">Match ❤️</button>
             <button class="action-button" onclick="handlePass('${profile.id}')">Passer ❌</button>
@@ -503,24 +522,51 @@
         if (querySnapshot.empty) {
           matchesContainer.innerHTML = '<p class="no-items">Aucun match en attente.</p>';
         } else {
+          const matchedUserIds = [];
           querySnapshot.forEach((doc) => {
             const match = doc.data();
-            matchedProfiles.add(match.matchedUserId);
-            const matchedProfile = profiles.find(profile => profile.id === match.matchedUserId);
-            if (matchedProfile) {
+            matchedUserIds.push(match.matchedUserId);
+          });
+
+          // Remove duplicates
+          const uniqueMatchedUserIds = [...new Set(matchedUserIds)];
+
+          // Firestore 'in' queries support up to 10 elements. If more, handle accordingly.
+          const batches = [];
+          const batchSize = 10;
+          for (let i = 0; i < uniqueMatchedUserIds.length; i += batchSize) {
+            const batch = uniqueMatchedUserIds.slice(i, i + batchSize);
+            batches.push(batch);
+          }
+
+          for (const batch of batches) {
+            const matchedProfilesSnapshot = await db.collection('users').where(firebase.firestore.FieldPath.documentId(), 'in', batch).get();
+
+            if (matchedProfilesSnapshot.empty) {
+              continue;
+            }
+
+            matchedProfilesSnapshot.forEach((doc) => {
+              const matchedProfile = doc.data();
+              matchedProfiles.add(doc.id);
               const matchItem = document.createElement('div');
               matchItem.className = 'match-item match-animation';
               matchItem.innerHTML = `
                 <img src="${matchedProfile.photodeprofil ? matchedProfile.photodeprofil : 'https://via.placeholder.com/150'}" alt="Photo de profil">
                 <h3>${matchedProfile.firstName || matchedProfile.lastName || 'Nom non renseigné'}</h3>
-                <p>Âge: ${matchedProfile.age || 'Non renseigné'}</p>
+                <p>${matchedProfile.age ? `${matchedProfile.age} ans` : 'Âge non renseigné'}</p>
                 <p>Instagram: <a href="${matchedProfile.socialMedia || '#'}" target="_blank">${matchedProfile.socialMedia ? 'Voir Instagram' : 'Non fourni'}</a></p>
                 <div class="hearts">💖💖💖</div>
                 <p>Match mutuel ! Bravo, maintenant tu peux faire le premier pas et contacter ton match via son profil Instagram 😉</p>
               `;
               matchesContainer.appendChild(matchItem);
-            }
-          });
+            });
+          }
+
+          // Si aucun profil correspondant n'est trouvé
+          if (matchesContainer.innerHTML === '') {
+            matchesContainer.innerHTML = '<p class="no-items">Aucun match en attente.</p>';
+          }
         }
       } catch (error) {
         console.error("Erreur lors de la récupération des matchs :", error);
@@ -536,16 +582,24 @@
     // Gestion des matchs
     const handleMatch = async (userId) => {
       try {
-        // Empêcher de matcher plus d'une fois
-        if (matchedProfiles.has(userId)) {
+        // Vérifier si un match existe déjà
+        const existingMatchSnapshot = await db.collection('matches')
+          .where('userId', '==', auth.currentUser.uid)
+          .where('matchedUserId', '==', userId)
+          .get();
+
+        if (!existingMatchSnapshot.empty) {
           console.log("Vous avez déjà matché avec cet utilisateur.");
+          alert("Vous avez déjà matché avec cet utilisateur.");
           return;
         }
+
+        // Ajouter le match
         await db.collection('matches').add({
           userId: auth.currentUser.uid,
           matchedUserId: userId,
           status: 'en attente',
-          timestamp: new Date()
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
         console.log("Match créé avec succès");
         matchedProfiles.add(userId);
