@@ -688,8 +688,7 @@
                   <button class="reject-button" onclick="handleRejectMatch('${match.id}')">❌ Refuser</button>
                 </div>
               ` : ''}
-              ${match.status === 'mutual' && matchedProfile.socialmedia && matchedProfile.socialmedia.instagram ? `
-                <p><a href="https://instagram.com/${matchedProfile.socialmedia.instagram}" target="_blank">Voir Instagram</a></p>
+             <p>Instagram: <a href="${matchedProfile.socialMedia || '#'}" target="_blank">${matchedProfile.socialMedia ? 'Voir Instagram' : 'Non fourni'}</a></p
               ` : ''}
             </div>
           `;
