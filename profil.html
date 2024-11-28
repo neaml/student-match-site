@@ -29,7 +29,17 @@
       color: #800020;
       text-align: center;
     }
+.nav {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
+    .nav a {
+      margin: 0 10px;
+      color: #800020;
+      text-decoration: none;
+      font-weight: bold;
+    }
     form {
       display: flex;
       flex-direction: column;
@@ -76,6 +86,11 @@
 <body>
   <main>
     <h1>Mon Profil</h1>
+    <div class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="profil.html">Profil</a>
+      <a href="dashboard.html">Tableau de Bord</a>
+    </div>
     <form>
       <label for="firstName">Prénom:</label>
       <input type="text" id="firstName" placeholder="Prénom">
