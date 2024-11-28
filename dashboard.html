@@ -416,7 +416,7 @@
           if (groupsList) {
             groupsList.innerHTML = "<p>Erreur lors du chargement des groupes. Veuillez réessayer plus tard.</p>";
           } else {
-            console.error('Element avec l\'ID "groupList" introuvable.');
+            console.error('Élément avec l\'ID "groupList" introuvable.');
           }
         });
     };
@@ -499,7 +499,7 @@
         if (eventsList) {
           eventsList.innerHTML = "<p>Erreur lors du chargement des événements. Veuillez réessayer plus tard.</p>";
         } else {
-          console.error('Element avec l\'ID "eventList" introuvable.');
+          console.error('Élément avec l\'ID "eventList" introuvable.');
         }
       });
     };
@@ -624,13 +624,17 @@
           return;
         }
 
-        // Utiliser un Map pour éviter les doublons pour les matchs mutuels
-        const displayedMatches = new Map();
+        // Utiliser un Set pour éviter les doublons pour les matchs mutuels
+        const displayedMatches = new Set();
 
         for (const match of allMatches) {
           // Si c'est un match mutuel et déjà affiché, passer
-          if (match.status === 'mutual' && displayedMatches.has(match.matchedUserId)) {
-            continue;
+          if (match.status === 'mutual') {
+            const uniqueKey = match.matchedUserId; // Utiliser l'UID comme clé unique
+            if (displayedMatches.has(uniqueKey)) {
+              continue;
+            }
+            displayedMatches.add(uniqueKey);
           }
 
           // Récupérer le profil de l'utilisateur correspondant
@@ -665,7 +669,6 @@
           matchItem.className = 'match-item';
           if (match.status === 'mutual') {
             matchItem.classList.add('match-animation');
-            displayedMatches.set(match.matchedUserId, true); // Marquer comme affiché
           }
 
           matchItem.innerHTML = `
@@ -685,8 +688,8 @@
                   <button class="reject-button" onclick="handleRejectMatch('${match.id}')">❌ Refuser</button>
                 </div>
               ` : ''}
-              ${match.status === 'mutual' && matchedProfile.instagram ? `
-                <p><a href="https://instagram.com/${matchedProfile.instagram}" target="_blank">Voir Instagram</a></p>
+              ${match.status === 'mutual' && matchedProfile.socialmedia && matchedProfile.socialmedia.instagram ? `
+                <p><a href="https://instagram.com/${matchedProfile.socialmedia.instagram}" target="_blank">Voir Instagram</a></p>
               ` : ''}
             </div>
           `;
@@ -699,7 +702,7 @@
         if (matchesContainer) {
           matchesContainer.innerHTML = '<p class="no-items">Erreur lors du chargement des matchs. Veuillez réessayer plus tard.</p>';
         } else {
-          console.error('Element avec l\'ID "matchesContainer" introuvable.');
+          console.error('Élément avec l\'ID "matchesContainer" introuvable.');
         }
       }
     };
